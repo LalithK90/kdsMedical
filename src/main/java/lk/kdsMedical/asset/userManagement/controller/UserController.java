@@ -1,8 +1,8 @@
 package lk.kdsMedical.asset.userManagement.controller;
 
 import lk.kdsMedical.asset.employee.entity.Employee;
-import lk.kdsMedical.asset.employee.entity.Enum.Designation;
-import lk.kdsMedical.asset.employee.entity.Enum.EmployeeStatus;
+import lk.kdsMedical.asset.employee.entity.enums.Designation;
+import lk.kdsMedical.asset.employee.entity.enums.EmployeeStatus;
 import lk.kdsMedical.asset.employee.service.EmployeeService;
 import lk.kdsMedical.asset.userManagement.entity.User;
 import lk.kdsMedical.asset.userManagement.service.RoleService;

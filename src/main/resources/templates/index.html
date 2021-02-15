@@ -5,9 +5,89 @@
     <title>Thymeleaf Springboot </title>
 </head>
 <body>
+<link th:href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css"/>
+
 <nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
 
-<h1> I am index page</h1>
+<table>
+    <tr bgcolor="#5ebd3c">
+        <th>
+            <h1 class="title"><b>Welcome to KDS Medical Centre</b>
+                <h1>
+        </th>
+    </tr>
+
+    <tr height="500">
+        <td>
+            <h2>Mission</h2>
+            <h4>The Mission of KDS Medical Centre is to provide compassionate, accessible, high quality, cost effective
+                healthcare to the community; to promote health; to educate healthcare professionals; and to participate
+                in appropriate clinical research.</h4>
+
+            <h2>Vision</h2>
+            <h4>KDS Medical Centre will be an innovative, leading regional health system dedicated to advancing the
+                health and transforming the lives of the people we serve through excellent clinical quality; accessible,
+                patient-centered, caring service; and unmatched physician and employee commitment.</h4>
+
+            <h2>Core Values</h2>
+            <h4><u>1. Advancement</u> - We're committed to setting ambitious goals and move healthcare and our
+                communities forward<br>
+                <u>2. Inclusiveness</u> - Everyone working together collaboratively<br>
+                <u>3. Respect</u> - In our regard for, and actions toward, our communities, patients and each other<br>
+                <u>4. Responsibility</u> - Acting in honest, forthright and fiscally responsible ways<br>
+            </h4>
+
+
+            <center>
+                <button class="button1" onclick="document.getElementById('id01').style.display='block'"
+                        style="width:auto;"><b>Login Form</b></button>
+            </center>
+            <br><br>
+
+            <div id="id01" class="modal">
+
+                <form class="modal-content animate" action="/login" method="post">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                              title="Close Modal">&times;</span>
+                        <img src="/img/imglogin.png" alt="ImageLogin" class="imglogin">
+                    </div>
+
+                    <div class="container1" style="background-color:#f5d742">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text" id="username" placeholder="Enter Username" name="username" required>
+
+                        <label for="password"><b>Password</b></label>
+                        <input type="password" id="password" placeholder="Enter Password" name="password" required>
+                    </div>
+
+                    <div class="container2">
+                        <button type="submit" class="button1" onclick="check(this.form)" value="login"><b>Login</b>
+                        </button>
+                        <button type="reset" class="button1" data-dismiss="modal"><b>Reset</b></button>
+                        <!--                        <label>-->
+                        <!--                            <input type="checkbox" checked="checked" name="remember"> Remember me-->
+                        <!--                        </label>-->
+                    </div>
+
+                    <div class="container2" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                                class="cancelbtn"><b>Cancel</b></button>
+<!--                        <span class="psw">Forgot <a href="#">password?</a></span>-->
+                    </div>
+
+                </form>
+            </div>
+
+        </td>
+    </tr>
+
+    <tr bgcolor="#5ebd3c" align="center">
+        <th><h6>Address : No. 09, Roly Fernando Mawatha, Katubedda, Moratuwa.
+            <br>Contact : 011-2658361</h6>
+        </th>
+    </tr>
+</table>
 
 <!--footer include-->
 <footer th:replace="~{fragments/footer :: footerFragment}"></footer>

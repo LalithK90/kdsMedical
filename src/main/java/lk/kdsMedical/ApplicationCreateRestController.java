@@ -5,8 +5,8 @@ import lk.kdsMedical.asset.commonAsset.model.Enum.CivilStatus;
 import lk.kdsMedical.asset.commonAsset.model.Enum.Gender;
 import lk.kdsMedical.asset.commonAsset.model.Enum.Title;
 import lk.kdsMedical.asset.employee.entity.Employee;
-import lk.kdsMedical.asset.employee.entity.Enum.Designation;
-import lk.kdsMedical.asset.employee.entity.Enum.EmployeeStatus;
+import lk.kdsMedical.asset.employee.entity.enums.Designation;
+import lk.kdsMedical.asset.employee.entity.enums.EmployeeStatus;
 import lk.kdsMedical.asset.employee.service.EmployeeService;
 import lk.kdsMedical.asset.userManagement.entity.Role;
 import lk.kdsMedical.asset.userManagement.entity.User;
@@ -46,15 +46,13 @@ public class ApplicationCreateRestController {
 
 //Employee
         Employee employee = new Employee();
-        employee.setPayRoleNumber("11111111");
         employee.setName("Admin User");
         employee.setCallingName("Admin");
         employee.setName("908670000V");
         employee.setMobileOne("0750000000");
         employee.setTitle(Title.DR);
         employee.setGender(Gender.MALE);
-        employee.setBloodGroup(BloodGroup.AP);
-        employee.setDesignation(Designation.ED);
+        employee.setDesignation(Designation.ADMIN);
         employee.setCivilStatus(CivilStatus.UNMARRIED);
         employee.setEmployeeStatus(EmployeeStatus.WORKING);
         employee.setDateOfBirth(LocalDate.now().minusYears(18));

@@ -4,37 +4,40 @@
     <meta charset="UTF-8">
     <title>Thymeleaf Springboot </title>
 </head>
+
 <body id="loginBack">
+<link th:href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css"/>
+
+<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
 <div class="col full-height " id="loginPage">
-    <div class="col-8 col-sm-4 form-box bg-transparent ui-widget-content" id="draggable">
-        <form th:action="${'/login'}" method="post">
-            <br/>
-            <fieldset>
-                <!--   <legend class="text-lg-center bg-white"><h3><strong> Excise Department - Sri Lanka</strong></h3>
-                   </legend>-->
-                <div class="form-label-group">
-                    <input type="text" id="username" th:name="${'username'}" class="form-control" placeholder="username"
-                           required>
-                    <label for="username">Username</label>
-                </div>
-                <div class="form-label-group">
-                    <input type="password" id="inputPassword" th:name="${'password'}" class="form-control"
-                           placeholder="password"
-                           required>
-                    <label for="inputPassword">Password</label>
-                </div>
-                <div class="form-group text-right">
-                    <button class="btn btn-primary " type="submit">LOGIN</button>
-                </div>
-            </fieldset>
-            <div class="container-fluid " th:if="${param.error}">
-                <p class="bg-white text-capitalize text-danger text-lg-center">Invalid username or password. </p>
+
+    <div id="id01" class="vh-100 align-content-center">
+
+        <form class="modal-content animate" action="/login" method="post">
+            <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                              title="Close Modal">&times;</span>
+                <img src="/img/imglogin.png" alt="ImageLogin" class="imglogin">
             </div>
-            <div class="container-fluid ">
-                <p id="errorMessage" th:text="${err}" class="bg-white text-capitalize text-danger text-lg-center"></p>
+
+            <div class="container1" style="background-color:#f5d742">
+                <label for="username"><b>Username</b></label>
+                <input type="text" id="username" placeholder="Enter Username" name="username" required>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" id="password" placeholder="Enter Password" name="password" required>
             </div>
-        </form>
+
+            <div class="container2">
+                <button type="submit" class="button1" onclick="check(this.form)" value="login"><b>Login</b>
+                </button>
+                <button type="reset" class="button1" data-dismiss="modal"><b>Reset</b></button>
+            </div>
+
     </div>
+
+    </form>
+</div>
 </div>
 <!--footer include-->
 <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
