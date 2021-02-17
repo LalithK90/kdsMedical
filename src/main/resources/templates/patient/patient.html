@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: headerFragment}">
+<html lang="en" >
+<head data-th-replace="~{fragments/header :: headerFragment}">
     <meta charset="UTF-8">
     <title>Thymeleaf Springboot </title>
 </head>
 <body>
-<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
 
 <div class="container-fluid bg-secondary form-Border">
     <div class="row text-center formManagement border-info">
@@ -31,7 +31,7 @@
 </div>
 <div class="container-fluid bg-dark formBorder text-center">
     <div class="col">
-        <div class="col" id="patientListPresent" th:if="${not #lists.isEmpty(patients)}">
+        <div class="col" id="patientListPresent" data-th-if="${not #lists.isEmpty(patients)}">
             <table class="table table-hover table-striped" id="myTable">
                 <thead>
                 <tr>
@@ -45,21 +45,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="patient, rowCount : ${patients}">
-                    <th th:text="${rowCount.count}"></th>
-                    <th th:text="${patient.code}"></th>
-                    <th th:text="${patient.name}"></th>
-                    <th th:text="${patient.gender}"></th>
-                    <th th:text="${patient.mobileOne}"></th>
-                    <th th:text="${patient.allergies}"></th>
-                    <th th:text="${patient.nic}"></th>
-                    <th th:text="${patient.address}"></th>
+                <tr data-th-each="patient, rowCount : ${patients}">
+                    <th data-th-text="${rowCount.count}"></th>
+                    <th data-th-text="${patient.code}"></th>
+                    <th data-th-text="${patient.name}"></th>
+                    <th data-th-text="${patient.gender}"></th>
+                    <th data-th-text="${patient.mobileOne}"></th>
+                    <th data-th-text="${patient.allergies}"></th>
+                    <th data-th-text="${patient.nic}"></th>
+                    <th data-th-text="${patient.address}"></th>
                     <th>
-                        <a id="patientView" th:href="${'/patient/' + patient.id}" class="btn btn-success btn-sm"><i
+                        <a id="patientView" data-th-href="${'/patient/' + patient.id}" class="btn btn-success btn-sm"><i
                                 class="fa fa-folder-open"></i>&nbsp;View</a>
-                        <a id="patientEdit" th:href="${'/patient/edit/' + patient.id}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;Edit</a>
-                        <a id="patientRemove" th:href="${'/patient/remove/' + patient.id}"
-                           th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
+                        <a id="patientEdit" data-th-href="${'/patient/edit/' + patient.id}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                        <a id="patientRemove" data-th-href="${'/patient/remove/' + patient.id}"
+                           data-th-if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                             Delete</a>
                     </th>
                 </tr>
@@ -67,7 +67,7 @@
             </table>
         </div>
     </div>
-    <div class="row" th:if="${ #lists.isEmpty(patients)}">
+    <div class="row" data-th-if="${ #lists.isEmpty(patients)}">
         <div class="col-sm-12">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -88,9 +88,9 @@
     </div>
 </div>
 <!--footer include-->
-<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<footer data-th-replace="~{fragments/footer :: footerFragment}"></footer>
 <!--script include-->
-<script th:replace="~{fragments/script :: scriptFragment}"></script>
+<div data-th-replace="~{fragments/script :: scriptFragment}"></div>
 
 </body>
 </html>

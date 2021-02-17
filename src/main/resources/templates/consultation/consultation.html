@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: headerFragment}">
+<html lang="en" >
+<head data-th-replace="~{fragments/header :: headerFragment}">
     <meta charset="UTF-8">
     <title>Thymeleaf Springboot </title>
 </head>
 <body>
-<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
 
 <div class="container-fluid bg-secondary form-Border">
     <div class="row text-center formManagement border-info">
@@ -31,7 +31,7 @@
 </div>
 <div class="container-fluid bg-dark formBorder text-center">
     <div class="col">
-        <div class="col" id="consultationListPresent" th:if="${not #lists.isEmpty(consultations)}">
+        <div class="col" id="consultationListPresent" data-th-if="${not #lists.isEmpty(consultations)}">
             <table class="table table-hover table-striped" id="myTable">
                 <thead>
                 <tr>
@@ -41,13 +41,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="consultation, rowCount : ${consultations}">
-                    <th th:text="${rowCount.count}"></th>
-                    <th th:text="${consultation.name}"></th>
+                <tr data-th-each="consultation, rowCount : ${consultations}">
+                    <th data-th-text="${rowCount.count}"></th>
+                    <th data-th-text="${consultation.name}"></th>
                     <th>
-                        <a id="consultationEdit" th:href="${'/consultation/edit/' + consultation.id}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;Edit</a>
-                        <a id="consultationRemove" th:href="${'/consultation/delete/' + consultation.id}"
-                           th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="btn btn-danger btn-sm">
+                        <a id="consultationEdit" data-th-href="${'/consultation/edit/' + consultation.id}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                        <a id="consultationRemove" data-th-href="${'/consultation/delete/' + consultation.id}"
+                           data-th-if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="btn btn-danger btn-sm">
                             <i class="fa fa-trash"></i>
                             Delete</a>
                     </th>
@@ -56,7 +56,7 @@
             </table>
         </div>
     </div>
-    <div class="row" th:if="${ #lists.isEmpty(consultations)}">
+    <div class="row" data-th-if="${ #lists.isEmpty(consultations)}">
         <div class="col-sm-12">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -77,9 +77,9 @@
     </div>
 </div>
 <!--footer include-->
-<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<footer data-th-replace="~{fragments/footer :: footerFragment}"></footer>
 <!--script include-->
-<script th:replace="~{fragments/script :: scriptFragment}"></script>
+<div data-th-replace="~{fragments/script :: scriptFragment}"></div>
 
 </body>
 </html>
