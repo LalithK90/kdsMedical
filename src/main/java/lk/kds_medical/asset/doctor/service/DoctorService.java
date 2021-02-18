@@ -57,4 +57,8 @@ public class DoctorService implements AbstractService<Doctor, Integer> {
         Example<Doctor> doctorExample = Example.of(doctor, matcher);
         return doctorDao.findAll(doctorExample);
     }
+
+  public Doctor lastDoctor() {
+        return doctorDao.findFirstByOrderByIdDesc();
+  }
 }

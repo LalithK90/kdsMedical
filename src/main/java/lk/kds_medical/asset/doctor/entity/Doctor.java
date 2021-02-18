@@ -1,9 +1,10 @@
 package lk.kds_medical.asset.doctor.entity;
 
 
-import lk.kds_medical.asset.commonAsset.model.Enum.Gender;
-import lk.kds_medical.asset.commonAsset.model.Enum.Title;
+import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.asset.consultation.entity.Consultation;
+import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -23,39 +25,42 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Doctor extends AuditEntity {
 
-    @Column(length = 45)
-    private String name;
+  @Column( length = 45 )
+  private String name;
 
-    private String code;
+  private String code;
 
-    @Column(unique = true)
-    private Integer slmcNumber;
+  @Column( unique = true )
+  private Integer slmcNumber;
 
-    private String mobile;
+  private String mobile;
 
-    private String land;
+  private String land;
 
-    @Email(message = "Please provide valid email")
-    @Column(length = 45)
-    private String email;
+  @Email( message = "Please provide valid email" )
+  @Column( length = 45 )
+  private String email;
 
-    @Column(length = 10)
-    private String description;
+  @Column( length = 10 )
+  private String description;
 
-    @Enumerated(EnumType.STRING)
-    private Title title;
+  @Enumerated( EnumType.STRING )
+  private Title title;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+  @Enumerated( EnumType.STRING )
+  private Gender gender;
 
-    @NotEmpty
-    private BigDecimal consultationFee;
+  @NotEmpty
+  private BigDecimal consultationFee;
 
-    @ManyToOne
-    private Consultation consultation;
+  @ManyToOne
+  private Consultation consultation;
 
-    //@OneToMany
-    //@ManyToOne
+  @OneToMany( cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
+  private List< DoctorSchedule > doctorSchedules;
+
+  //@OneToMany
+  //@ManyToOne
     /*    @OneToMany(mappedBy = "doctor")
         private List<Invoice> invoices = new ArrayList<>();*/
 
