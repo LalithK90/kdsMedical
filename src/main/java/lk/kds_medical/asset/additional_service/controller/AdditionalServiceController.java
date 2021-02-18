@@ -23,9 +23,9 @@ public class AdditionalServiceController implements AbstractController< Addition
         this.additionalServiceService = additionalServiceService;
     }
 
-    private String commonMethod(Model model, AdditionalService additionalService, boolean torf){
+    private String commonMethod(Model model, AdditionalService additionalService, boolean addStatus){
         model.addAttribute("additionalService", additionalService);
-        model.addAttribute("addStatus", torf);
+        model.addAttribute("addStatus", addStatus);
         return "additionalService/addAdditionalService";
     }
 
