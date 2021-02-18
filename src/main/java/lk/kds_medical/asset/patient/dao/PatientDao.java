@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface PatientDao extends JpaRepository<Patient,Integer>{
 // Patient findFirstByOderByIdDesc();
  Patient findByNic(String nic);
+
+  Patient findFirstByOrderByIdDesc();
 }

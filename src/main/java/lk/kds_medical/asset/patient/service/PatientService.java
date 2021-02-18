@@ -71,4 +71,8 @@ public class PatientService implements AbstractService<Patient,Integer> {
     public Patient findByNic(String nic) {
         return patientDao.findByNic(nic);
     }
+
+  public Patient lastPatient() {
+        return patientDao.findFirstByOrderByIdDesc();
+  }
 }

@@ -1,8 +1,8 @@
 package lk.kds_medical.asset.patient.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.kds_medical.asset.commonAsset.model.Enum.Gender;
-import lk.kds_medical.asset.commonAsset.model.Enum.Title;
+import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
