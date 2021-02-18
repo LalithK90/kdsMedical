@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" >
 <head th:replace="~{fragments/header :: headerFragment}">
     <meta charset="UTF-8">
     <title>Thymeleaf Springboot </title>
 </head>
 
 <body id="loginBack">
-<link th:href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css"/>
+<link data-th-href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css"/>
 
 <nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
 <div class="col full-height " id="loginPage">

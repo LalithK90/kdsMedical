@@ -29,14 +29,14 @@
     </div>
 </div>
 <!--Form Content - start -->
-<div class="container-fluid bg-dark formBorder">
+<div class="container-fluid  ">
     <div class="col-sm-12 flex-column ">
         <form id="form" class="form-horizontal" data-th-action="${addStatus==true?'/patient/save':'/patient/update'}"
               data-th-object="${patient}" method="POST" >
             <div class="row">
                 <!--Left Side-->
                 <div class="form-group col-md-6 col-sm-6 text-left flex-column">
-                    <input id="id" data-th-field="*{id}" class="form-control" type="text" data-th-if="${addStatus==false}"
+                    <input id="id" data-th-field="*{id}" class="form-control" type="hidden" data-th-if="${addStatus==false}"
                            readonly/>
                     <!--Id-->
                     <div id="idStatus" data-th-if="${addStatus==false}" class="form-row text-right">

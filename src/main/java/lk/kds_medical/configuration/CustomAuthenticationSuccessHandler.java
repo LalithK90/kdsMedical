@@ -1,11 +1,11 @@
 package lk.kds_medical.configuration;
 
 
-import lk.kds_medical.asset.userManagement.entity.Enum.UserSessionLogStatus;
-import lk.kds_medical.asset.userManagement.entity.User;
-import lk.kds_medical.asset.userManagement.entity.UserSessionLog;
-import lk.kds_medical.asset.userManagement.service.UserService;
-import lk.kds_medical.asset.userManagement.service.UserSessionLogService;
+import lk.kds_medical.asset.user_management.entity.Enum.UserSessionLogStatus;
+import lk.kds_medical.asset.user_management.entity.User;
+import lk.kds_medical.asset.user_management.entity.UserSessionLog;
+import lk.kds_medical.asset.user_management.service.UserService;
+import lk.kds_medical.asset.user_management.service.UserSessionLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
