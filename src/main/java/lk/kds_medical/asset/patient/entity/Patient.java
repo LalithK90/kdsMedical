@@ -2,6 +2,7 @@ package lk.kds_medical.asset.patient.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
@@ -58,4 +59,7 @@ public class Patient extends AuditEntity {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private LiveDead liveDead;
 }
