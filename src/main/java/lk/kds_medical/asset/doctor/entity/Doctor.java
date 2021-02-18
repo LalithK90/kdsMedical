@@ -63,7 +63,7 @@ public class Doctor extends AuditEntity {
   @ManyToOne
   private Consultation consultation;
 
-  @OneToMany( cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
+  @OneToMany(mappedBy = "doctor",cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
   private List< DoctorSchedule > doctorSchedules;
 
 }

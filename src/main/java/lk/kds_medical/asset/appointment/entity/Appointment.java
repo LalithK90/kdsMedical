@@ -1,6 +1,7 @@
 package lk.kds_medical.asset.appointment.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import lk.kds_medical.asset.appointment.entity.enums.AppointmentStatus;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.payment_appointment.entity.PaymentAppointment;
@@ -21,17 +22,20 @@ import java.util.List;
 @JsonFilter( "Appointment" )
 public class Appointment extends AuditEntity {
 
-  @Column(unique = true)
+  @Column( unique = true )
   private String code;
 
   private String number;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
+
+  @Enumerated( EnumType.STRING )
+  private AppointmentStatus appointmentStatus;
 
   @ManyToOne
   private DoctorSchedule doctorSchedule;
 
-  @OneToMany(mappedBy = "appointment")
+  @OneToMany( mappedBy = "appointment" )
   private List< PaymentAppointment > paymentAppointments;
 }

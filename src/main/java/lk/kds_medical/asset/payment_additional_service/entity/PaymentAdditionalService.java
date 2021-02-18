@@ -1,7 +1,7 @@
-package lk.kds_medical.asset.payment_appointment.entity;
+package lk.kds_medical.asset.payment_additional_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import lk.kds_medical.asset.appointment.entity.Appointment;
+import lk.kds_medical.asset.additional_service.entity.AdditionalService;
 import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.util.audit.AuditEntity;
@@ -17,16 +17,16 @@ import javax.persistence.OneToMany;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode( callSuper = true )
-@JsonFilter( "PaymentAppointment" )
-public class PaymentAppointment extends AuditEntity {
+@JsonFilter( "PaymentAdditionalService" )
+public class PaymentAdditionalService extends AuditEntity {
+
 
   @ManyToOne
   private Payment payment;
 
   @ManyToOne
-  private Appointment appointment;
+  private AdditionalService additionalService;
 
   @ManyToOne
   private Patient patient;
-
 }

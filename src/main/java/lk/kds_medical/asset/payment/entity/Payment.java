@@ -8,6 +8,7 @@ import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
+import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.asset.payment_appointment.entity.PaymentAppointment;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.*;
@@ -60,11 +61,12 @@ public class Payment extends AuditEntity {
   private LiveDead liveDead;
 
   @ManyToOne
-  private Patient patient;
-
-  @ManyToOne
   private DiscountRatio discountRatio;
 
   @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payment")
   private List< PaymentAppointment > PaymentAppointments;
+
+  @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payment")
+  private List< PaymentAdditionalService > paymentAdditionalServices;
+
 }
