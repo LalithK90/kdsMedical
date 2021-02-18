@@ -14,7 +14,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -31,7 +30,7 @@ public class DoctorSchedule extends AuditEntity {
   @DateTimeFormat( pattern = "HH:MM" )
   private LocalTime arrivalTime;
 
-  private boolean active = false;
+  private boolean active;
 
   @ManyToOne
   private Doctor doctor;

@@ -14,6 +14,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class Doctor extends AuditEntity {
   @Enumerated( EnumType.STRING )
   private Gender gender;
 
-  @NotEmpty
+  @NotNull(message = "consultation fee is required")
   private BigDecimal consultationFee;
 
   @ManyToOne

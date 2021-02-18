@@ -8,7 +8,7 @@
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
 
 <!--Page header -->
-<div class="container-fluid bg-secondary form-Border">
+<div class="container-fluid   ">
     <div class="row text-center formManagement border-info">
         <div class="col">
             <a class="btn btn-primary" href="/home">
@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="col">
-            <h4 class="text-light text-center">
+            <h4 class="  text-dark text-center">
                 <strong>
                     <span id="formHeader" data-th-text="${addStatus==true?'New User':'Update User'}"></span>
                 </strong>
@@ -174,12 +174,16 @@
             </div>
 
             <!--Button-->
-            <div class="form-group col-md-12 col-sm-12 text-center flex-column">
-                <button class="btn btn-success" type="submit">
-                    <i class="fa fa-save" style="font-size: 20px"></i>&nbsp; &nbsp;<span
-                        id="submit" data-th-text="${addStatus==true?'Save': 'Update'}">                        </span>
-                </button>
-            </div>
+            <!--Button-->
+            <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
+                <button class="btn btn-success" type="submit" tabindex="21" >
+                    <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;<span id="submit"
+                                                                                            data-th-text="${addStatus==true?'Save': 'Update'}" ></span >
+                </button >
+                <button class="btn btn-danger" type="reset" >
+                    <i class="fa fa-redo" ></i > <span id="reset" >Reset</span >
+                </button >
+            </div >
         </div>
         <!--Error-->
         <div class="form-row">

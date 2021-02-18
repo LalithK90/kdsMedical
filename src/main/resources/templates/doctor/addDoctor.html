@@ -7,7 +7,7 @@
 <body >
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
 
-<div class="container-fluid bg-secondary form-Border" >
+<div class="container-fluid   " >
     <div class="row text-center formManagement border-info" >
         <div class="col" >
             <a class="btn btn-primary" href="/home" >
@@ -15,7 +15,7 @@
             </a >
         </div >
         <div class="col" >
-            <h4 class="text-light text-center" >
+            <h4 class="  text-dark text-center" >
                 <strong >
                     <span data-th-text="${addStatus==true?'New Doctor Add':'Update Doctor Details'}" ></span >
                 </strong >
@@ -48,13 +48,27 @@
                             <input class="form-control" data-th-field="*{code}" id="code" readonly type="text" />
                         </div >
                     </div >
+                    <!--Consultation -->
+                    <div class="form-row text-right" >
+                        <div class="col-md-4" >
+                            <label class="control-label" >Consultation :</label >
+                        </div >
+                        <div class="col-md-8" >
+                            <select class="form-control" data-th-field="*{consultation}" required >
+                                <option value="" >Please select</option >
+                                <option data-th-each="consultation : ${consultations}"
+                                        data-th-text="${consultation.name}"
+                                        data-th-value="${consultation.id}" ></option >
+                            </select >
+                        </div >
+                    </div >
                     <!--Tittle -->
                     <div class="form-row text-right" >
                         <div class="col-md-4" >
                             <label class="control-label" for="title" >Title :</label >
                         </div >
                         <div class="col-md-8" >
-                            <select class="form-control" data-th-field="*{title}" id="title" required tabindex="3" >
+                            <select class="form-control" data-th-field="*{title}" id="title" required >
                                 <option value="" >Please select</option >
                                 <option data-th-each="titles : ${title}"
                                         data-th-selected="${titles==doctor.title?'selected':'unselected'}"
@@ -69,15 +83,14 @@
                             <label class="control-label" for="name" >Name :</label >
                         </div >
                         <div class="col-md-8" >
-                            <input class="form-control" data-th-field="*{name}" id="name" required tabindex="4"
-                                   type="text" />
+                            <input class="form-control" data-th-field="*{name}" id="name" required type="text" />
                             <span class="error" data-th-errors="*{name}"
                                   data-th-if="${#fields.hasErrors('name')}" id="nameError" >Error Name</span >
                         </div >
                     </div >
                     <div class="form-row text-right" >
                         <div class="col-md-4" >
-                            <label class="control-label" for="gender" >Gender :</label >
+                            <label class="control-label" data-th-for="${'gender'}" >Gender :</label >
                         </div >
                         <div class="col-md-8" >
                             <div class="custom-control custom-checkbox custom-control-inline "
@@ -102,7 +115,7 @@
                         <div class="col-md-8" >
                             <input class="form-control" data-th-field="*{consultationFee}" id="cfee"
 
-                                   required tabindex="13"
+                                   required
                                    type="text" />
                         </div >
                     </div >
@@ -114,7 +127,7 @@
                         <div class="col-md-8" >
                             <input class="form-control mobile" data-th-field="*{mobile}" id="mobile" maxlength="10"
                                    min="9"
-                                   required tabindex="13"
+                                   required
                                    type="text" />
                             <span class="error" data-th-errors="*{mobile}"
                                   data-th-if="${#fields.hasErrors('mobile')}"
@@ -127,10 +140,10 @@
                             <label class="control-label" for="slmc_number" >SLMC No :</label >
                         </div >
                         <div class="col-md-8" >
-                            <input class="form-control mobile" data-th-field="*{slmcNumber}" id="slmc_number"
+                            <input class="form-control" data-th-field="*{slmcNumber}" id="slmc_number"
                                    maxlength="10"
                                    min="9"
-                                   tabindex="14" type="text" />
+                                   type="text" />
                             <span class="error" data-th-errors="*{slmcNumber}"
                                   data-th-if="${#fields.hasErrors('slmcNumber')}"
                                   id="slmc_numberError" >Error Mobile  Number</span >
@@ -142,24 +155,22 @@
                             <label class="control-label" for="email" >Email :</label >
                         </div >
                         <div class="col-md-8" >
-                            <input class="form-control" data-th-field="*{email}" id="email" required tabindex="16"
+                            <input class="form-control" data-th-field="*{email}" id="email" required
                                    type="email" />
                             <span class="error" data-th-errors="*{email}"
                                   data-th-if="${#fields.hasErrors('email')}" id="emailError" >Error Email</span >
                         </div >
                     </div >
-                    <!--Consultation -->
+                    <!--Consultation fee-->
                     <div class="form-row text-right" >
                         <div class="col-md-4" >
-                            <label class="control-label" >Consultation :</label >
+                            <label class="control-label" for="email" >Consultation Fee :</label >
                         </div >
                         <div class="col-md-8" >
-                            <select class="form-control" data-th-field="*{consultation}" required tabindex="20" >
-                                <option value="" >Please select</option >
-                                <option data-th-each="consultation : ${consultations}"
-                                        data-th-text="${consultation.name}"
-                                        data-th-value="${consultation.id}" ></option >
-                            </select >
+                            <input class="form-control" data-th-field="*{consultationFee}" required
+                                   type="number" />
+                            <span class="error" data-th-errors="*{consultationFee}"
+                                  data-th-if="${#fields.hasErrors('consultationFee')}" >Error Email</span >
                         </div >
                     </div >
                     <!--Created by and created at-->
@@ -186,12 +197,44 @@
                 </div >
                 <!--Right side-->
                 <div class="form-group col-md-6 col-sm-6 text-left flex-column" >
-                    <p class="h3">Arrival Times </p >
-
+                    <p class="h3" >Arrival Times </p >
+                    <table class="table table-striped table-inverse table-responsive" >
+                        <thead class="thead-inverse" >
+                        <tr >
+                            <th >Day Of Week</th >
+                            <th > Arrival or Not</th >
+                            <th >Arrival Time</th >
+                        </tr >
+                        </thead >
+                        <tbody >
+                        <tr data-th-each="doctorSchedule, index : ${doctor.doctorSchedules}" >
+                            <td >
+                                <input type="text" class="form-control"
+                                       data-th-field="*{doctorSchedules[__${index.index}__].dayOfWeek}" >
+                                <input type="hidden" class="form-control"
+                                       data-th-field="*{doctorSchedules[__${index.index}__].id}" >
+                            </td >
+                            <td >
+                                <div class="custom-control custom-switch" >
+                                    <input type="checkbox"
+                                           class="arrival custom-control-input" data-th-id="${'ar'+index.index}"
+                                           data-th-field="*{doctorSchedules[__${index.index}__].active}" >
+                                    <label class="custom-control-label"
+                                           data-th-for="${'ar'+index.index}" >Arrival</label >
+                                </div >
+                            </td >
+                            <td >
+                                <input type="time" class="form-control" data-th-id="${'at'+index.index}"
+                                       data-th-field="*{doctorSchedules[__${index.index}__].arrivalTime}"
+                                       data-th-readonly="${doctorSchedule.active == false}" >
+                            </td >
+                        </tr >
+                        </tbody >
+                    </table >
                 </div >
                 <!--Button-->
                 <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
-                    <button class="btn btn-success" type="submit" tabindex="21" >
+                    <button class="btn btn-success" type="submit" >
                         <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;<span id="submit"
                                                                                                 data-th-text="${addStatus==true?'Save': 'Update'}" ></span >
                     </button >
@@ -217,7 +260,14 @@
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 
 <script >
-    $('.input-images').imageUploader();
+    $('.arrival').click(function () {
+        let selectedId = $(this).attr('id').slice(2);
+        if ($(this).is(':checked')) {
+            $(`#at${selectedId}`).removeAttr('readonly').attr('required', 'required');
+        } else {
+            $(`#at${selectedId}`).removeAttr('required').attr('readonly', 'readonly');
+        }
+    });
 </script >
 </body >
 </html >
