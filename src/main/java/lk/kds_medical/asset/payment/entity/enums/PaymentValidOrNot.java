@@ -1,14 +1,12 @@
 package lk.kds_medical.asset.payment.entity.enums;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum InvoiceState {
-    PAID("Paid"),
-    CANCELLED("Cancelled");
-
-    private final String invoiceState;
+public enum PaymentValidOrNot {
+    VALID("Valid"),
+    NOTVALID("No Valid");
+    private final String invoiceValidOrNot;
 }

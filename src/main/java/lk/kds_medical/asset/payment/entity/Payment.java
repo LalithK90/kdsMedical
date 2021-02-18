@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.discount_ratio.entity.DiscountRatio;
 import lk.kds_medical.asset.patient.entity.Patient;
-import lk.kds_medical.asset.payment.entity.enums.InvoicePrintOrNot;
-import lk.kds_medical.asset.payment.entity.enums.InvoiceValidOrNot;
+import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
+import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment_appointment.entity.PaymentAppointment;
 import lk.kds_medical.util.audit.AuditEntity;
@@ -48,13 +48,13 @@ public class Payment extends AuditEntity {
 
   @Column(precision = 10, scale = 2)
   private BigDecimal balance;
-  private InvoicePrintOrNot invoicePrintOrNot;
+  private PaymentPrintOrNot paymentPrintOrNot;
 
   @Enumerated( EnumType.STRING)
   private PaymentMethod paymentMethod;
 
   @Enumerated(EnumType.STRING)
-  private InvoiceValidOrNot invoiceValidOrNot;
+  private PaymentValidOrNot paymentValidOrNot;
 
   @Enumerated(EnumType.STRING)
   private LiveDead liveDead;
