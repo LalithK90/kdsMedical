@@ -91,7 +91,7 @@ public class DoctorController {
 
     if ( doctor.getId() == null ) {
       Doctor lastDoctor = doctorService.lastDoctor();
-      if ( lastDoctor.getCode() == null ) {
+      if ( lastDoctor == null ) {
         doctor.setCode("KDSD" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
       } else {
         doctor.setCode("KDSD" + makeAutoGenerateNumberService.numberAutoGen(lastDoctor.getCode().substring(4)).toString());
