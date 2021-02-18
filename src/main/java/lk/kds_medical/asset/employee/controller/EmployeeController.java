@@ -2,16 +2,16 @@ package lk.kds_medical.asset.employee.controller;
 
 
 
-import lk.kds_medical.asset.commonAsset.model.Enum.*;
-import lk.kds_medical.asset.commonAsset.service.CommonService;
+import lk.kds_medical.asset.common_asset.model.Enum.*;
+import lk.kds_medical.asset.common_asset.service.CommonService;
 import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.employee.entity.EmployeeFiles;
 import lk.kds_medical.asset.employee.entity.enums.Designation;
 import lk.kds_medical.asset.employee.entity.enums.EmployeeStatus;
 import lk.kds_medical.asset.employee.service.EmployeeFilesService;
 import lk.kds_medical.asset.employee.service.EmployeeService;
-import lk.kds_medical.asset.userManagement.entity.User;
-import lk.kds_medical.asset.userManagement.service.UserService;
+import lk.kds_medical.asset.user_management.entity.User;
+import lk.kds_medical.asset.user_management.service.UserService;
 import lk.kds_medical.util.service.DateTimeAgeService;
 import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,9 +142,9 @@ public class EmployeeController {
     if ( employee.getId() == null ) {
       Employee lastEmployee = employeeService.lastEmployee();
       if ( lastEmployee.getCode() == null ) {
-        employee.setCode("SSME" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+        employee.setCode("KDSE" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
       } else {
-        employee.setCode("SSME" + makeAutoGenerateNumberService.numberAutoGen(lastEmployee.getCode().substring(4)).toString());
+        employee.setCode("KDSE" + makeAutoGenerateNumberService.numberAutoGen(lastEmployee.getCode().substring(4)).toString());
       }
     }
 

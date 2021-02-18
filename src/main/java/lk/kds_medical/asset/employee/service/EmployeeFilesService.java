@@ -2,7 +2,7 @@ package lk.kds_medical.asset.employee.service;
 
 
 
-import lk.kds_medical.asset.commonAsset.model.FileInfo;
+import lk.kds_medical.asset.common_asset.model.FileInfo;
 import lk.kds_medical.asset.employee.controller.EmployeeController;
 import lk.kds_medical.asset.employee.dao.EmployeeFilesDao;
 import lk.kds_medical.asset.employee.entity.Employee;

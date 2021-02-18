@@ -2,7 +2,7 @@ package lk.kds_medical.asset.employee.service;
 
 
 
-import lk.kds_medical.asset.commonAsset.model.Enum.LiveDead;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.employee.dao.EmployeeDao;
 import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.util.interfaces.AbstractService;
