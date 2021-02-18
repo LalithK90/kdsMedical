@@ -87,7 +87,7 @@ public class PatientController {
 
         if ( patient.getId() == null ) {
             Patient lastPatient = patientService.lastPatient();
-            if ( lastPatient.getCode() == null ) {
+            if ( lastPatient == null ) {
                 patient.setCode("KDSD" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
             } else {
                 patient.setCode("KDSD" + makeAutoGenerateNumberService.numberAutoGen(lastPatient.getCode().substring(4)).toString());
