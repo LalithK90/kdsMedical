@@ -2,6 +2,7 @@ package lk.kds_medical.asset.doctor.entity;
 
 
 import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.asset.consultation.entity.Consultation;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
@@ -36,6 +37,8 @@ public class Doctor extends AuditEntity {
 
   private String mobile;
 
+  private String mobileTwo;
+
   private String land;
 
   @Email( message = "Please provide valid email" )
@@ -51,6 +54,9 @@ public class Doctor extends AuditEntity {
   @Enumerated( EnumType.STRING )
   private Gender gender;
 
+  @Enumerated(EnumType.STRING)
+  private LiveDead liveDead;
+
   @NotNull(message = "consultation fee is required")
   private BigDecimal consultationFee;
 
@@ -59,10 +65,5 @@ public class Doctor extends AuditEntity {
 
   @OneToMany( cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
   private List< DoctorSchedule > doctorSchedules;
-
-  //@OneToMany
-  //@ManyToOne
-    /*    @OneToMany(mappedBy = "doctor")
-        private List<Invoice> invoices = new ArrayList<>();*/
 
 }

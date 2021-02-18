@@ -36,7 +36,7 @@
                 <thead>
                 <tr>
                     <th>Index</th>
-                    <!--<th> Code</th>-->
+                    <th> Code</th>
                     <th> Name</th>
                     <th> SLMC No</th>
                     <th> Gender</th>
@@ -48,7 +48,7 @@
                 <tbody>
                 <tr data-th-each="doctor, rowCount : ${doctors}">
                     <th data-th-text="${rowCount.count}"></th>
-                    <!--<th data-th-text="${doctor.code}"></th>-->
+                    <th data-th-text="${doctor.code}"></th>
                     <th data-th-text="${doctor.name}"></th>
                     <th data-th-text="${doctor.slmcNumber}"></th>
                     <th data-th-text="${doctor.gender}"></th>

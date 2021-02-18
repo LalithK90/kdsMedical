@@ -97,8 +97,12 @@ public class DoctorController {
         doctor.setCode("KDSD" + makeAutoGenerateNumberService.numberAutoGen(lastDoctor.getCode().substring(4)).toString());
       }
     }
-
-
+    List< DoctorSchedule > doctorSchedules = new ArrayList<>();
+    doctor.getDoctorSchedules().forEach(x -> {
+      x.setDoctor(doctor);
+      doctorSchedules.add(x);
+    });
+    doctor.setDoctorSchedules(doctorSchedules);
     doctorService.persist(doctor);
     return "redirect:/doctor";
   }
