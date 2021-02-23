@@ -1,5 +1,4 @@
-package lk.kds_medical.asset.appointmentDao.service;
-
+package lk.kds_medical.asset.appointment.service;
 
 
 import lk.kds_medical.asset.appointment.dao.AppointmentDao;

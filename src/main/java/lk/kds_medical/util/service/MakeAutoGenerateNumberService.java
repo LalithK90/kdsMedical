@@ -34,4 +34,11 @@ public class MakeAutoGenerateNumberService {
         }
         return newNumber;
     }
+
+    public String commonMobileNumberLengthValidator(String number) {
+        if ( number.length() == 9 ) {
+            number = "0".concat(number);
+        }
+        return number;
+    }
 }

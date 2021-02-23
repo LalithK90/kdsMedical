@@ -1,7 +1,6 @@
 package lk.kds_medical.asset.patient.controller;
 
 
-import lk.kds_medical.asset.common_asset.service.CommonService;
 import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.user_management.service.UserService;
@@ -82,8 +81,8 @@ public class PatientController {
             return commonThings(model);
         }
 
-        patient.setMobileOne(commonService.commonMobileNumberLengthValidator(patient.getMobileOne()));
-        patient.setMobileTwo(commonService.commonMobileNumberLengthValidator(patient.getMobileTwo()));
+        patient.setMobileOne(makeAutoGenerateNumberService.commonMobileNumberLengthValidator(patient.getMobileOne()));
+        patient.setMobileTwo(makeAutoGenerateNumberService.commonMobileNumberLengthValidator(patient.getMobileTwo()));
 
         if ( patient.getId() == null ) {
             Patient lastPatient = patientService.lastPatient();

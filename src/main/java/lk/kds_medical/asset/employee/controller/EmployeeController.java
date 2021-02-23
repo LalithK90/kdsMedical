@@ -135,9 +135,9 @@ public class EmployeeController {
       return commonThings(model);
     }
 
-    employee.setMobileOne(commonService.commonMobileNumberLengthValidator(employee.getMobileOne()));
-    employee.setMobileTwo(commonService.commonMobileNumberLengthValidator(employee.getMobileTwo()));
-    employee.setLand(commonService.commonMobileNumberLengthValidator(employee.getLand()));
+    employee.setMobileOne(makeAutoGenerateNumberService.commonMobileNumberLengthValidator(employee.getMobileOne()));
+    employee.setMobileTwo(makeAutoGenerateNumberService.commonMobileNumberLengthValidator(employee.getMobileTwo()));
+    employee.setLand(makeAutoGenerateNumberService.commonMobileNumberLengthValidator(employee.getLand()));
 
     if ( employee.getId() == null ) {
       Employee lastEmployee = employeeService.lastEmployee();

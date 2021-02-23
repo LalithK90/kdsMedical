@@ -40,9 +40,6 @@ public class Patient extends AuditEntity {
   @Column( unique = true )
   private String nic;
 
-  @Column( columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NULL", length = 255 )
-  private String allergies;
-
   @Size( max = 10, message = "Mobile number length should be contained 10 and 9" )
   private String mobileOne;
 
