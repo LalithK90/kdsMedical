@@ -39,7 +39,6 @@ public class EmployeeService implements AbstractService< Employee, Integer > {
 
     @Caching( evict = {@CacheEvict( value = "employee", allEntries = true )},
             put = {@CachePut( value = "employee", key = "#employee.id" )} )
-    @Transactional
     public Employee persist(Employee employee) {
         if(employee.getId()==null){
             employee.setLiveDead(LiveDead.ACTIVE);}
@@ -52,12 +51,6 @@ public class EmployeeService implements AbstractService< Employee, Integer > {
         employeeDao.save(employee);
         return false;
     }
-   /* @CacheEvict( allEntries = true )
-    public boolean delete(Integer id) {
-        employeeDao.deleteById(id);
-        return false;
-    }
-*/
     @Cacheable
     public List< Employee > search(Employee employee) {
         ExampleMatcher matcher = ExampleMatcher

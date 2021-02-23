@@ -1,8 +1,10 @@
 package lk.kds_medical.asset.payment.service;
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.payment.dao.PaymentDao;
 import lk.kds_medical.asset.payment.entity.Payment;
+import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService implements AbstractService<Payment, Integer> {
@@ -25,7 +28,9 @@ public class PaymentService implements AbstractService<Payment, Integer> {
 
     @Cacheable(value = "Payment")
     public List<Payment> findAll() {
-        return paymentDao.findAll();
+        return paymentDao.findAll().stream()
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .collect(Collectors.toList());
     }
 
 
@@ -33,16 +38,20 @@ public class PaymentService implements AbstractService<Payment, Integer> {
         return paymentDao.getOne(id);
     }
 
-    @Transactional
+
     public Payment persist(Payment payment) {
+        if(payment.getId()==null){
+            payment.setLiveDead(LiveDead.ACTIVE);}
         return paymentDao.save(payment);
     }
 
-    @Transactional
     public boolean delete(Integer id) {
-        paymentDao.deleteById(id);
+        Payment payment =  paymentDao.getOne(id);
+        payment.setLiveDead(LiveDead.STOP);
+        paymentDao.save(payment);
         return false;
     }
+
 
 
     public List<Payment> search(Payment payment) {

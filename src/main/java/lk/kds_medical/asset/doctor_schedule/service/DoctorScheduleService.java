@@ -1,6 +1,8 @@
 package lk.kds_medical.asset.doctor_schedule.service;
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.dao.DoctorScheduleDao;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.util.interfaces.AbstractService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorScheduleService implements AbstractService< DoctorSchedule, Integer> {
@@ -25,7 +28,9 @@ public class DoctorScheduleService implements AbstractService< DoctorSchedule, I
 
     @Cacheable(value = "DoctorSchedule")
     public List<DoctorSchedule> findAll() {
-        return doctorScheduleDao.findAll();
+        return doctorScheduleDao.findAll().stream()
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .collect(Collectors.toList());
     }
 
 
@@ -33,16 +38,20 @@ public class DoctorScheduleService implements AbstractService< DoctorSchedule, I
         return doctorScheduleDao.getOne(id);
     }
 
-    @Transactional
     public DoctorSchedule persist(DoctorSchedule doctorSchedule) {
+        if ( doctorSchedule.getId()==null ){
+            doctorSchedule.setLiveDead(LiveDead.ACTIVE);
+        }
         return doctorScheduleDao.save(doctorSchedule);
     }
 
-    @Transactional
     public boolean delete(Integer id) {
-        doctorScheduleDao.deleteById(id);
+        DoctorSchedule doctorSchedule =  doctorScheduleDao.getOne(id);
+        doctorSchedule.setLiveDead(LiveDead.STOP);
+        doctorScheduleDao.save(doctorSchedule);
         return false;
     }
+
 
 
     public List<DoctorSchedule> search(DoctorSchedule doctorSchedule) {

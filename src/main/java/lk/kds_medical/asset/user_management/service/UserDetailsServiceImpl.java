@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetailsServiceImpl() {
     }
 
-    @Transactional( readOnly = true )
+    @Transactional(readOnly = true )
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

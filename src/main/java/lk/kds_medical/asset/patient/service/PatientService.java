@@ -1,6 +1,8 @@
 package lk.kds_medical.asset.patient.service;
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.patient.dao.PatientDao;
 import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.util.interfaces.AbstractService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @CacheConfig(cacheNames = "patient")
@@ -27,7 +30,9 @@ public class PatientService implements AbstractService<Patient,Integer> {
 
     @Cacheable
     public List<Patient> findAll() {
-        return patientDao.findAll();
+        return patientDao.findAll().stream()
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .collect(Collectors.toList());
     }
 
     @Cacheable
@@ -37,17 +42,20 @@ public class PatientService implements AbstractService<Patient,Integer> {
 
     @Caching( evict = {@CacheEvict( value = "patient", allEntries = true )},
             put = {@CachePut( value = "patient", key = "#patient.id" )} )
-    @Transactional
+
     public Patient persist(Patient patient) {
+        if ( patient.getId()==null ){
+            patient.setLiveDead(LiveDead.ACTIVE);
+        }
         return patientDao.save(patient);
     }
-
     @CacheEvict( allEntries = true )
     public boolean delete(Integer id) {
-        patientDao.deleteById(id);
+        Patient patient =  patientDao.getOne(id);
+        patient.setLiveDead(LiveDead.STOP);
+        patientDao.save(patient);
         return false;
     }
-
     @Cacheable
     public List< Patient > search(Patient patient) {
         ExampleMatcher matcher = ExampleMatcher

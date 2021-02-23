@@ -3,7 +3,6 @@ package lk.kds_medical.asset.employee.controller;
 
 
 import lk.kds_medical.asset.common_asset.model.Enum.*;
-import lk.kds_medical.asset.common_asset.service.CommonService;
 import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.employee.entity.EmployeeFiles;
 import lk.kds_medical.asset.employee.entity.enums.Designation;
@@ -37,20 +36,17 @@ public class EmployeeController {
   private final EmployeeService employeeService;
   private final EmployeeFilesService employeeFilesService;
   private final DateTimeAgeService dateTimeAgeService;
-  private final CommonService commonService;
   private final UserService userService;
 
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
 
   @Autowired
   public EmployeeController(EmployeeService employeeService, EmployeeFilesService employeeFilesService,
-                            DateTimeAgeService dateTimeAgeService,
-                            CommonService commonService, UserService userService,
+                            DateTimeAgeService dateTimeAgeService,UserService userService,
                             MakeAutoGenerateNumberService makeAutoGenerateNumberService) {
     this.employeeService = employeeService;
     this.employeeFilesService = employeeFilesService;
     this.dateTimeAgeService = dateTimeAgeService;
-    this.commonService = commonService;
     this.userService = userService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
   }

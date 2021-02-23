@@ -19,6 +19,7 @@ public class AppointmentController {
   private final PatientService patientService;
   private final AppointmentService appointmentService;
 
+
   public AppointmentController(DoctorService doctorService, PatientService patientService,
                                AppointmentService appointmentService) {
     this.doctorService = doctorService;
@@ -28,14 +29,7 @@ public class AppointmentController {
 
   @GetMapping
   public String appointment(Model model) {
-    List< Doctor > doctors = doctorService.findAll();
-    for ( DayOfWeek dayOfWeek : DayOfWeek.values() ) {
-      doctors.forEach(x -> {
-        x.getDoctorSchedules().forEach(y -> {
-          y.getDayOfWeek().equals(dayOfWeek);
-        });
-      });
-    }
+
     return "appointment/appointment";
   }
 }

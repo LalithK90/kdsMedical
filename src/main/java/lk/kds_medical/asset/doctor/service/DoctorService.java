@@ -39,7 +39,7 @@ public class DoctorService implements AbstractService< Doctor, Integer > {
   }
 
   @CachePut( value = "doctor" )
-  @Transactional
+
   public Doctor persist(Doctor doctor) {
     if ( doctor.getId() == null ) {
       doctor.setLiveDead(LiveDead.ACTIVE);

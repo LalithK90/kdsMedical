@@ -3,6 +3,8 @@ package lk.kds_medical.asset.appointment.service;
 
 import lk.kds_medical.asset.appointment.dao.AppointmentDao;
 import lk.kds_medical.asset.appointment.entity.Appointment;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService implements AbstractService< Appointment, Integer> {
@@ -25,7 +28,10 @@ public class AppointmentService implements AbstractService< Appointment, Integer
 
     @Cacheable(value = "Appointment")
     public List<Appointment> findAll() {
-        return appointmentDao.findAll();
+        return appointmentDao.findAll()
+            .stream()
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .collect(Collectors.toList());
     }
 
 
@@ -33,17 +39,20 @@ public class AppointmentService implements AbstractService< Appointment, Integer
         return appointmentDao.getOne(id);
     }
 
-    @Transactional
+
     public Appointment persist(Appointment appointment) {
+        if ( appointment.getId()==null ){
+            appointment.setLiveDead(LiveDead.ACTIVE);
+        }
         return appointmentDao.save(appointment);
     }
 
-    @Transactional
     public boolean delete(Integer id) {
-        appointmentDao.deleteById(id);
+        Appointment appointment =  appointmentDao.getOne(id);
+        appointment.setLiveDead(LiveDead.STOP);
+        appointmentDao.save(appointment);
         return false;
     }
-
 
     public List<Appointment> search(Appointment appointment) {
         ExampleMatcher matcher = ExampleMatcher

@@ -2,6 +2,7 @@ package lk.kds_medical.asset.doctor_schedule.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.kds_medical.asset.appointment.entity.Appointment;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.doctor.entity.Doctor;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,9 @@ public class DoctorSchedule extends AuditEntity {
   private LocalTime arrivalTime;
 
   private boolean active;
+
+  @Enumerated(EnumType.STRING)
+  private LiveDead liveDead;
 
   @ManyToOne
   private Doctor doctor;

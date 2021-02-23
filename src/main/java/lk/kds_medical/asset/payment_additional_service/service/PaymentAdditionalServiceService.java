@@ -2,6 +2,8 @@ package lk.kds_medical.asset.payment_additional_service.service;
 
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.payment_additional_service.dao.PaymentAdditionalServiceDao;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.util.interfaces.AbstractService;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentAdditionalServiceService implements AbstractService< PaymentAdditionalService, Integer> {
@@ -26,7 +29,9 @@ public class PaymentAdditionalServiceService implements AbstractService< Payment
 
     @Cacheable(value = "PaymentAdditionalService")
     public List<PaymentAdditionalService> findAll() {
-        return paymentAdditionalServiceDao.findAll();
+        return paymentAdditionalServiceDao.findAll().stream()
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .collect(Collectors.toList());
     }
 
 
@@ -34,14 +39,17 @@ public class PaymentAdditionalServiceService implements AbstractService< Payment
         return paymentAdditionalServiceDao.getOne(id);
     }
 
-    @Transactional
+
     public PaymentAdditionalService persist(PaymentAdditionalService paymentAdditionalService) {
+        if(paymentAdditionalService.getId()==null){
+            paymentAdditionalService.setLiveDead(LiveDead.ACTIVE);}
         return paymentAdditionalServiceDao.save(paymentAdditionalService);
     }
 
-    @Transactional
     public boolean delete(Integer id) {
-        paymentAdditionalServiceDao.deleteById(id);
+        PaymentAdditionalService paymentAdditionalService =  paymentAdditionalServiceDao.getOne(id);
+        paymentAdditionalService.setLiveDead(LiveDead.STOP);
+        paymentAdditionalServiceDao.save(paymentAdditionalService);
         return false;
     }
 

@@ -32,14 +32,14 @@ public class UserService implements AbstractService<User, Integer > {
     }
 
     @Cacheable
-    @Transactional
+
     public User findById(Integer id) {
         return userDao.getOne(id);
     }
 
     @Caching( evict = {@CacheEvict( value = "user", allEntries = true )},
             put = {@CachePut( value = "user", key = "#user.id" )} )
-    @Transactional
+
     public User persist(User user) {
         user.setUsername(user.getUsername().toLowerCase());
         if ( user.getPassword() != null ) {
@@ -71,7 +71,6 @@ public class UserService implements AbstractService<User, Integer > {
     }
 
     @Cacheable
-    @Transactional( readOnly = true )
     public User findByUserName(String name) {
         return userDao.findByUsername(name);
     }

@@ -1,6 +1,7 @@
 package lk.kds_medical.asset.consultation.entity;
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,5 +20,7 @@ public class Consultation {
     @Column(nullable = false, length = 45, unique = true)
     private String name;
 
+    @Enumerated( EnumType.STRING )
+    private LiveDead liveDead;
 
 }

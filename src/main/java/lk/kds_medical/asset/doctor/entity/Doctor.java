@@ -66,4 +66,7 @@ public class Doctor extends AuditEntity {
   @OneToMany(mappedBy = "doctor",cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
   private List< DoctorSchedule > doctorSchedules;
 
+  @Transient
+  private int appointmentCount;
+
 }

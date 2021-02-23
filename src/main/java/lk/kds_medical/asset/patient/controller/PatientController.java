@@ -1,6 +1,12 @@
 package lk.kds_medical.asset.patient.controller;
 
 
+import lk.kds_medical.asset.common_asset.model.Enum.BloodGroup;
+import lk.kds_medical.asset.common_asset.model.Enum.CivilStatus;
+import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.Title;
+import lk.kds_medical.asset.employee.entity.enums.Designation;
+import lk.kds_medical.asset.employee.entity.enums.EmployeeStatus;
 import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.user_management.service.UserService;
@@ -19,21 +25,24 @@ public class PatientController {
 
     private final PatientService patientService;
     private final DateTimeAgeService dateTimeAgeService;
-    private final CommonService commonService;
     private final UserService userService;
     private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
 
     @Autowired
-    public PatientController(PatientService patientService, DateTimeAgeService dateTimeAgeService, CommonService commonService,
+    public PatientController(PatientService patientService, DateTimeAgeService dateTimeAgeService,
                              UserService userService, MakeAutoGenerateNumberService makeAutoGenerateNumberService) {
         this.patientService = patientService;
         this.dateTimeAgeService = dateTimeAgeService;
-        this.commonService = commonService;
         this.userService = userService;
         this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     }
     private String commonThings(Model model) {
-        commonService.commonEmployeeAndOffender(model);
+        model.addAttribute("title", Title.values());
+        model.addAttribute("gender", Gender.values());
+        model.addAttribute("civilStatus", CivilStatus.values());
+        model.addAttribute("employeeStatus", EmployeeStatus.values());
+        model.addAttribute("designation", Designation.values());
+        model.addAttribute("bloodGroup", BloodGroup.values());
         return "patient/addPatient";
     }
     //Send all employee data
