@@ -99,8 +99,10 @@ public class DoctorController {
     }
     List< DoctorSchedule > doctorSchedules = new ArrayList<>();
     doctor.getDoctorSchedules().forEach(x -> {
-      x.setDoctor(doctor);
-      doctorSchedules.add(x);
+      if ( x.isActive() ) {
+        x.setDoctor(doctor);
+        doctorSchedules.add(x);
+      }
     });
     doctor.setDoctorSchedules(doctorSchedules);
     doctorService.persist(doctor);

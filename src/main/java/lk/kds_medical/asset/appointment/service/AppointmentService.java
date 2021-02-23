@@ -13,6 +13,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,5 +62,8 @@ public class AppointmentService implements AbstractService< Appointment, Integer
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Appointment> consultationExample = Example.of(appointment, matcher);
         return appointmentDao.findAll(consultationExample);
+    }
+    public List<Appointment> byDate(LocalDate localDate) {
+        return appointmentDao.findByDateAfter(localDate);
     }
 }

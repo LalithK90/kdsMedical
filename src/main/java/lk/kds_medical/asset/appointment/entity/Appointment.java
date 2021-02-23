@@ -27,6 +27,9 @@ public class Appointment extends AuditEntity {
 
   private String number;
 
+  @DateTimeFormat( pattern = "yyyy-MM-dd" )
+  private LocalDate date;
+
   @Enumerated( EnumType.STRING )
   private LiveDead liveDead;
 
