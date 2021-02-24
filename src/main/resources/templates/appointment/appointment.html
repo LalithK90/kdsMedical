@@ -11,7 +11,7 @@
   <div class="row text-center " >
     <div class="col" >
       <a href="/appointment/add" >
-        <button type="button" class="btn btn-primary">Add Appointment</button>
+        <button type="button" class="btn btn-primary" >Add Appointment</button >
       </a >
     </div >
     <div class="col" >
@@ -26,14 +26,15 @@
   </div >
 </div >
 
-<div class="container-fluid" >
-  <div class="container" data-th-each="appointmentBook, index : ${appointmentBooks}" >
+<div class="container-fluid mt-3" >
+  <div class="container-fluid" data-th-each="appointmentBook, index : ${appointmentBooks}" >
     <div id="accordianId" role="tablist" aria-multiselectable="true" >
       <div class="card" >
         <div class="card-header" role="tab" data-th-id="${'section1HeaderId'+index.index}" >
           <a data-toggle="collapse" data-parent="#accordianId" data-th-href="${'#section1ContentId'+index.index}"
              aria-expanded="true" aria-controls="section1ContentId" >
             <h5 class="mb-0 text-center" >
+              <span data-th-text="${appointmentBook.appointmentDate}" ></span > -
               <span data-th-text="${appointmentBook.dayOfWeek}" ></span >
             </h5 >
           </a >
@@ -41,22 +42,48 @@
         <div data-th-id="${'section1ContentId'+index.index}" class="collapse in" role="tabpanel"
              aria-labelledby="section1HeaderId" >
           <div class="card-body" >
-            <table class="table table-hover table-striped text-center">
+            <table class="table table-hover table-striped text-center" >
               <tr >
                 <td >Doctor Name</td >
                 <td >Consultation</td >
                 <td >Arrival Time</td >
                 <td >Booking Account</td >
-                <td >Modify</td >
               </tr >
-                <tr data-th-each="doctorSchedule, indexOne : ${appointmentBook.doctorSchedules}">
-                    <td data-th-text="${doctorSchedule.doctor.title.title+''+doctorSchedule.doctor.name}"></td>
-                    <td data-th-text="${doctorSchedule.doctor.consultation.name}"></td>
-                    <td data-th-text="${doctorSchedule.arrivalTime}"></td>
-                    <td data-th-text="${#lists.size(doctorSchedule.appointments)}"></td>
-                    <td data-th-text="${#lists.size(doctorSchedule.appointments)}"></td>
-                </tr>
-            </table>
+              <tr data-th-each="doctorSchedule, indexOne : ${appointmentBook.doctorSchedules}" >
+                <td data-th-text="${doctorSchedule.doctor.title.title+''+doctorSchedule.doctor.name}" ></td >
+                <td data-th-text="${doctorSchedule.doctor.consultation.name}" ></td >
+                <td data-th-text="${doctorSchedule.arrivalTime}" ></td >
+                <td >
+                  <table class="table table-hover table-striped text-center" >
+                    <tr >
+                      <td >Date</td >
+                      <td >Count</td >
+                      <td >Modify</td >
+                    </tr >
+                    <tr >
+                      <td data-th-text="${doctorSchedule.appointmentDate}" ></td >
+                      <td data-th-text="${doctorSchedule.count}" ></td >
+                      <td >
+                        <div class="form-row" >
+                          <!--View-->
+                          <form action="/appointment/view" >
+                            <input type="hidden" name="doctorSchedule.id" data-th-value="${doctorSchedule.id}" >
+                            <input type="hidden" name="date" data-th-value="${doctorSchedule.appointmentDate}" >
+                            <button type="submit" class="btn btn-primary" >View</button >
+                          </form >
+                          <!--add New Appointment-->
+                          <form action="/appointment/save" class="ml-2">
+                            <input type="hidden" name="doctorSchedule.id" data-th-value="${doctorSchedule.id}" >
+                            <input type="hidden" name="date" data-th-value="${doctorSchedule.appointmentDate}" >
+                            <button type="submit" class="btn btn-info" >New Appointment</button >
+                          </form >
+                        </div >
+                      </td >
+                    </tr >
+                  </table >
+                </td >
+              </tr >
+            </table >
           </div >
         </div >
       </div >

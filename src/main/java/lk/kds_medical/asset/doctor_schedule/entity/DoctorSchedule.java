@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -40,4 +41,10 @@ public class DoctorSchedule extends AuditEntity {
 
   @OneToMany(mappedBy = "doctorSchedule")
   private List< Appointment > appointments;
+
+  @Transient
+  private int count;
+
+  @Transient
+  private LocalDate appointmentDate;
 }

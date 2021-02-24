@@ -1,7 +1,11 @@
 package lk.kds_medical.asset.doctor.controller;
 
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import lk.kds_medical.asset.common_asset.model.Enum.Gender;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.asset.consultation.service.ConsultationService;
 import lk.kds_medical.asset.doctor.entity.Doctor;
@@ -11,6 +15,7 @@ import lk.kds_medical.asset.user_management.service.UserService;
 import lk.kds_medical.util.service.DateTimeAgeService;
 import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +25,7 @@ import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping( "/doctor" )
@@ -101,6 +107,7 @@ public class DoctorController {
     doctor.getDoctorSchedules().forEach(x -> {
       if ( x.isActive() ) {
         x.setDoctor(doctor);
+        x.setLiveDead(LiveDead.ACTIVE);
         doctorSchedules.add(x);
       }
     });
@@ -113,6 +120,31 @@ public class DoctorController {
   public String removeDoctor(@PathVariable Integer id) {
     doctorService.delete(id);
     return "redirect:/doctor";
+  }
+
+  @GetMapping( "/doctorSchedule/{id}" )
+  @ResponseBody
+  public MappingJacksonValue doctorScheduleForDoctor(@PathVariable Integer id) {
+    List< DoctorSchedule > doctorSchedules = new ArrayList<>();
+    doctorService.findById(id).getDoctorSchedules()
+        .stream()
+        .filter(DoctorSchedule::isActive)
+        .collect(Collectors.toList())
+        .forEach(x -> {
+          x.setCount(x.getAppointments().size());
+          doctorSchedules.add(x);
+        });
+
+    MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(doctorSchedules);
+
+    SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter
+        .filterOutAllExcept("id", "dayOfWeek", "arrivalTime","count");
+
+    FilterProvider filters = new SimpleFilterProvider()
+        .addFilter("DoctorSchedule", simpleBeanPropertyFilter);
+
+    mappingJacksonValue.setFilters(filters);
+    return mappingJacksonValue;
   }
 
 }
