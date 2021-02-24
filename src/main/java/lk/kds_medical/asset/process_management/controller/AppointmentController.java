@@ -1,7 +1,9 @@
 package lk.kds_medical.asset.process_management.controller;
 
 import lk.kds_medical.asset.appointment.entity.Appointment;
+import lk.kds_medical.asset.appointment.entity.enums.AppointmentStatus;
 import lk.kds_medical.asset.appointment.service.AppointmentService;
+import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.doctor.controller.DoctorController;
 import lk.kds_medical.asset.doctor.service.DoctorService;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
@@ -11,12 +13,15 @@ import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -85,8 +90,22 @@ public class AppointmentController {
     return "appointment/finderAppointment";
   }
 
-  @PostMapping( "/save" )
-  public String addAppointment(@ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch) {
+  @PostMapping( "/find" )
+  public String findAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch,
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    DoctorSchedule doctorSchedule = doctorScheduleService.findById(appointmentDoctorSearch.getDoctorSchedule().getId());
+    LocalDate appointmentDate = appointmentDoctorSearch.getAppointmentDate();
+    if ( bindingResult.hasErrors() && doctorSchedule.getDayOfWeek().equals(appointmentDate.getDayOfWeek()) ) {
+      redirectAttributes.addFlashAttribute("message", "Selected date is not matched with doctor schedule.");
+      return "redirect:/appointment/add";
+    }
+    Appointment appointment = new Appointment();
+    appointment.setAppointmentStatus(AppointmentStatus.BK);
+    appointment.setDoctorSchedule(doctorSchedule);
+    appointment.setLiveDead(LiveDead.ACTIVE);
+    appointment.setDate(appointmentDate);
+
+    model.addAttribute("appointment", appointment);
     return "appointment/addAppointment";
   }
 
