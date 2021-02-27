@@ -62,4 +62,8 @@ public class PaymentService implements AbstractService<Payment, Integer> {
         Example<Payment> consultationExample = Example.of(payment, matcher);
         return paymentDao.findAll(consultationExample);
     }
+
+  public Payment lastPayment() {
+        return paymentDao.findFirstByOrderByIdDesc();
+  }
 }

@@ -66,4 +66,8 @@ public class AppointmentService implements AbstractService< Appointment, Integer
     public List<Appointment> byDate(LocalDate localDate) {
         return appointmentDao.findByDateAfter(localDate);
     }
+
+  public Appointment lastAppointment() {
+        return appointmentDao.findFirstByOrderByIdDesc();
+  }
 }

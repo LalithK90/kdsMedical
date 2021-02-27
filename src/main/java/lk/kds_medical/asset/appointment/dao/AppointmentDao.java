@@ -13,4 +13,5 @@ public interface AppointmentDao extends JpaRepository< Appointment, Integer> {
 
   List<Appointment> findByDateAfter(LocalDate date);
 
+  Appointment findFirstByOrderByIdDesc();
 }

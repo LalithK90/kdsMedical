@@ -62,7 +62,7 @@
                     </tr >
                     <tr >
                       <td data-th-text="${doctorSchedule.appointmentDate}" ></td >
-                      <td data-th-text="${doctorSchedule.count}" ></td >
+                      <td data-th-text="${#lists.size(doctorSchedule.appointments)}" ></td >
                       <td >
                         <div class="form-row" >
                           <!--View-->

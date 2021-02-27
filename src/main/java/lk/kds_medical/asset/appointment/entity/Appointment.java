@@ -20,13 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode( callSuper = true )
+@ToString
 @JsonFilter( "Appointment" )
 public class Appointment extends AuditEntity {
 
   @Column( unique = true )
   private String code;
 
-  private String number;
+  private int number;
 
   @DateTimeFormat( pattern = "yyyy-MM-dd" )
   private LocalDate date;

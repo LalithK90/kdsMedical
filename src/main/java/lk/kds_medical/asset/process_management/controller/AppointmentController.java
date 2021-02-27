@@ -10,10 +10,13 @@ import lk.kds_medical.asset.doctor.service.DoctorService;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.service.DoctorScheduleService;
 import lk.kds_medical.asset.patient.service.PatientService;
+import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
+import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
+import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +28,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,16 +42,22 @@ public class AppointmentController {
   private final PatientService patientService;
   private final AppointmentService appointmentService;
   private final DoctorScheduleService doctorScheduleService;
-private final DiscountRatioService discountRatioService;
+  private final DiscountRatioService discountRatioService;
+  private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
+  private final PaymentService paymentService;
 
   public AppointmentController(DoctorService doctorService, PatientService patientService,
                                AppointmentService appointmentService, DoctorScheduleService doctorScheduleService,
-                               DiscountRatioService discountRatioService) {
+                               DiscountRatioService discountRatioService,
+                               MakeAutoGenerateNumberService makeAutoGenerateNumberService,
+                               PaymentService paymentService) {
     this.doctorService = doctorService;
     this.patientService = patientService;
     this.appointmentService = appointmentService;
     this.doctorScheduleService = doctorScheduleService;
     this.discountRatioService = discountRatioService;
+    this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
+    this.paymentService = paymentService;
   }
 
   @GetMapping
@@ -110,7 +120,6 @@ private final DiscountRatioService discountRatioService;
       model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
       model.addAttribute("patients", patientService.findAll());
       model.addAttribute("appointment", appointment);
-      System.out.println(doctorSchedule.getDoctor().getConsultationFee());
       model.addAttribute("consultationFee", doctorSchedule.getDoctor().getConsultationFee());
       model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
       model.addAttribute("paymentMethods", PaymentMethod.values());
@@ -121,7 +130,41 @@ private final DiscountRatioService discountRatioService;
       return "redirect:/appointment/add";
     }
   }
-  //todo need to save appointment method
+
+  @PostMapping( "/save" )
+  public String makeAppointment(@ModelAttribute Appointment appointment) {
+
+    if ( appointment.getPayments().get(0).getTotalAmount() != null ) {
+
+      appointment.getPayments().forEach(x -> {
+        x.setAppointment(appointment);
+        if ( x.getId() == null ) {
+          Payment lastPayment = paymentService.lastPayment();
+          if ( lastPayment == null ) {
+            x.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+          } else {
+            x.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(lastPayment.getCode().substring(4)).toString());
+          }
+        }
+      });
+    } else {
+      appointment.setPayments(null);
+    }
+
+    if ( appointment.getId() == null ) {
+      Appointment lastAppointment = appointmentService.lastAppointment();
+      if ( lastAppointment == null ) {
+        appointment.setNumber(1);
+        appointment.setCode("KDSA" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+      } else {
+        appointment.setNumber(lastAppointment.getNumber() + 1);
+        appointment.setCode("KDSA" + makeAutoGenerateNumberService.numberAutoGen(lastAppointment.getCode().substring(4)).toString());
+      }
+    }
+    appointmentService.persist(appointment);
+
+    return "redirect:/appointment";
+  }
   //todo need to add appointment edit
 
 }

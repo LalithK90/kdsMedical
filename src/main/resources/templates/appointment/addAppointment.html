@@ -123,8 +123,8 @@
                 </div >
                 <div class="col-md-8" >
                   <input class="form-control" id="consultationFee"
-                         data-th-name="${'payments[__${0}__].consultationFee'}" data-th-value="${consultationFee}"
-                         type="number" readonly required >
+                         data-th-value="${consultationFee}"
+                         type="number" readonly >
 
                 </div >
               </div >
@@ -136,8 +136,8 @@
                   <label class="control-label" data-th-for="${'hospitalFee'}" >Hospital Fee :</label >
                 </div >
                 <div class="col-md-8" >
-                  <input class="form-control" id="hospitalFee" data-th-name="${'payments[__${0}__].hospitalFee'}"
-                         readonly required type="number" />
+                  <input class="form-control" id="hospitalFee"
+                         readonly type="number" />
                 </div >
               </div >
             </div >
@@ -158,7 +158,7 @@
                 <div class="col-md-8 text-left" >
                   <div class="custom-control custom-checkbox custom-control-inline "
                        data-th-each="paymentMethod,index : ${paymentMethods}" >
-                    <input class="custom-control-input payment-method" required
+                    <input class="custom-control-input payment-method"
                            data-th-name="${'payments[__${0}__].paymentMethod'}"
                            data-th-value="${paymentMethod}"
                            data-th-id="${index.index}+${paymentMethod}" type="radio"
@@ -180,7 +180,7 @@
                 <div class="col-md-8" >
                   <select id="discountRatio" data-th-field="*{payments[__${0}__].discountRatio}" class="form-control"
                           tabindex="9"
-                          required >
+                  >
                     <option value="" >Please select</option >
                     <option data-th-each="discountRatio : ${discountRatios}"
                             data-th-text="${discountRatio.amount}"
@@ -203,7 +203,7 @@
                   <input id="totalAmount" data-th-field="*{payments[__${0}__].totalAmount}" class="form-control"
                          tabindex="6"
                          type="text"
-                         required readonly />
+                         readonly />
                 </div >
               </div >
             </div >
@@ -217,7 +217,7 @@
                   <input id="discountAmount" data-th-field="*{payments[__${0}__].discountAmount}" class="form-control"
                          tabindex="6"
                          type="text"
-                         required readonly />
+                         readonly />
                 </div >
               </div >
             </div >
@@ -233,8 +233,7 @@
                 <div class="col-md-8" >
                   <input id="amountTendered" data-th-field="*{payments[__${0}__].amountTendered}"
                          class="form-control"
-                         tabindex="6" type="text"
-                         required />
+                         tabindex="6" type="text" />
                 </div >
               </div >
             </div >
@@ -247,7 +246,7 @@
                 <div class="col-md-8" >
                   <input id="balance" data-th-field="*{payments[__${0}__].balance}" class="form-control" tabindex="6"
                          type="text"
-                         required readonly />
+                         readonly />
                 </div >
               </div >
             </div >
@@ -294,10 +293,11 @@
                 <div class="col-md-8 text-left" >
                   <div class="custom-control custom-checkbox custom-control-inline "
                        data-th-each="invoicePrintOrNot,index : ${invoicePrintOrNots}" >
-                    <input class="custom-control-input" required
+                    <input class="custom-control-input invoicePrintOrNot"
                            data-th-name="${'payments[__${0}__].invoicePrintOrNot'}"
                            data-th-value="${invoicePrintOrNot}"
-                           data-th-id="${index.index}+${invoicePrintOrNot}" type="radio"
+                           data-th-id="${index.index}+${invoicePrintOrNot}"
+                           type="radio"
                     />
                     <label class="custom-control-label"
                            data-th-for="${index.index}+${invoicePrintOrNot}"
@@ -321,6 +321,14 @@
           </div >
         </div >
       </div >
+      <!--paymentWay-->
+      <input data-th-name="${'payments[__${0}__].paymentWay'}" data-th-value="${'DOC'}" type="hidden" />
+      <!--Live dead-->
+      <input data-th-name="${'payments[__${0}__].liveDead'}" data-th-value="${'ACTIVE'}" type="hidden" />
+      <!--Valid Or not-->
+      <input data-th-name="${'payments[__${0}__].paymentValidOrNot'}" data-th-value="${'VALID'}" type="hidden" />
+      <!--total price-->
+      <input type="hidden" id="total" data-th-name="${'payments[__${0}__].totalPrice'}" >
       <!--Button-->
       <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
         <button class="btn btn-success" type="submit" tabindex="21" >
@@ -334,7 +342,6 @@
     </form >
   </div >
 </div >
-<input type="hidden" id="total" >
 <!--footer include-->
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
@@ -346,8 +353,9 @@
             data: $(this).val()
         });
         $("input[value='CASH']").prop('checked', true);
-        showHideContent('CASH');
         $("input[value='NOT_PRINTED']").prop('checked', true);
+
+        showHideContent('CASH');
 
         let conFee = parseFloat($("#consultationFee").val());
         let hosFee = $("#hospitalFee").val(conFee * 0.2);
@@ -360,8 +368,14 @@
     $("#appointmentStatus").change(function () {
         if ($(this).val() === "PA") {
             $("#paymentSection").show();
+            $("#discountRatio").prop('required', true);
+            $("#consultationFee").attr("name", "payments[0].consultationFee").prop('required', true);
+            $("#hospitalFee").attr("name", "payments[0].hospitalFee").prop('required', true);
         } else {
             $("#paymentSection").hide();
+            $("#discountRatio").prop('required', false);
+            $("#consultationFee").removeAttr("name").prop('required', true);
+            $("#hospitalFee").removeAttr("name").prop('required', true);
         }
     });
 
@@ -373,11 +387,11 @@
         if (paymentMethodValue === 'CASH') {
             $("#bankNameBlock").hide();
             $("#cashPaymentBlock").show();
-            $("#amountTendered, #balance").prop('required', true);
+            $("#amountTendered, #balance");
         } else {
             $("#cashPaymentBlock").hide();
             $("#bankNameBlock").show();
-            $("#bankName, #cardNumber").prop('required', true);
+            $("#bankName, #cardNumber");
         }
     }
 

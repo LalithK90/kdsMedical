@@ -56,6 +56,8 @@ public class Payment extends AuditEntity {
 
   @Column(precision = 10, scale = 2)
   private BigDecimal balance;
+
+  @Enumerated( EnumType.STRING)
   private PaymentPrintOrNot paymentPrintOrNot;
 
   @Enumerated( EnumType.STRING)
