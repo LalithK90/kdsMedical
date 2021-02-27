@@ -4,6 +4,8 @@ package lk.kds_medical.asset.appointment.service;
 import lk.kds_medical.asset.appointment.dao.AppointmentDao;
 import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
+import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,11 +66,16 @@ public class AppointmentService implements AbstractService< Appointment, Integer
         Example<Appointment> consultationExample = Example.of(appointment, matcher);
         return appointmentDao.findAll(consultationExample);
     }
-    public List<Appointment> byDate(LocalDate localDate) {
-        return appointmentDao.findByDateAfter(localDate);
+    public List<Appointment> byDateAndDoctorSchedule(LocalDate date, DoctorSchedule doctorSchedule) {
+        return appointmentDao.findByDateAndDoctorSchedule(date, doctorSchedule);
+
     }
 
   public Appointment lastAppointment() {
         return appointmentDao.findFirstByOrderByIdDesc();
   }
+
+    public Appointment findByDoctorScheduleAndPatientAndDate(DoctorSchedule doctorSchedule, Patient patient, LocalDate date) {
+    return appointmentDao.findByDoctorScheduleAndPatientAndDate(doctorSchedule,patient,date);
+    }
 }

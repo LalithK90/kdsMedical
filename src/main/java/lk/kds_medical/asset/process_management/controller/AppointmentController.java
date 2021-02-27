@@ -79,8 +79,7 @@ public class AppointmentController {
 
       for ( DoctorSchedule doctorSchedule : doctorScheduleService.findAll()
           .stream().filter(x -> x.getDayOfWeek().equals(dayOfWeek)).collect(Collectors.toList()) ) {
-        List< Appointment > appointments = appointmentService.byDate(today)
-            .stream().filter(y -> y.getDoctorSchedule().equals(doctorSchedule)).collect(Collectors.toList());
+        List< Appointment > appointments = appointmentService.byDateAndDoctorSchedule(today, doctorSchedule);
         doctorSchedule.setAppointments(appointments);
         doctorSchedule.setCount(appointments.size());
         doctorSchedule.setAppointmentDate(today);
@@ -108,6 +107,12 @@ public class AppointmentController {
   @PostMapping( "/find" )
   public String findAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch,
                                 BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    return common(appointmentDoctorSearch, bindingResult, redirectAttributes, model);
+
+  }
+
+  private String common(AppointmentDoctorSearch appointmentDoctorSearch, BindingResult bindingResult,
+                        RedirectAttributes redirectAttributes, Model model) {
     DoctorSchedule doctorSchedule = doctorScheduleService.findById(appointmentDoctorSearch.getDoctorSchedule().getId());
     LocalDate appointmentDate = appointmentDoctorSearch.getAppointmentDate();
     if ( !bindingResult.hasErrors() && doctorSchedule.getDayOfWeek().equals(appointmentDate.getDayOfWeek()) ) {
@@ -116,11 +121,11 @@ public class AppointmentController {
       appointment.setDoctorSchedule(doctorSchedule);
       appointment.setLiveDead(LiveDead.ACTIVE);
       appointment.setDate(appointmentDate);
-      model.addAttribute("appointmentStatuses", AppointmentStatus.values());
-      model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
-      model.addAttribute("patients", patientService.findAll());
       model.addAttribute("appointment", appointment);
       model.addAttribute("consultationFee", doctorSchedule.getDoctor().getConsultationFee());
+      model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
+
+      model.addAttribute("appointmentStatuses", AppointmentStatus.values());model.addAttribute("patients", patientService.findAll());
       model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
       model.addAttribute("paymentMethods", PaymentMethod.values());
       model.addAttribute("discountRatios", discountRatioService.findAll());
@@ -132,7 +137,20 @@ public class AppointmentController {
   }
 
   @PostMapping( "/save" )
-  public String makeAppointment(@ModelAttribute Appointment appointment) {
+  public String makeAppointment(@ModelAttribute Appointment appointment, BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes, Model model) {
+
+    Appointment todayAppointment =
+        appointmentService.findByDoctorScheduleAndPatientAndDate(appointment.getDoctorSchedule(),
+                                                                 appointment.getPatient(), appointment.getDate());
+
+    if ( todayAppointment != null ) {
+      model.addAttribute("message", "There is already appointment for this patient ");
+      return common(new AppointmentDoctorSearch(appointment.getDoctorSchedule().getDoctor(),
+                                                appointment.getDate(),
+                                                appointment.getDoctorSchedule()), bindingResult, redirectAttributes,
+                    model);
+    }
 
     if ( appointment.getPayments().get(0).getTotalAmount() != null ) {
 
@@ -161,10 +179,24 @@ public class AppointmentController {
         appointment.setCode("KDSA" + makeAutoGenerateNumberService.numberAutoGen(lastAppointment.getCode().substring(4)).toString());
       }
     }
+
     appointmentService.persist(appointment);
 
     return "redirect:/appointment";
   }
+
+  //todo appointment view
+  @PostMapping( "/view" )
+  public String viewAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch, Model model) {
+    List< Appointment > appointments =
+        appointmentService.byDateAndDoctorSchedule(appointmentDoctorSearch.getAppointmentDate(),
+                                                   appointmentDoctorSearch.getDoctorSchedule());
+    model.addAttribute("appointments", appointments);
+    model.addAttribute("doctorDetail", appointments.get(0).getDoctorSchedule().getDoctor());
+    return "appointment/appointment-view";
+  }
+
   //todo need to add appointment edit
+
 
 }
