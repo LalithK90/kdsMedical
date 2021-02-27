@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AppointmentStatus {
   BK("Booking"),
-  PA("Paid"),
+  PA("Paid Booking"),
   CL("Cancel");
 
   private final String appointmentStatus;

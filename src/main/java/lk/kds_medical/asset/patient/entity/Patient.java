@@ -2,11 +2,11 @@ package lk.kds_medical.asset.patient.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import lk.kds_medical.asset.additional_service.entity.AdditionalService;
+import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.Enum.Gender;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
-import lk.kds_medical.asset.payment_appointment.entity.PaymentAppointment;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -65,5 +65,5 @@ public class Patient extends AuditEntity {
   private List< PaymentAdditionalService > paymentAdditionalServices;
 
   @OneToMany( mappedBy = "patient" )
-  private List< PaymentAppointment > paymentAppointments;
+  private List< Appointment > appointments;
 }

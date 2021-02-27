@@ -2,6 +2,7 @@ package lk.kds_medical.asset.doctor_schedule.service;
 
 
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.doctor.entity.Doctor;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.dao.DoctorScheduleDao;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
@@ -61,5 +62,11 @@ public class DoctorScheduleService implements AbstractService< DoctorSchedule, I
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<DoctorSchedule> consultationExample = Example.of(doctorSchedule, matcher);
         return doctorScheduleDao.findAll(consultationExample);
+    }
+
+  public List<DoctorSchedule> findByDoctor(Doctor doctor) {
+      List<DoctorSchedule> abc = doctorScheduleDao.findByDoctor(doctor);
+      System.out.println(abc.size());
+  return abc;
     }
 }

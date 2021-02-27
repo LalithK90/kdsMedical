@@ -92,21 +92,26 @@ public class AppointmentController {
 
   @PostMapping( "/find" )
   public String findAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+                                BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
     DoctorSchedule doctorSchedule = doctorScheduleService.findById(appointmentDoctorSearch.getDoctorSchedule().getId());
     LocalDate appointmentDate = appointmentDoctorSearch.getAppointmentDate();
-    if ( bindingResult.hasErrors() && doctorSchedule.getDayOfWeek().equals(appointmentDate.getDayOfWeek()) ) {
+    if ( !bindingResult.hasErrors() && doctorSchedule.getDayOfWeek().equals(appointmentDate.getDayOfWeek()) ) {
+      Appointment appointment = new Appointment();
+      appointment.setAppointmentStatus(AppointmentStatus.BK);
+      appointment.setDoctorSchedule(doctorSchedule);
+      appointment.setLiveDead(LiveDead.ACTIVE);
+      appointment.setDate(appointmentDate);
+      model.addAttribute("appointmentStatuses", AppointmentStatus.values());
+      model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
+      model.addAttribute("patients", patientService.findAll());
+      model.addAttribute("appointment", appointment);
+      return "appointment/addAppointment";
+    } else {
       redirectAttributes.addFlashAttribute("message", "Selected date is not matched with doctor schedule.");
       return "redirect:/appointment/add";
     }
-    Appointment appointment = new Appointment();
-    appointment.setAppointmentStatus(AppointmentStatus.BK);
-    appointment.setDoctorSchedule(doctorSchedule);
-    appointment.setLiveDead(LiveDead.ACTIVE);
-    appointment.setDate(appointmentDate);
-
-    model.addAttribute("appointment", appointment);
-    return "appointment/addAppointment";
   }
+  //todo need to save appointment method
+  //todo need to add appointment edit
 
 }

@@ -2,14 +2,15 @@ package lk.kds_medical.asset.payment.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.discount_ratio.entity.DiscountRatio;
 import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
+import lk.kds_medical.asset.payment.entity.enums.PaymentWay;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
-import lk.kds_medical.asset.payment_appointment.entity.PaymentAppointment;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.*;
 
@@ -54,6 +55,9 @@ public class Payment extends AuditEntity {
   @Enumerated( EnumType.STRING)
   private PaymentMethod paymentMethod;
 
+  @Enumerated( EnumType.STRING)
+  private PaymentWay paymentWay;
+
   @Enumerated(EnumType.STRING)
   private PaymentValidOrNot paymentValidOrNot;
 
@@ -63,8 +67,9 @@ public class Payment extends AuditEntity {
   @ManyToOne
   private DiscountRatio discountRatio;
 
-  @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payment")
-  private List< PaymentAppointment > PaymentAppointments;
+  @ManyToOne
+  private Appointment appointment;
+
 
   @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payment")
   private List< PaymentAdditionalService > paymentAdditionalServices;
