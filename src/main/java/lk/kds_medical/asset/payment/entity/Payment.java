@@ -49,6 +49,12 @@ public class Payment extends AuditEntity {
   private BigDecimal amountTendered;
 
   @Column(precision = 10, scale = 2)
+  private BigDecimal consultationFee;
+
+  @Column(precision = 10, scale = 2)
+  private BigDecimal hospitalFee;
+
+  @Column(precision = 10, scale = 2)
   private BigDecimal balance;
   private PaymentPrintOrNot paymentPrintOrNot;
 

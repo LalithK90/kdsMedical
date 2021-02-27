@@ -4,11 +4,14 @@ import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.appointment.entity.enums.AppointmentStatus;
 import lk.kds_medical.asset.appointment.service.AppointmentService;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
+import lk.kds_medical.asset.discount_ratio.service.DiscountRatioService;
 import lk.kds_medical.asset.doctor.controller.DoctorController;
 import lk.kds_medical.asset.doctor.service.DoctorService;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.service.DoctorScheduleService;
 import lk.kds_medical.asset.patient.service.PatientService;
+import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
+import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
 import org.springframework.stereotype.Controller;
@@ -35,14 +38,16 @@ public class AppointmentController {
   private final PatientService patientService;
   private final AppointmentService appointmentService;
   private final DoctorScheduleService doctorScheduleService;
-
+private final DiscountRatioService discountRatioService;
 
   public AppointmentController(DoctorService doctorService, PatientService patientService,
-                               AppointmentService appointmentService, DoctorScheduleService doctorScheduleService) {
+                               AppointmentService appointmentService, DoctorScheduleService doctorScheduleService,
+                               DiscountRatioService discountRatioService) {
     this.doctorService = doctorService;
     this.patientService = patientService;
     this.appointmentService = appointmentService;
     this.doctorScheduleService = doctorScheduleService;
+    this.discountRatioService = discountRatioService;
   }
 
   @GetMapping
@@ -105,6 +110,11 @@ public class AppointmentController {
       model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
       model.addAttribute("patients", patientService.findAll());
       model.addAttribute("appointment", appointment);
+      System.out.println(doctorSchedule.getDoctor().getConsultationFee());
+      model.addAttribute("consultationFee", doctorSchedule.getDoctor().getConsultationFee());
+      model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
+      model.addAttribute("paymentMethods", PaymentMethod.values());
+      model.addAttribute("discountRatios", discountRatioService.findAll());
       return "appointment/addAppointment";
     } else {
       redirectAttributes.addFlashAttribute("message", "Selected date is not matched with doctor schedule.");

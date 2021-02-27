@@ -65,8 +65,6 @@ public class DoctorScheduleService implements AbstractService< DoctorSchedule, I
     }
 
   public List<DoctorSchedule> findByDoctor(Doctor doctor) {
-      List<DoctorSchedule> abc = doctorScheduleDao.findByDoctor(doctor);
-      System.out.println(abc.size());
-  return abc;
+      return doctorScheduleDao.findByDoctor(doctor);
     }
 }
