@@ -13,19 +13,19 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class DiscountRatio {
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
-    private Integer id;
+  @Id
+  @GeneratedValue( strategy = GenerationType.IDENTITY )
+  private Integer id;
 
 
-    private String name;
+  private String name;
 
 
-    @Column( nullable = false, precision = 10, scale = 2 )
-    private BigDecimal amount;
+  @Column( nullable = false, precision = 10, scale = 2 )
+  private BigDecimal amount;
 
-
-    private DiscountRatioStatus discountRatioStatus;
+  @Enumerated( EnumType.STRING )
+  private DiscountRatioStatus discountRatioStatus;
 
 /*    @OneToMany
     @JoinColumn(name = "discount_ratio_id")

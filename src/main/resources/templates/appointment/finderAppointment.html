@@ -81,7 +81,8 @@
     </form >
   </div >
 </div >
-<div class="alert alert-primary alert-dismissible fade show" role="alert" data-th-if="${not #strings.isEmpty(message)}" >
+<div class="alert alert-primary alert-dismissible fade show" role="alert"
+     data-th-if="${not #strings.isEmpty(message)}" >
   <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
     <span aria-hidden="true" >&times;</span >
     <span class="sr-only" >Close</span >
@@ -105,7 +106,13 @@
         removeOption('doctorSchedule');
         $.getJSON(url, function (val) {
             $.each(val, function () {
-                $("#doctorSchedule").append(`<option value="${this.id}">${this.dayOfWeek} ${this.arrivalTime} ${this.count}</option>`);
+                let text = `Day of week : ${capitalizeFirstLetter(this.dayOfWeek)} Arrival Time : ${this.arrivalTime} Appointment Count : ${this.count}`;
+
+                $("#doctorSchedule").append(`<option value="${this.id}">${text}</option>`);
+
+                function capitalizeFirstLetter(string) {
+                    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+                }
             });
         });
     });
