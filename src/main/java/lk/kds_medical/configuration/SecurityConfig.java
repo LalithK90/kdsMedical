@@ -71,11 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable();
-    http.authorizeRequests().antMatchers("/").permitAll();
+/*    http.csrf().disable();
+    http.authorizeRequests().antMatchers("/").permitAll();*/
     // For developing easy to give permission all lin
-
-       /* http
+//"ADMIN","CASHIER","MANAGER","ACCOUNTANT"
+        http
                 .authorizeRequests(
                         authorizeRequests ->
                                 authorizeRequests
@@ -83,14 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         //to see actuator details
                                         .antMatchers(ALL_PERMIT_URL).permitAll()
                                         //this is used the normal admin to give access every url mapping
-                                        .antMatchers("/employee").hasRole("ADMIN")
-                                        //Need to login for access those are
-                                        *//*   .antMatchers("/employee/**").hasRole("ADMIN")
-                                           .antMatchers("/employee1/**").hasRole("MANAGER")
-                                           .antMatchers("/user/**").hasRole("ADMIN")
-                                           .antMatchers("/petition/**").hasRole("ADMIN")
-                                           .antMatchers("/minutePetition/**").hasRole("MANAGER")
-                                           .antMatchers("/invoiceProcess/add").hasRole("CASHIER")*//*
+                                        .antMatchers("/employee/**").hasRole("ADMIN")
                                         .anyRequest()
                                         .authenticated())
                 // Login form
@@ -128,7 +121,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling();
 
-                */
   }
 }
 

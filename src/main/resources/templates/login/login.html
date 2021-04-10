@@ -1,48 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" >
-<head th:replace="~{fragments/header :: headerFragment}">
-    <meta charset="UTF-8">
-    <title>Thymeleaf Springboot </title>
-</head>
+<head data-th-replace="~{fragments/header :: headerFragment}" >
+  <meta charset="UTF-8" >
+  <title >Thymeleaf Springboot </title >
+</head >
 
-<body id="loginBack">
-<link data-th-href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css"/>
+<body id="loginBack" >
+<link data-th-href="@{/css/loginIndex.css}" media="all" rel="stylesheet" type="text/css" />
 
-<nav th:replace="~{fragments/navBar :: navBarFragment}"></nav>
-<div class="col full-height " id="loginPage">
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
+<div class="col full-height " id="loginPage" >
 
-    <div id="id01" class="vh-100 align-content-center">
+  <div id="id01" class="vh-100 align-content-center" >
 
-        <form class="modal-content animate" action="/login" method="post">
-            <div class="imgcontainer">
+    <form class="modal-content animate" action="/login" method="post" >
+      <div class="imgcontainer" >
                         <span onclick="document.getElementById('id01').style.display='none'" class="close"
-                              title="Close Modal">&times;</span>
-                <img src="/img/imglogin.png" alt="ImageLogin" class="imglogin">
-            </div>
+                              title="Close Modal" >&times;</span >
+        <img src="/img/imglogin.png" alt="ImageLogin" class="imglogin" >
+      </div >
 
-            <div class="container1" style="background-color:#f5d742">
-                <label for="username"><b>Username</b></label>
-                <input type="text" id="username" placeholder="Enter Username" name="username" required>
+      <div class="container1" style="background-color:#f5d742" >
+        <label for="username" ><b >Username</b ></label >
+        <input type="text" id="username" placeholder="Enter Username" name="username" required >
 
-                <label for="password"><b>Password</b></label>
-                <input type="password" id="password" placeholder="Enter Password" name="password" required>
-            </div>
+        <label for="password" ><b >Password</b ></label >
+        <input type="password" id="password" placeholder="Enter Password" name="password" required >
+      </div >
 
-            <div class="container2">
-                <button type="submit" class="button1" onclick="check(this.form)" value="login"><b>Login</b>
-                </button>
-                <button type="reset" class="button1" data-dismiss="modal"><b>Reset</b></button>
-            </div>
+      <div class="container2" >
+        <button type="submit" class="btn btn-success" onclick="check(this.form)" value="login" ><b >Login</b >
+        </button >
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" ><b >Reset</b ></button >
+      </div >
 
-    </div>
 
-    </form>
-</div>
-</div>
+    </form >
+  </div >
+</div >
 <!--footer include-->
-<footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+<div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
-<script th:replace="~{fragments/script :: scriptFragment}"></script>
+<div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 
-</body>
-</html>
+</body >
+</html >

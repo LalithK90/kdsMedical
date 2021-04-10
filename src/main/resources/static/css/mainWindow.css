@@ -1,0 +1,12 @@
+.card{
+    transition: all .8s linear;
+    -o-transition: all .8s linear;
+    -moz-transition: all .8s linear;
+    -webkit-transition: all .8s linear;
+}
+
+.card:hover{
+    background: #f5e642;
+    transition: background-color 1000ms linear;
+    cursor: pointer;
+}
