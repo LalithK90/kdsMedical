@@ -5,6 +5,7 @@ import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.payment.dao.PaymentDao;
 import lk.kds_medical.asset.payment.entity.Payment;
+import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.util.interfaces.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class PaymentService implements AbstractService<Payment, Integer> {
     @Cacheable(value = "Payment")
     public List<Payment> findAll() {
         return paymentDao.findAll().stream()
-            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE))
+            .filter(x->x.getLiveDead().equals(LiveDead.ACTIVE) && x.getPaymentValidOrNot().equals(PaymentValidOrNot.VALID))
             .collect(Collectors.toList());
     }
 

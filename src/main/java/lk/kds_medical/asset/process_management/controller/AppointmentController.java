@@ -185,9 +185,12 @@ public class AppointmentController {
       }
     }
 
-    appointmentService.persist(appointment);
-
-    return "redirect:/appointment";
+    Appointment appointmentDb = appointmentService.persist(appointment);
+    if ( appointmentDb.getAppointmentStatus().equals(AppointmentStatus.PA) ) {
+      return "redirect:/payment/" + paymentService.findByAppoinment(appointmentDb).getId();
+    } else {
+      return "redirect:/appointment";
+    }
   }
 
   @PostMapping( "/view" )

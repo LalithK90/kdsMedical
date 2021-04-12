@@ -19,7 +19,7 @@
     </div >
     <!--Item Name-->
     <div class="col" >
-      <p class="h2 text-white font-weight-bold"
+      <p class="h2 font-weight-bold"
          data-th-text="${paymentDetail.code }" ></p >
     </div >
     <!--Home Button-->
@@ -31,292 +31,251 @@
   </div >
 </div >
 
-<div class="container-fluid" id="printContent">
-  <div class="container-fluid" >
-    <!--doctor Schedule-->
-    <div class="form-group" >
+<div class="container-fluid" id="printContent" >
+  <!--Hospital Details-->
+  <div class="form-row text-center" >
+    <div class="col" >
+      <p class="font-bold h3" >KDS Medical</p >
+      <p >No. 09, Roly Fernando Mawatha</p >
+      <p > Katubedda</p >
+      <p > Moratuwa</p >
+      <p >Tp: 011-2658361</p ></div >
+  </div >
+  <!--doctor Schedule-->
+  <div class="form-row text-right" >
+    <div class="col-md-6" >
       <div class="form-row text-right" >
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Availability :</label >
-            </div >
-            <div class="col-md-8" >
-              <select class="form-control" data-th-field="*{doctorSchedule}" required readonly >
-                <option value="" > Select Doctor Booking Slot</option >
-                <option data-th-each="doctorSchedule : ${doctorSchedules}"
-                        data-th-value="${doctorSchedule.id}" >
-                  <span data-th-text="${doctorSchedule.dayOfWeek}" ></span >
-                  <span class="ml-1 mr-1" >Arrival Time :</span >
-                  <span data-th-text="${doctorSchedule.arrivalTime}" ></span >
-                  <span class="ml-1 mr-l" > Appointment Count : </span >
-                  <span data-th-text="${#lists.size(doctorSchedule.appointments)}" > Appointment Count : </span >
-                </option >
-              </select >
-            </div >
-          </div >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Schedule :</label >
         </div >
-        <!--Name-->
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
-            </div >
-            <div class="col-md-8" >
-              <input class="form-control" data-th-field="*{date}" required type="date" readonly />
-            </div >
-          </div >
+        <div class="col-md-8" >
+          <p class="display_detail"
+             data-th-text="${paymentDetail.appointment.doctorSchedule.dayOfWeek} +${' '}+${paymentDetail.appointment.doctorSchedule.arrivalTime}" ></p >
         </div >
       </div >
     </div >
-    <!--Patient-->
-    <div class="form-group" >
+    <!--Appoiment date-->
+    <div class="col-md-6" >
       <div class="form-row text-right" >
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
-            </div >
-            <div class="col-md-8" >
-              <input class="form-control" id="patient" data-th-field="*{patient}" required hidden >
-              <input class="form-control" data-th-value="${patient.name+'  '+ patient.mobileOne}" readonly >
-            </div >
-          </div >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
         </div >
-        <!--Payment Status-->
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
-            </div >
-            <div class="col-md-8" >
-              <div class="custom-control custom-checkbox custom-control-inline "
-                   data-th-each="appointmentStatus,index : ${appointmentStatuses}" >
-                <input class="custom-control-input appointmentStatus" required
-                       data-th-name="${'appointmentStatus'}"
-                       data-th-value="${appointmentStatus}"
-                       data-th-id="${index.index}+${appointmentStatus}" type="radio"
-                       data-th-checked="${appointmentStatus==appointmentStatus}" />
-                <label class="custom-control-label"
-                       data-th-for="${index.index}+${appointmentStatus}"
-                       data-th-text="${appointmentStatus.appointmentStatus}" > radio
-                </label >
-              </div >
-            </div >
-          </div >
-        </div >
-      </div >
-    </div >
-
-    <!--consultation fee-->
-    <div class="form-group" >
-      <div class="form-row text-right" >
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'consultationFee'}" >Consultation Fee :</label >
-            </div >
-            <div class="col-md-8" >
-              <input class="form-control" id="consultationFee"
-                     data-th-value="${consultationFee}"
-                     type="number" readonly >
-
-            </div >
-          </div >
-        </div >
-        <!--hospital fee-->
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" data-th-for="${'hospitalFee'}" >Hospital Fee :</label >
-            </div >
-            <div class="col-md-8" >
-              <input class="form-control" id="hospitalFee"
-                     readonly type="number" />
-            </div >
-          </div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-text="${paymentDetail.appointment.date}" ></p >
         </div >
       </div >
     </div >
   </div >
+  <!--Patient-->
+  <div class="form-row text-right" >
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
+        </div >
+        <div class="col-md-8" >
+          <p class="display_detail"
+             data-th-text="${paymentDetail.appointment.patient.name+'  '+ paymentDetail.appointment.patient.mobileOne}" ></p >
+        </div >
+      </div >
+    </div >
+    <!--Appoiment Status-->
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
+        </div >
+        <div class="col-md-8" >
+          <p class="display_detail"
+             data-th-text="${paymentDetail.appointment.appointmentStatus.appointmentStatus}" ></p >
+        </div >
+      </div >
+    </div >
+  </div >
+
+  <!--consultation fee-->
+  <div class="form-row text-right" >
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'consultationFee'}" >Consultation Fee :</label >
+        </div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-text="${paymentDetail.consultationFee}" ></p >
+        </div >
+      </div >
+    </div >
+    <!--hospital fee-->
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" data-th-for="${'hospitalFee'}" >Hospital Fee :</label >
+        </div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-text="${paymentDetail.hospitalFee}" ></p >
+        </div >
+      </div >
+    </div >
+  </div >
+
   <!--Payment Section-->
-  <div class="container-fluid" id="paymentSection" >
-    <div class="form-group" >
-      <!--Payment method and total amount-->
-      <div class="form-row text-right" >
-        <!--payment method-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label data-th-for="${paymentMethod}" >Payment Method:</label >
-            </div >
-            <div class="col-md-8 text-left" >
-              <div class="custom-control custom-checkbox custom-control-inline "
-                   data-th-each="paymentMethod,index : ${paymentMethods}" >
-                <input class="custom-control-input payment-method"
-                       data-th-name="${'payments[__${0}__].paymentMethod'}"
-                       data-th-value="${paymentMethod}"
-                       data-th-id="${index.index}+${paymentMethod}" type="radio"
-                />
-                <label class="custom-control-label"
-                       data-th-for="${index.index}+${paymentMethod}"
-                       data-th-text="${paymentMethod.paymentMethod}" > radio
-                </label >
-              </div >
-            </div >
+  <div class="container-fluid" >
+    <!--Payment method and total amount-->
+    <div class="form-row text-right" >
+      <!--payment method-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label data-th-for="${paymentMethod}" >Payment Method:</label >
           </div >
-        </div >
-        <!--Discount-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="discountRatio" >Discount Ratio :</label >
-            </div >
-            <div class="col-md-8" >
-              <select id="discountRatio" data-th-field="*{payments[__${0}__].discountRatio}" class="form-control"
-                      tabindex="9"
-              >
-                <option value="" >Please select</option >
-                <option data-th-each="discountRatio : ${discountRatios}"
-                        data-th-text="${discountRatio.amount}"
-                        data-th-value="${discountRatio.id}" >
-                  Please select
-                </option >
-              </select >
-            </div >
+          <div class="col-md-8 text-left" >
+            <p class="display_detail" data-th-text="${paymentDetail.paymentMethod.paymentMethod}" ></p >
           </div >
         </div >
       </div >
-      <div class="form-row" >
-        <!--Total Amount-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="totalAmount" >Total Amount :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="totalAmount" data-th-field="*{payments[__${0}__].totalAmount}" class="form-control"
-                     tabindex="6"
-                     type="text"
-                     readonly />
-            </div >
+      <!--Discount-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="discountRatio" >Discount Ratio :</label >
           </div >
-        </div >
-        <!--Discount Amount-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="discountAmount" >Discount Amount :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="discountAmount" data-th-field="*{payments[__${0}__].discountAmount}" class="form-control"
-                     tabindex="6"
-                     type="text"
-                     readonly />
-            </div >
-          </div >
-        </div >
-      </div >
-      <!--Amount tendered and balance  -->
-      <div class="form-row text-right" id="cashPaymentBlock" >
-        <!--Amount Tendered-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="amountTendered" >Amount Tendered :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="amountTendered" data-th-field="*{payments[__${0}__].amountTendered}"
-                     class="form-control"
-                     tabindex="6" type="text" />
-            </div >
-          </div >
-        </div >
-        <!--Balance-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="balance" >Balance :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="balance" data-th-field="*{payments[__${0}__].balance}" class="form-control" tabindex="6"
-                     type="text"
-                     readonly />
-            </div >
-          </div >
-        </div >
-      </div >
-      <!-- Card Payment -> Bank and card Number -->
-      <div class="form-row text-right" id="bankNameBlock" >
-        <!--Bank -->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="bankName" >Bank Name :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="bankName" data-th-field="*{payments[__${0}__].bankName}"
-                     class="form-control"
-                     tabindex="6" type="text" />
-            </div >
-          </div >
-        </div >
-        <!--card number-->
-        <div class="col-md-6 " >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label class="control-label" for="cardNumber" >Card Number :</label >
-            </div >
-            <div class="col-md-8" >
-              <input id="cardNumber" data-th-field="*{payments[__${0}__].cardNumber}" class="form-control"
-                     tabindex="6"
-                     type="text" />
-            </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.discountRatio.name} + ${' '}+${paymentDetail.discountRatio.amount }" ></p >
+
           </div >
         </div >
       </div >
     </div >
-    <!--remarks and invoice print or not-->
-    <div class="form-group" >
-      <div class="form-row" >
-        <div class="col-md-6" >
-          <!--invoice print or not-->
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label data-th-for="${invoicePrintOrNot}" >Payment Print or Not:</label >
-            </div >
-            <div class="col-md-8 text-left" >
-              <div class="custom-control custom-checkbox custom-control-inline "
-                   data-th-each="invoicePrintOrNot,index : ${invoicePrintOrNots}" >
-                <input class="custom-control-input invoicePrintOrNot"
-                       data-th-name="${'payments[__${0}__].paymentPrintOrNot'}"
-                       data-th-value="${invoicePrintOrNot}"
-                       data-th-id="${index.index}+${invoicePrintOrNot}"
-                       type="radio"
-                />
-                <label class="custom-control-label"
-                       data-th-for="${index.index}+${invoicePrintOrNot}"
-                       data-th-text="${invoicePrintOrNot.invoicePrintOrNot}" > radio
-                </label >
-              </div >
-            </div >
+    <div class="form-row text-right" >
+      <!--Total Amount-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="totalAmount" >Total Amount :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.totalPrice}" ></p >
           </div >
         </div >
-        <!--Remarks-->
-        <div class="col-md-6" >
-          <div class="form-row text-right" >
-            <div class="col-md-4" >
-              <label for="remarks" >Remarks :</label ></div >
-            <div class="col-md-8" >
-                  <textarea id="remarks" class="form-control" data-th-field="*{payments[__${0}__].remarks}"
-                            rows="2" ></textarea >
-            </div >
+      </div >
+      <!--Discount Amount-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="discountAmount" >Discount Amount :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.discountAmount}" ></p >
+          </div >
+        </div >
+      </div >
+    </div >
+    <!--Amount tendered and balance  -->
+    <div class="row" data-th-if="${#strings.equals(paymentDetail.paymentMethod, 'CASH')}" >
+      <!--Amount Tendered-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="amountTendered" >Amount Tendered :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.amountTendered}" ></p >
+          </div >
+        </div >
+      </div >
+      <!--Balance-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="balance" >Balance :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.balance}" ></p >
+          </div >
+        </div >
+      </div >
+    </div >
+    <!-- Card Payment -> Bank and card Number -->
+    <!--Bank -->
+    <div class="row" data-th-if="${#strings.equals(paymentDetail.paymentMethod, 'CARD')}" >
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="bankName" >Bank Name :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.bankName}" ></p >
+          </div >
+        </div >
+      </div >
+      <!--card number-->
+      <div class="col-md-6 " >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" for="cardNumber" >Card Number :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.cardNumber}" ></p >
           </div >
         </div >
       </div >
     </div >
   </div >
-</div>
+  <!--remarks and invoice print or not-->
+  <div class="form-row" >
+    <!--Remarks-->
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label for="remarks" >Remarks :</label ></div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-utext="${paymentDetail.remarks}" ></p >
+        </div >
+      </div >
+    </div >
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label for="remarks" >Payment Code :</label ></div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-text="${paymentDetail.code}" ></p >
+        </div >
+      </div >
+    </div >
+  </div >
+  <div class="form-row" >
+    <!--Remarks-->
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label for="remarks" >Create By :</label ></div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-utext="${paymentDetail.createdBy}" ></p >
+        </div >
+      </div >
+    </div >
+    <div class="col-md-6" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label for="remarks" >Created At :</label ></div >
+        <div class="col-md-8" >
+          <p class="display_detail" data-th-text="${{paymentDetail.createdAt}}" ></p >
+        </div >
+      </div >
+    </div >
+  </div >
+  <div class="form-row " >
+    <div class="col text-center" >
+      Printed By : <span data-th-text="${#authentication.name}" ></span >
+    </div >
+    <div class="col text-center" >
+      <p class="font-bold" >Before leave the premises please chek whether details are correct or not</p >
+      <p >Thank you come again</p >
+      <p id="currentDateTime" ></p >
+    </div >
+  </div >
+</div >
 
 
 <!--Back Button-->
@@ -335,9 +294,10 @@
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 <script >
-
+    $("#currentDateTime").html(new Date);
     $("#btnPrintResult").click(function () {
         $("#printContent").addClass("mt-3 pt-3")
+        $("#currentDateTime").html(new Date);
         printContent("printContent")
     })
 </script >
