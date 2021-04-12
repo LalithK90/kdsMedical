@@ -182,20 +182,6 @@
                         </div>
                     </div>
 
-                    <!--Current Working Place-->
-                    <!-- <div class="form-row text-right">
-                         <div class="col-md-4">
-                             <label class="control-label" for="workingPlace">Patient Working Place :</label>
-                         </div>
-                         <div class="col-md-8">
-                             <select id="workingPlace" data-th-field="*{workingPlace}" class="form-control" tabindex="20" required>
-                                 <option value="">Please select</option>
-                                 <option data-th-each="workingPlace : ${workingPlaces}"
-                                         data-th-text="${workingPlace.name}"
-                                         data-th-value="${workingPlace.id}"></option>
-                             </select>
-                         </div>
-                     </div>-->
                     <!--Created by and created at-->
                     <div id="updateStatus" data-th-if="${addStatus==false}">
                         <div class="form-row text-right">
@@ -219,45 +205,6 @@
                     </div>
                 </div>
                 <div class="form-group col-md-12 col-sm-12 text-left flex-column ">
-                    <!--<div class="input-field">
-                        <label class="active ">Photos :</label>
-                        <label>Please remove numbers where included in image number </label>
-                        <div class="input-images" style="padding-top: .5rem;"></div>
-                    </div>-->
-                    <!-- <div class="col" id="photoDetails" data-th-if="${addStatus==false}">
-                         <div>
-                             <label class="control-label ">Photo Details : </label>
-                         </div>
-                         <div class="row">
-                             <div class="col" id="filesList" data-th-each="file, rowStat: ${files}">
-                                 <div class="col">
-                                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                         <button id="alertClose" type="button" class="close" data-dismiss="alert"
-                                                 aria-label="Close">
-                                             <span aria-hidden="true">&times;</span>
-                                         </button>
-                                         <div class="card text-center">
-                                             <div class="card-header" hidden>
-                                                 <input id="removeImages" data-th-value="${file.filename}" type="text" name="removeImages"></div>
-                                             <div class="card-body">
-                                                 <img id="img" class="rounded" src="" data-th-src="${file.url}"
-                                                      style="height: 150px; widdata-th- 150px; border-radius: 10px" alt=""/>
-                                             </div>
-                                             <div class="card-footer bg-secondary   text-dark text-center">
-                                                 <p id="imgName" data-th-text="${file.filename}"></p>
-                                                 <p> Uploaded Date : <span id="imgCreateAt" data-th-text="${{file.createAt}}"></span>
-                                                 </p>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                                 <script>
-                                     $(".alert").alert();
-                                 </script>
-                             </div>
-                         </div>
-                     </div>-->
-                    <!--Button-->
                     <!--Button-->
                     <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
                         <button class="btn btn-success" type="submit" tabindex="21" >
@@ -284,8 +231,5 @@
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}"></div>
 
-<script>
-    $('.input-images').imageUploader();
-</script>
 </body>
 </html>
