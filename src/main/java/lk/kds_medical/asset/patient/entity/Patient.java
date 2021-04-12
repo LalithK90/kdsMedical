@@ -43,7 +43,7 @@ public class Patient extends AuditEntity {
   @Size( max = 10, message = "Mobile number length should be contained 10 and 9" )
   private String mobileOne;
 
-  @Size( max = 10, message = "Mobile number length should be contained 10 and 9" )
+
   private String mobileTwo;
 
   @Column( columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NULL", length = 255 )
