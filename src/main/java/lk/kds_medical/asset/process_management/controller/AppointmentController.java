@@ -14,6 +14,7 @@ import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
 import lk.kds_medical.asset.payment.entity.enums.PaymentState;
+import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
@@ -21,10 +22,7 @@ import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -80,7 +78,11 @@ public class AppointmentController {
 
       for ( DoctorSchedule doctorSchedule : doctorScheduleService.findAll()
           .stream().filter(x -> x.getDayOfWeek().equals(dayOfWeek)).collect(Collectors.toList()) ) {
-        List< Appointment > appointments = appointmentService.byDateAndDoctorSchedule(today, doctorSchedule);
+        //all active appointment
+        List< Appointment > appointments = appointmentService.byDateAndDoctorSchedule(today, doctorSchedule)
+            .stream()
+            .filter(x -> !x.getAppointmentStatus().equals(AppointmentStatus.CL))
+            .collect(Collectors.toList());
         doctorSchedule.setAppointments(appointments);
         doctorSchedule.setCount(appointments.size());
         doctorSchedule.setAppointmentDate(today);
@@ -192,13 +194,40 @@ public class AppointmentController {
   public String viewAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch, Model model) {
     List< Appointment > appointments =
         appointmentService.byDateAndDoctorSchedule(appointmentDoctorSearch.getAppointmentDate(),
-                                                   appointmentDoctorSearch.getDoctorSchedule());
+                                                   appointmentDoctorSearch.getDoctorSchedule())
+            .stream()
+            .filter(x -> !x.getAppointmentStatus().equals(AppointmentStatus.CL))
+            .collect(Collectors.toList());
     model.addAttribute("appointments", appointments);
     model.addAttribute("doctorDetail", appointments.get(0).getDoctorSchedule().getDoctor());
     return "appointment/appointment-view";
   }
 
-  //todo need to add appointment edit
 
+  @GetMapping( "/refund/{id}" )
+  public String refundAppointment(@PathVariable( "id" ) Integer id, Model model) {
+    Appointment appointment = appointmentService.findById(id);
+    appointment.setAppointmentStatus(AppointmentStatus.CL);
+    Appointment appointmentDb = appointmentService.persist(appointment);
+
+    Payment payment = paymentService.findByAppoinment(appointmentDb);
+    payment.setPaymentValidOrNot(PaymentValidOrNot.NOT_VALID);
+    model.addAttribute("paymentDetail", paymentService.persist(payment));
+    return "payment/payment-detail";
+  }
+
+  @GetMapping( "/cancel/{id}" )
+  public String cancelAppointment(@PathVariable( "id" ) Integer id) {
+    Appointment appointment = appointmentService.findById(id);
+    appointment.setAppointmentStatus(AppointmentStatus.CL);
+    appointmentService.persist(appointment);
+    return "redirect:/appointment";
+  }
+
+  @GetMapping( "/pay/{id}" )
+  public String payAppointment(@PathVariable( "id" ) Integer id, Model model) {
+
+    return "appointment/addAppointmentPayment";
+  }
 
 }

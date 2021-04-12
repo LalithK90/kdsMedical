@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head data-th-replace="~{fragments/header :: headerFragment}" >
+  <meta charset="UTF-8" >
+  <title >Thymeleaf Springboot </title >
+</head >
+<body >
+<link data-th-href="@{/css/combo-box-search.css}" media="all" rel="stylesheet" type="text/css" />
+
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
+
+<div class="container-fluid   " >
+  <div class="row text-center formManagement border-info" >
+    <div class="col" >
+      <a class="btn btn-primary" href="/home" >
+        <i class="fa fa-home" style="font-size: 20px" ></i > &nbsp; Home
+      </a >
+    </div >
+    <div class="col" >
+      <h4 class="  text-dark text-center" >
+        <strong >
+          Make Appointment
+        </strong >
+      </h4 >
+    </div >
+    <div class="col" >
+      <a class="btn btn-primary" href="/appointment" >
+        <i class="fa fa-list" ></i >&nbsp; View List
+      </a >
+    </div >
+  </div >
+</div >
+<!--message-->
+<div class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+     data-th-if="${not #strings.isEmpty(message)}" >
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
+    <span aria-hidden="true" >&times;</span >
+  </button >
+  <strong data-th-text="${message}" ></strong >
+</div >
+<!--Form Content - start -->
+<div class="container-fluid  " >
+  <div class="col-sm-12 flex-column " >
+    <form data-th-action="${'/appointment/save'}"
+          data-th-object="${appointment}"
+          method="POST" >
+      <input type="hidden" data-th-field="*{id}" >
+      <input type="hidden" data-th-field="*{code}" >
+      <input type="hidden" data-th-field="*{liveDead}" >
+      <div class="container-fluid" >
+        <!--doctor Schedule-->
+        <div class="form-group" >
+          <div class="form-row text-right" >
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Availability :</label >
+                </div >
+                <div class="col-md-8" >
+                  <select class="form-control" data-th-field="*{doctorSchedule}" required >
+                    <option value="" > Select Doctor Booking Slot</option >
+                    <option data-th-each="doctorSchedule : ${doctorSchedules}"
+                            data-th-value="${doctorSchedule.id}" >
+                      <span data-th-text="${doctorSchedule.dayOfWeek}" ></span >
+                      <span class="ml-1 mr-1" >Arrival Time :</span >
+                      <span data-th-text="${doctorSchedule.arrivalTime}" ></span >
+                      <span class="ml-1 mr-l" > Appointment Count : </span >
+                      <span data-th-text="${#lists.size(doctorSchedule.appointments)}" > Appointment Count : </span >
+                    </option >
+                  </select >
+                </div >
+              </div >
+            </div >
+            <!--Name-->
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input class="form-control" data-th-field="*{date}" required type="date" />
+                </div >
+              </div >
+            </div >
+          </div >
+        </div >
+        <!--Patient-->
+        <div class="form-group" >
+          <div class="form-row text-right" >
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
+                </div >
+                <div class="col-md-8" >
+                  <select class="form-control" id="patient" data-th-field="*{patient}" required >
+                    <option value="" > Select Patient</option >
+                    <option data-th-each="patient : ${patients}"
+                            data-th-value="${patient.id}"
+                            data-th-text="${patient.title.title+' '+ patient.name+' '+patient.mobileOne}" ></option >
+                  </select >
+                </div >
+              </div >
+            </div >
+            <!--Payment Status-->
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
+                </div >
+                <div class="col-md-8" >
+                  <div class="custom-control custom-checkbox custom-control-inline "
+                       data-th-each="appointmentStatus,index : ${appointmentStatuses}" >
+                    <input class="custom-control-input appointmentStatus" required
+                           data-th-name="${'appointmentStatus'}"
+                           data-th-value="${appointmentStatus}"
+                           data-th-id="${index.index}+${appointmentStatus}" type="radio"
+                           data-th-checked="${appointmentStatus==appointmentStatus}" />
+                    <label class="custom-control-label"
+                           data-th-for="${index.index}+${appointmentStatus}"
+                           data-th-text="${appointmentStatus.appointmentStatus}" > radio
+                    </label >
+                  </div >
+                </div >
+              </div >
+            </div >
+          </div >
+        </div >
+
+        <!--consultation fee-->
+        <div class="form-group" >
+          <div class="form-row text-right" >
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'consultationFee'}" >Consultation Fee :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input class="form-control" id="consultationFee"
+                         data-th-value="${consultationFee}"
+                         type="number" readonly >
+
+                </div >
+              </div >
+            </div >
+            <!--hospital fee-->
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" data-th-for="${'hospitalFee'}" >Hospital Fee :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input class="form-control" id="hospitalFee"
+                         readonly type="number" />
+                </div >
+              </div >
+            </div >
+          </div >
+        </div >
+      </div >
+      <!--Payment Section-->
+      <div class="container-fluid" id="paymentSection" >
+        <div class="form-group" >
+          <!--Payment method and total amount-->
+          <div class="form-row text-right" >
+            <!--payment method-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label data-th-for="${paymentMethod}" >Payment Method:</label >
+                </div >
+                <div class="col-md-8 text-left" >
+                  <div class="custom-control custom-checkbox custom-control-inline "
+                       data-th-each="paymentMethod,index : ${paymentMethods}" >
+                    <input class="custom-control-input payment-method"
+                           data-th-name="${'payments[__${0}__].paymentMethod'}"
+                           data-th-value="${paymentMethod}"
+                           data-th-id="${index.index}+${paymentMethod}" type="radio"
+                    />
+                    <label class="custom-control-label"
+                           data-th-for="${index.index}+${paymentMethod}"
+                           data-th-text="${paymentMethod.paymentMethod}" > radio
+                    </label >
+                  </div >
+                </div >
+              </div >
+            </div >
+            <!--Discount-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="discountRatio" >Discount Ratio :</label >
+                </div >
+                <div class="col-md-8" >
+                  <select id="discountRatio" data-th-field="*{payments[__${0}__].discountRatio}" class="form-control"
+                          tabindex="9"
+                  >
+                    <option value="" >Please select</option >
+                    <option data-th-each="discountRatio : ${discountRatios}"
+                            data-th-text="${discountRatio.amount}"
+                            data-th-value="${discountRatio.id}" >
+                      Please select
+                    </option >
+                  </select >
+                </div >
+              </div >
+            </div >
+          </div >
+          <div class="form-row" >
+            <!--Total Amount-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="totalAmount" >Total Amount :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="totalAmount" data-th-field="*{payments[__${0}__].totalAmount}" class="form-control"
+                         tabindex="6"
+                         type="text"
+                         readonly />
+                </div >
+              </div >
+            </div >
+            <!--Discount Amount-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="discountAmount" >Discount Amount :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="discountAmount" data-th-field="*{payments[__${0}__].discountAmount}" class="form-control"
+                         tabindex="6"
+                         type="text"
+                         readonly />
+                </div >
+              </div >
+            </div >
+          </div >
+          <!--Amount tendered and balance  -->
+          <div class="form-row text-right" id="cashPaymentBlock" >
+            <!--Amount Tendered-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="amountTendered" >Amount Tendered :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="amountTendered" data-th-field="*{payments[__${0}__].amountTendered}"
+                         class="form-control"
+                         tabindex="6" type="text" />
+                </div >
+              </div >
+            </div >
+            <!--Balance-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="balance" >Balance :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="balance" data-th-field="*{payments[__${0}__].balance}" class="form-control" tabindex="6"
+                         type="text"
+                         readonly />
+                </div >
+              </div >
+            </div >
+          </div >
+          <!-- Card Payment -> Bank and card Number -->
+          <div class="form-row text-right" id="bankNameBlock" >
+            <!--Bank -->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="bankName" >Bank Name :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="bankName" data-th-field="*{payments[__${0}__].bankName}"
+                         class="form-control"
+                         tabindex="6" type="text" />
+                </div >
+              </div >
+            </div >
+            <!--card number-->
+            <div class="col-md-6 " >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label class="control-label" for="cardNumber" >Card Number :</label >
+                </div >
+                <div class="col-md-8" >
+                  <input id="cardNumber" data-th-field="*{payments[__${0}__].cardNumber}" class="form-control"
+                         tabindex="6"
+                         type="text" />
+                </div >
+              </div >
+            </div >
+          </div >
+        </div >
+        <!--remarks and invoice print or not-->
+        <div class="form-group" >
+          <div class="form-row" >
+            <div class="col-md-6" >
+              <!--invoice print or not-->
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label data-th-for="${invoicePrintOrNot}" >Payment Print or Not:</label >
+                </div >
+                <div class="col-md-8 text-left" >
+                  <div class="custom-control custom-checkbox custom-control-inline "
+                       data-th-each="invoicePrintOrNot,index : ${invoicePrintOrNots}" >
+                    <input class="custom-control-input invoicePrintOrNot"
+                           data-th-name="${'payments[__${0}__].paymentPrintOrNot'}"
+                           data-th-value="${invoicePrintOrNot}"
+                           data-th-id="${index.index}+${invoicePrintOrNot}"
+                           type="radio"
+                    />
+                    <label class="custom-control-label"
+                           data-th-for="${index.index}+${invoicePrintOrNot}"
+                           data-th-text="${invoicePrintOrNot.invoicePrintOrNot}" > radio
+                    </label >
+                  </div >
+                </div >
+              </div >
+            </div >
+            <!--Remarks-->
+            <div class="col-md-6" >
+              <div class="form-row text-right" >
+                <div class="col-md-4" >
+                  <label for="remarks" >Remarks :</label ></div >
+                <div class="col-md-8" >
+                  <textarea id="remarks" class="form-control" data-th-field="*{payments[__${0}__].remarks}"
+                            rows="2" ></textarea >
+                </div >
+              </div >
+            </div >
+          </div >
+        </div >
+      </div >
+      <!--paymentWay-->
+      <input data-th-name="${'payments[__${0}__].paymentWay'}" data-th-value="${'DOC'}" type="hidden" />
+      <!--Live dead-->
+      <input data-th-name="${'payments[__${0}__].liveDead'}" data-th-value="${'ACTIVE'}" type="hidden" />
+      <!--Valid Or not-->
+      <input data-th-name="${'payments[__${0}__].paymentValidOrNot'}" data-th-value="${'VALID'}" type="hidden" />
+      <!--total price-->
+      <input type="hidden" id="total" data-th-name="${'payments[__${0}__].totalPrice'}" >
+      <!--Button-->
+      <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
+        <button class="btn btn-success" type="submit" tabindex="21" >
+          <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;
+          <span id="submit" data-th-text="${'Send'}" ></span >
+        </button >
+        <button class="btn btn-danger" type="reset" >
+          <i class="fa fa-redo" ></i > <span id="reset" >Reset</span >
+        </button >
+      </div >
+    </form >
+  </div >
+</div >
+<!--footer include-->
+<div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
+<!--script include-->
+<div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
+<script data-th-src="@{/js/combo-box-search.js}" ></script >
+<script >
+    $(document).ready(function () {
+        $("#patient").select2({
+            data: $(this).val()
+        });
+        $("input[value='CASH']").prop('checked', true);
+        $("input[value='NOT_PRINTED']").prop('checked', true);
+
+        showHideContent('CASH');
+
+        let conFee = parseFloat($("#consultationFee").val());
+        let hosFee = $("#hospitalFee").val(conFee * 0.2);
+
+        $("#total, #totalAmount").val(parseFloat(conFee + hosFee));
+        $("#paymentSection").hide();
+    });
+
+    // appointment status
+    $("input:radio[name='appointmentStatus']").change(function () {
+        if ($("input[name='appointmentStatus']:checked").val() === "PA") {
+            $("#paymentSection").show();
+            $("#discountRatio").prop('required', true);
+            $("#consultationFee").attr("name", "payments[0].consultationFee").prop('required', true);
+            $("#hospitalFee").attr("name", "payments[0].hospitalFee").prop('required', true);
+        } else {
+            $("#paymentSection").hide();
+            $("#discountRatio").prop('required', false);
+            $("#consultationFee").removeAttr("name").prop('required', true);
+            $("#hospitalFee").removeAttr("name").prop('required', true);
+        }
+    });
+
+    $(".payment-method").bind('change', function () {
+        showHideContent($(this).val());
+    });
+
+    function showHideContent(paymentMethodValue) {
+        if (paymentMethodValue === 'CASH') {
+            $("#bankNameBlock").hide();
+            $("#cashPaymentBlock").show();
+            $("#amountTendered, #balance");
+        } else {
+            $("#cashPaymentBlock").hide();
+            $("#bankNameBlock").show();
+            $("#bankName, #cardNumber");
+        }
+    }
+
+    $('#discountRatio').bind('change', function () {
+        let total = $("#total").val();
+        if (total <= 0 || total === null) {
+            swal({
+                title: "Before select discount have to select item  ",
+                icon: "warning",
+            });
+        }
+        discountRatio();
+    });
+
+    function discountRatio() {
+        let discountRatio = parseFloat($("#discountRatio").find('option:selected').text());
+        let total = parseFloat($("#total").val());
+        let discountAmount = total * discountRatio / 100;
+        $("#totalAmount").val(total - discountAmount);
+        $("#discountAmount").val(discountAmount);
+    }
+
+    $("#amountTendered").bind('focusout', function () {
+        let tenderedAmount = $(this).val();
+        let totalAmount = $("#totalAmount").val();
+        if (tenderedAmount < totalAmount) {
+            swal({
+                title: "Hey.. you enter amount is not enough to get this appointment ",
+                icon: "warning",
+            });
+            $("#amountTendered").val(totalAmount);
+            $("#balance").val(0);
+        } else {
+            $("#balance").val(tenderedAmount - totalAmount);
+        }
+    });
+
+    $(".alert").alert();
+</script >
+</body >
+</html >

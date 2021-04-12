@@ -1,6 +1,7 @@
 package lk.kds_medical.asset.payment.service;
 
 
+import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.payment.dao.PaymentDao;
 import lk.kds_medical.asset.payment.entity.Payment;
@@ -65,5 +66,9 @@ public class PaymentService implements AbstractService<Payment, Integer> {
 
   public Payment lastPayment() {
         return paymentDao.findFirstByOrderByIdDesc();
+  }
+
+  public Payment findByAppoinment(Appointment appointment) {
+        return paymentDao.findByAppointment(appointment);
   }
 }
