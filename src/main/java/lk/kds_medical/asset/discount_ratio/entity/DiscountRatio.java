@@ -27,9 +27,6 @@ public class DiscountRatio {
   @Enumerated( EnumType.STRING )
   private DiscountRatioStatus discountRatioStatus;
 
-/*    @OneToMany
-    @JoinColumn(name = "discount_ratio_id")
-    private List<Invoice> invoices = new ArrayList<>();*/
 
 
 }

@@ -31,7 +31,8 @@
   </div >
 </div >
 <!--message-->
-<div class="alert alert-warning alert-dismissible fade show text-center" role="alert" data-th-if="${not #strings.isEmpty(message)}" >
+<div class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+     data-th-if="${not #strings.isEmpty(message)}" >
   <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
     <span aria-hidden="true" >&times;</span >
   </button >
@@ -105,15 +106,21 @@
             <div class="col-md-6" >
               <div class="form-row text-right" >
                 <div class="col-md-4" >
-                  <label class="control-label" data-th-for="${'appointmentStatus'}" >Payment Status :</label >
+                  <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{appointmentStatus}" required >
-                    <option value="" > Select Patient</option >
-                    <option data-th-each="appointmentStatus : ${appointmentStatuses}"
-                            data-th-value="${appointmentStatus}"
-                            data-th-text="${appointmentStatus.appointmentStatus}" ></option >
-                  </select >
+                  <div class="custom-control custom-checkbox custom-control-inline "
+                       data-th-each="appointmentStatus,index : ${appointmentStatuses}" >
+                    <input class="custom-control-input appointmentStatus" required
+                           data-th-name="${'appointmentStatus'}"
+                           data-th-value="${appointmentStatus}"
+                           data-th-id="${index.index}+${appointmentStatus}" type="radio"
+                           data-th-checked="${appointmentStatus==appointmentStatus}" />
+                    <label class="custom-control-label"
+                           data-th-for="${index.index}+${appointmentStatus}"
+                           data-th-text="${appointmentStatus.appointmentStatus}" > radio
+                    </label >
+                  </div >
                 </div >
               </div >
             </div >
@@ -295,13 +302,13 @@
               <!--invoice print or not-->
               <div class="form-row text-right" >
                 <div class="col-md-4" >
-                  <label data-th-for="${invoicePrintOrNot}" >Invoice Print or Not:</label >
+                  <label data-th-for="${invoicePrintOrNot}" >Payment Print or Not:</label >
                 </div >
                 <div class="col-md-8 text-left" >
                   <div class="custom-control custom-checkbox custom-control-inline "
                        data-th-each="invoicePrintOrNot,index : ${invoicePrintOrNots}" >
                     <input class="custom-control-input invoicePrintOrNot"
-                           data-th-name="${'payments[__${0}__].invoicePrintOrNot'}"
+                           data-th-name="${'payments[__${0}__].paymentPrintOrNot'}"
                            data-th-value="${invoicePrintOrNot}"
                            data-th-id="${index.index}+${invoicePrintOrNot}"
                            type="radio"
@@ -372,8 +379,8 @@
     });
 
     // appointment status
-    $("#appointmentStatus").change(function () {
-        if ($(this).val() === "PA") {
+    $("input:radio[name='appointmentStatus']").change(function () {
+        if ($("input[name='appointmentStatus']:checked").val() === "PA") {
             $("#paymentSection").show();
             $("#discountRatio").prop('required', true);
             $("#consultationFee").attr("name", "payments[0].consultationFee").prop('required', true);
@@ -430,6 +437,7 @@
                 icon: "warning",
             });
             $("#amountTendered").val(totalAmount);
+            $("#balance").val(0);
         } else {
             $("#balance").val(tenderedAmount - totalAmount);
         }

@@ -66,7 +66,7 @@
                       <td >
                         <div class="form-row" >
                           <!--View-->
-                          <form action="/appointment/view"  method="post">
+                          <form action="/appointment/view"  method="post" data-th-if="${not #lists.isEmpty(doctorSchedule.appointments)}">
                             <input type="hidden" name="doctorSchedule" data-th-value="${doctorSchedule.id}" >
                             <input type="hidden" name="appointmentDate" data-th-value="${doctorSchedule.appointmentDate}" >
                             <input type="hidden" name="doctor" data-th-value="${doctorSchedule.doctor.id}" >

@@ -128,6 +128,7 @@ public class DoctorController {
   @GetMapping( value = "/remove/{id}" )
   public String removeDoctor(@PathVariable Integer id) {
     doctorService.delete(id);
+    //todo if there is an payment need to change its status
     return "redirect:/doctor";
   }
 

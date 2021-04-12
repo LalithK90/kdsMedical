@@ -13,6 +13,7 @@ import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
+import lk.kds_medical.asset.payment.entity.enums.PaymentState;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
@@ -124,8 +125,11 @@ public class AppointmentController {
       model.addAttribute("appointment", appointment);
       model.addAttribute("consultationFee", doctorSchedule.getDoctor().getConsultationFee());
       model.addAttribute("doctorSchedules", doctorScheduleService.findByDoctor(appointmentDoctorSearch.getDoctor()));
-
-      model.addAttribute("appointmentStatuses", AppointmentStatus.values());model.addAttribute("patients", patientService.findAll());
+      List< AppointmentStatus > appointmentStatuses = new ArrayList<>();
+      appointmentStatuses.add(AppointmentStatus.BK);
+      appointmentStatuses.add(AppointmentStatus.PA);
+      model.addAttribute("appointmentStatuses", appointmentStatuses);
+      model.addAttribute("patients", patientService.findAll());
       model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
       model.addAttribute("paymentMethods", PaymentMethod.values());
       model.addAttribute("discountRatios", discountRatioService.findAll());
@@ -153,7 +157,6 @@ public class AppointmentController {
     }
 
     if ( appointment.getPayments().get(0).getTotalAmount() != null ) {
-
       appointment.getPayments().forEach(x -> {
         x.setAppointment(appointment);
         if ( x.getId() == null ) {
@@ -185,7 +188,6 @@ public class AppointmentController {
     return "redirect:/appointment";
   }
 
-  //todo appointment view
   @PostMapping( "/view" )
   public String viewAppointment(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch, Model model) {
     List< Appointment > appointments =
