@@ -227,7 +227,42 @@ public class AppointmentController {
   @GetMapping( "/pay/{id}" )
   public String payAppointment(@PathVariable( "id" ) Integer id, Model model) {
 
+    Appointment appointment = appointmentService.findById(id);
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("consultationFee", appointment.getDoctorSchedule().getDoctor().getConsultationFee());
+    model.addAttribute("doctorSchedules", appointment.getDoctorSchedule());
+    List< AppointmentStatus > appointmentStatuses = new ArrayList<>();
+    appointmentStatuses.add(AppointmentStatus.PA);
+
+    model.addAttribute("appointmentStatuses", appointmentStatuses);
+    model.addAttribute("patient", patientService.findById(appointment.getPatient().getId()));
+    model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
+    model.addAttribute("paymentMethods", PaymentMethod.values());
+    model.addAttribute("discountRatios", discountRatioService.findAll());
     return "appointment/addAppointmentPayment";
+  }
+
+  @PostMapping( "/update" )
+  public String makeAppointmentPayment(@ModelAttribute Appointment appointment) {
+
+    Appointment appointmentDb = appointmentService.findById(appointment.getId());
+    appointmentDb.setAppointmentStatus(AppointmentStatus.PA);
+
+    if ( appointment.getPayments().get(0).getTotalAmount() != null ) {
+      Payment payment = appointment.getPayments().get(0);
+      payment.setAppointment(appointmentService.persist(appointmentDb));
+      if ( payment.getId() == null ) {
+        Payment lastPayment = paymentService.lastPayment();
+        if ( lastPayment == null ) {
+          payment.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+        } else {
+          payment.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(lastPayment.getCode().substring(4)).toString());
+        }
+      }
+      paymentService.persist(payment);
+    }
+
+    return "redirect:/appointment";
   }
 
 }

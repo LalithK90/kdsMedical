@@ -41,7 +41,7 @@
 <!--Form Content - start -->
 <div class="container-fluid  " >
   <div class="col-sm-12 flex-column " >
-    <form data-th-action="${'/appointment/save'}"
+    <form data-th-action="${'/appointment/update'}"
           data-th-object="${appointment}"
           method="POST" >
       <input type="hidden" data-th-field="*{id}" >
@@ -57,7 +57,7 @@
                   <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Availability :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{doctorSchedule}" required >
+                  <select class="form-control" data-th-field="*{doctorSchedule}" required readonly >
                     <option value="" > Select Doctor Booking Slot</option >
                     <option data-th-each="doctorSchedule : ${doctorSchedules}"
                             data-th-value="${doctorSchedule.id}" >
@@ -78,7 +78,7 @@
                   <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
                 </div >
                 <div class="col-md-8" >
-                  <input class="form-control" data-th-field="*{date}" required type="date" />
+                  <input class="form-control" data-th-field="*{date}" required type="date" readonly />
                 </div >
               </div >
             </div >
@@ -93,12 +93,8 @@
                   <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" id="patient" data-th-field="*{patient}" required >
-                    <option value="" > Select Patient</option >
-                    <option data-th-each="patient : ${patients}"
-                            data-th-value="${patient.id}"
-                            data-th-text="${patient.title.title+' '+ patient.name+' '+patient.mobileOne}" ></option >
-                  </select >
+                  <input class="form-control" id="patient" data-th-field="*{patient}" required hidden >
+                  <input class="form-control" data-th-value="${patient.name+'  '+ patient.mobileOne}" readonly >
                 </div >
               </div >
             </div >
@@ -363,9 +359,7 @@
 <script data-th-src="@{/js/combo-box-search.js}" ></script >
 <script >
     $(document).ready(function () {
-        $("#patient").select2({
-            data: $(this).val()
-        });
+
         $("input[value='CASH']").prop('checked', true);
         $("input[value='NOT_PRINTED']").prop('checked', true);
 
@@ -373,9 +367,7 @@
 
         let conFee = parseFloat($("#consultationFee").val());
         let hosFee = $("#hospitalFee").val(conFee * 0.2);
-
-        $("#total, #totalAmount").val(parseFloat(conFee + hosFee));
-        $("#paymentSection").hide();
+        $("#total, #totalAmount").val((parseFloat(conFee) + parseFloat(hosFee.val())).toFixed(2));
     });
 
     // appointment status
@@ -443,7 +435,6 @@
         }
     });
 
-    $(".alert").alert();
 </script >
 </body >
 </html >

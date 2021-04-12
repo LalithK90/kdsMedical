@@ -66,15 +66,15 @@
         <td data-th-text="${appointment.patient.title.title+' '+appointment.patient.name}" ></td >
         <td >
           <!--refund-->
-          <a data-th-if="${!#strings.equals(appointment.appointmentStatus, 'PA')}"
-             data-th-href="${'/appointment/refund/'+appointment.id}" class="btn btn-warring" >Refund</a >
+          <a data-th-if="${#strings.equals(appointment.appointmentStatus, 'PA')}"
+             data-th-href="${'/appointment/refund/'+appointment.id}" class="btn btn-warning" >Refund</a >
           <!--cancel-->
-          <a data-th-if="${!#strings.equals(appointment.appointmentStatus, 'BK')}"
+          <a data-th-if="${#strings.equals(appointment.appointmentStatus, 'BK')}"
              data-th-href="${'/appointment/cancel/'+appointment.id}" class="btn btn-danger" >Cancel</a >
           <!--to payment-->
 
-          <a data-th-if="${!#strings.equals(appointment.appointmentStatus, 'BK')}"
-             data-th-href="${'/appointment/pay/'+appointment.id}" class="btn btn-danger" >Refund</a >
+          <a data-th-if="${#strings.equals(appointment.appointmentStatus, 'BK')}"
+             data-th-href="${'/appointment/pay/'+appointment.id}" class="btn btn-info" >Pay</a >
         </td >
       </tr >
       </tbody >

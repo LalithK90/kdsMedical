@@ -376,6 +376,7 @@
 
         $("#total, #totalAmount").val(parseFloat(conFee + hosFee));
         $("#paymentSection").hide();
+        $("input:radio[name='appointmentStatus']").prop('checked', false);
     });
 
     // appointment status
