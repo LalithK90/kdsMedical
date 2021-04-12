@@ -19,6 +19,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -112,7 +113,15 @@ public class DoctorController {
       }
     });
     doctor.setDoctorSchedules(doctorSchedules);
-    doctorService.persist(doctor);
+    try {
+      doctorService.persist(doctor);
+    } catch ( Exception e ) {
+      ObjectError error = new ObjectError("patient",
+                                          "Please make sure that resolve following error \n. <br> System message -->"
+                                              + e.getCause().getCause().getMessage());
+      result.addError(error);
+      return common(model, doctor, true);
+    }
     return "redirect:/doctor";
   }
 
@@ -138,7 +147,7 @@ public class DoctorController {
     MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(doctorSchedules);
 
     SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter
-        .filterOutAllExcept("id", "dayOfWeek", "arrivalTime","count");
+        .filterOutAllExcept("id", "dayOfWeek", "arrivalTime", "count");
 
     FilterProvider filters = new SimpleFilterProvider()
         .addFilter("DoctorSchedule", simpleBeanPropertyFilter);
