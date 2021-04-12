@@ -146,7 +146,20 @@ public class EmployeeController {
 
 
     //after save employee files and save employee
-    Employee employeeSaved = employeeService.persist(employee);
+    Employee employeeSaved = null;
+    try {
+      employeeSaved = employeeService.persist(employee);
+    } catch ( Exception e ) {
+      ObjectError error = new ObjectError("patient",
+                                          "Please make sure that resolve following error \n. <br> System message -->"
+                                              + e.getCause().getCause().getMessage());
+      result.addError(error);
+      model.addAttribute("addStatus", true);
+      model.addAttribute("employee", employee);
+      return commonThings(model);
+    }
+
+
     //if employee state is not working he or she cannot access to the system
     if ( !employee.getEmployeeStatus().equals(EmployeeStatus.WORKING) ) {
       User user = userService.findUserByEmployee(employeeService.findByNic(employee.getNic()));
@@ -179,7 +192,7 @@ public class EmployeeController {
 
     } catch ( Exception e ) {
       ObjectError error = new ObjectError("employee",
-                                          "There is already in the system. <br>System message -->" + e.toString());
+                                          "There is already in the system. <br>System message -->" + e.getCause().getCause().getMessage());
       result.addError(error);
       if ( employee.getId() != null ) {
         model.addAttribute("addStatus", true);
