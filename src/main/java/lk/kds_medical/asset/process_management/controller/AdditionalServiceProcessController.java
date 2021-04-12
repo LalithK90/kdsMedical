@@ -33,7 +33,7 @@ private final DiscountRatioService discountRatioService;
     this.paymentService = paymentService;
     this.discountRatioService = discountRatioService;
   }
-
+//todo:
   @GetMapping
   public String findAll(Model model){
     model.addAttribute("additionServicePatients", additionalServiceService.findAll());
@@ -50,5 +50,5 @@ private final DiscountRatioService discountRatioService;
     model.addAttribute("paymentAdditionalService", new PaymentAdditionalService());
     return "additionServicePatient/addAdditionServicePatient";
   }
-  //to save method
+  //todo save method
 }

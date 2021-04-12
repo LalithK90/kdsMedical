@@ -19,29 +19,23 @@
     <div class="col" >
       <h4 class="  text-dark text-center" >
         <strong >
-          Make Appointment
+          Additional Service Payment
         </strong >
       </h4 >
     </div >
     <div class="col" >
-      <a class="btn btn-primary" href="/appointment" >
+      <a class="btn btn-primary" href="/additionServicePatient" >
         <i class="fa fa-list" ></i >&nbsp; View List
       </a >
     </div >
   </div >
 </div >
-<!--message-->
-<div class="alert alert-warning alert-dismissible fade show text-center" role="alert" data-th-if="${not #strings.isEmpty(message)}" >
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
-    <span aria-hidden="true" >&times;</span >
-  </button >
-  <strong data-th-text="${message}" ></strong >
-</div >
+<!--todo : need to below thing vconfig-->
 <!--Form Content - start -->
 <div class="container-fluid  " >
   <div class="col-sm-12 flex-column " >
-    <form data-th-action="${'/appointment/save'}"
-          data-th-object="${paymentAdditionalService}"
+    <form data-th-action="${'/appointment/update'}"
+          data-th-object="${appointment}"
           method="POST" >
       <input type="hidden" data-th-field="*{id}" >
       <input type="hidden" data-th-field="*{code}" >
@@ -56,7 +50,7 @@
                   <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Availability :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{doctorSchedule}" required >
+                  <select class="form-control" data-th-field="*{doctorSchedule}" required readonly >
                     <option value="" > Select Doctor Booking Slot</option >
                     <option data-th-each="doctorSchedule : ${doctorSchedules}"
                             data-th-value="${doctorSchedule.id}" >
@@ -77,7 +71,7 @@
                   <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
                 </div >
                 <div class="col-md-8" >
-                  <input class="form-control" data-th-field="*{date}" required type="date" />
+                  <input class="form-control" data-th-field="*{date}" required type="date" readonly />
                 </div >
               </div >
             </div >
@@ -92,12 +86,8 @@
                   <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" id="patient" data-th-field="*{patient}" required >
-                    <option value="" > Select Patient</option >
-                    <option data-th-each="patient : ${patients}"
-                            data-th-value="${patient.id}"
-                            data-th-text="${patient.title.title+' '+ patient.name+' '+patient.mobileOne}" ></option >
-                  </select >
+                  <input class="form-control" id="patient" data-th-field="*{patient}" required hidden >
+                  <input class="form-control" data-th-value="${patient.name+'  '+ patient.mobileOne}" readonly >
                 </div >
               </div >
             </div >
@@ -105,15 +95,21 @@
             <div class="col-md-6" >
               <div class="form-row text-right" >
                 <div class="col-md-4" >
-                  <label class="control-label" data-th-for="${'appointmentStatus'}" >Payment Status :</label >
+                  <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{appointmentStatus}" required >
-                    <option value="" > Select Patient</option >
-                    <option data-th-each="appointmentStatus : ${appointmentStatuses}"
-                            data-th-value="${appointmentStatus}"
-                            data-th-text="${appointmentStatus.appointmentStatus}" ></option >
-                  </select >
+                  <div class="custom-control custom-checkbox custom-control-inline "
+                       data-th-each="appointmentStatus,index : ${appointmentStatuses}" >
+                    <input class="custom-control-input appointmentStatus" required
+                           data-th-name="${'appointmentStatus'}"
+                           data-th-value="${appointmentStatus}"
+                           data-th-id="${index.index}+${appointmentStatus}" type="radio"
+                           data-th-checked="${appointmentStatus==appointmentStatus}" />
+                    <label class="custom-control-label"
+                           data-th-for="${index.index}+${appointmentStatus}"
+                           data-th-text="${appointmentStatus.appointmentStatus}" > radio
+                    </label >
+                  </div >
                 </div >
               </div >
             </div >
@@ -295,13 +291,13 @@
               <!--invoice print or not-->
               <div class="form-row text-right" >
                 <div class="col-md-4" >
-                  <label data-th-for="${invoicePrintOrNot}" >Invoice Print or Not:</label >
+                  <label data-th-for="${invoicePrintOrNot}" >Payment Print or Not:</label >
                 </div >
                 <div class="col-md-8 text-left" >
                   <div class="custom-control custom-checkbox custom-control-inline "
                        data-th-each="invoicePrintOrNot,index : ${invoicePrintOrNots}" >
                     <input class="custom-control-input invoicePrintOrNot"
-                           data-th-name="${'payments[__${0}__].invoicePrintOrNot'}"
+                           data-th-name="${'payments[__${0}__].paymentPrintOrNot'}"
                            data-th-value="${invoicePrintOrNot}"
                            data-th-id="${index.index}+${invoicePrintOrNot}"
                            type="radio"
@@ -356,9 +352,7 @@
 <script data-th-src="@{/js/combo-box-search.js}" ></script >
 <script >
     $(document).ready(function () {
-        $("#patient").select2({
-            data: $(this).val()
-        });
+
         $("input[value='CASH']").prop('checked', true);
         $("input[value='NOT_PRINTED']").prop('checked', true);
 
@@ -366,14 +360,12 @@
 
         let conFee = parseFloat($("#consultationFee").val());
         let hosFee = $("#hospitalFee").val(conFee * 0.2);
-
-        $("#total, #totalAmount").val(parseFloat(conFee + hosFee));
-        $("#paymentSection").hide();
+        $("#total, #totalAmount").val((parseFloat(conFee) + parseFloat(hosFee.val())).toFixed(2));
     });
 
     // appointment status
-    $("#appointmentStatus").change(function () {
-        if ($(this).val() === "PA") {
+    $("input:radio[name='appointmentStatus']").change(function () {
+        if ($("input[name='appointmentStatus']:checked").val() === "PA") {
             $("#paymentSection").show();
             $("#discountRatio").prop('required', true);
             $("#consultationFee").attr("name", "payments[0].consultationFee").prop('required', true);
@@ -430,12 +422,12 @@
                 icon: "warning",
             });
             $("#amountTendered").val(totalAmount);
+            $("#balance").val(0);
         } else {
             $("#balance").val(tenderedAmount - totalAmount);
         }
     });
 
-    $(".alert").alert();
 </script >
 </body >
 </html >
