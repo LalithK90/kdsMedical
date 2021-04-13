@@ -176,7 +176,7 @@
                 <div class="col-md-8" >
                   <select id="discountRatio" data-th-field="*{payments[__${0}__].discountRatio}"
                           class="form-control"
-                          tabindex="9"
+                          tabindex="9" required
                   >
                     <option value="" >Please select</option >
                     <option data-th-each="discountRatio : ${discountRatios}"
@@ -396,9 +396,9 @@
 
     $("#doctor").change(function () {
         if ($(this).val()) {
-            $("#consultationFee").prop('required', true).prop( 'readonly', false);
-        }else {
-        $("#consultationFee").attr('readonly', true);
+            $("#consultationFee").prop('required', true).prop('readonly', false);
+        } else {
+            $("#consultationFee").attr('readonly', true);
         }
     });
 
@@ -455,7 +455,7 @@
 
     $("#amountTendered").bind('focusout', function () {
         $("#totalConsultationFee").val($("#consultationFee").val());
-        $("#totalHospitalFee").val($("#hospitalFee").val());
+        $("#totalHospitalFee").val(parseFloat($("#hospitalFee").html()));
         let tenderedAmount = $(this).val();
         let totalAmount = $("#totalAmount").val();
         if (tenderedAmount < totalAmount) {

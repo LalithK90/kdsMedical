@@ -69,7 +69,11 @@ public class PaymentService implements AbstractService<Payment, Integer> {
         return paymentDao.findFirstByOrderByIdDesc();
   }
 
-  public Payment findByAppoinment(Appointment appointment) {
+  public Payment findByAppointment(Appointment appointment) {
         return paymentDao.findByAppointment(appointment);
   }
+
+    public Payment findByPaymentAdditionalService(PaymentAdditionalService paymentAdditionalService) {
+    return paymentDao.findByPaymentAdditionalService(paymentAdditionalService);
+    }
 }

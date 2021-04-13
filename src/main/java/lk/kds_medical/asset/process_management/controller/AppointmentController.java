@@ -13,7 +13,6 @@ import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
-import lk.kds_medical.asset.payment.entity.enums.PaymentState;
 import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
@@ -27,7 +26,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -187,7 +185,7 @@ public class AppointmentController {
 
     Appointment appointmentDb = appointmentService.persist(appointment);
     if ( appointmentDb.getAppointmentStatus().equals(AppointmentStatus.PA) ) {
-      return "redirect:/payment/" + paymentService.findByAppoinment(appointmentDb).getId();
+      return "redirect:/payment/" + paymentService.findByAppointment(appointmentDb).getId();
     } else {
       return "redirect:/appointment";
     }
@@ -213,7 +211,7 @@ public class AppointmentController {
     appointment.setAppointmentStatus(AppointmentStatus.CL);
     Appointment appointmentDb = appointmentService.persist(appointment);
 
-    Payment payment = paymentService.findByAppoinment(appointmentDb);
+    Payment payment = paymentService.findByAppointment(appointmentDb);
     payment.setPaymentValidOrNot(PaymentValidOrNot.NOT_VALID);
     model.addAttribute("paymentDetail", paymentService.persist(payment));
     return "payment/payment-detail";

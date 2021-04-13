@@ -35,7 +35,7 @@
     <div class="col" >
       <div class="collapse multi-collapse" id="multiCollapseExample1" >
         <div class="card card-body" >
-          <form action="/additionServicePatient/seach" method="post" >
+          <form action="/additionServicePatient/search" method="post" >
             <div class="col-3" >
               <label class="control-label" > Since :
                 <input type="date" class="form-control" name="startDate" id="startDate" required >
@@ -64,23 +64,26 @@
     </div >
   </div >
   <div class="form-row" >
-    <table class="table table-striped table-inverse " id="myTable" >
-      <thead class="thead-inverse" >
-      <tr >
-        <th ></th >
-        <th ></th >
-        <th ></th >
-      </tr >
-      <!--todo-->
-      </thead >
-      <tbody >
-      <tr >
-        <td scope="row" ></td >
-        <td ></td >
-        <td ></td >
-      </tr >
-      </tbody >
-    </table >
+    <div class="container-fluid" >
+      <table class="table table-striped  " id="myTable" >
+        <thead class="thead-inverse" >
+        <tr >
+          <th >Index</th >
+          <th >Patient Name</th >
+          <th >Service Name</th >
+          <th >Date</th >
+        </tr >
+        </thead >
+        <tbody >
+        <tr data-th-each="additionServicePatient, index:${additionServicePatients}" >
+          <td data-th-text="${index.count}" ></td >
+          <td data-th-text="${additionServicePatient.patient.name+' '+additionServicePatient.patient.mobileOne}" ></td >
+          <td data-th-text="${additionServicePatient.additionalService.name}" ></td >
+          <td data-th-text="${{additionServicePatient.createdAt}}" ></td >
+        </tr >
+        </tbody >
+      </table >
+    </div >
   </div >
 </div >
 <!--footer include-->

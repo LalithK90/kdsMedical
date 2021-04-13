@@ -2,6 +2,7 @@ package lk.kds_medical.asset.payment_additional_service.service;
 
 
 
+import lk.kds_medical.asset.additional_service.entity.AdditionalService;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.payment_additional_service.dao.PaymentAdditionalServiceDao;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,5 +67,13 @@ public class PaymentAdditionalServiceService implements AbstractService< Payment
 
     public PaymentAdditionalService lastPaymentAdditionalService() {
     return paymentAdditionalServiceDao.findFirstByOrderByIdDesc();
+    }
+    public List< PaymentAdditionalService > findByCreatedAtIsBetweenAndCreatedBy(LocalDateTime startDateTime, LocalDateTime endDateTime, String username) {
+        return paymentAdditionalServiceDao.findByCreatedAtIsBetweenAndCreatedBy(startDateTime,endDateTime,username);
+    }
+
+    public List< PaymentAdditionalService > findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return paymentAdditionalServiceDao.findByCreatedAtIsBetween(startDateTime,endDateTime);
+
     }
 }

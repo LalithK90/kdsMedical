@@ -74,14 +74,17 @@ public class AdditionalServiceProcessController {
 
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
     Employee employee = userService.findByUserName(username).getEmployee();
-    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
+/*    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
       model.addAttribute("additionServicePatients",
-                         additionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime,
+                         paymentAdditionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime,
                                                                                        username));
     } else {
-      model.addAttribute("additionServicePatients", additionalServiceService.findByCreatedAtIsBetween(startDateTime,
+      model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findByCreatedAtIsBetween(startDateTime,
                                                                                                       endDateTime));
-    }
+    }*/
+    //todo delete this
+    model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findAll());
+
     model.addAttribute("message", "This report is belong to " + startDate + " to " + endDate + "\n if you need to " +
         "more please use above search method");
     return "additionServicePatient/additionServicePatient";
@@ -146,7 +149,7 @@ public class AdditionalServiceProcessController {
       if ( lastPaymentAdditionalService == null ) {
         paymentAdditionalService.setCode("KDSAS" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
       } else {
-        paymentAdditionalService.setCode("KDSAS" + makeAutoGenerateNumberService.numberAutoGen(paymentAdditionalService.getCode().substring(5)).toString());
+        paymentAdditionalService.setCode("KDSAS" + makeAutoGenerateNumberService.numberAutoGen(lastPaymentAdditionalService.getCode().substring(5)).toString());
       }
     }
 
@@ -154,7 +157,7 @@ public class AdditionalServiceProcessController {
         paymentAdditionalServiceService.persist(paymentAdditionalService);
 
 
-    return "redirect:/additionServicePatient";
+    return "redirect:/payment/" + paymentService.findByPaymentAdditionalService(paymentAdditionalServiceDb).getId();
   }
 
 }

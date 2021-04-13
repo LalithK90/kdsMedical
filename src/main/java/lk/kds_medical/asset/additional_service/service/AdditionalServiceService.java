@@ -57,12 +57,5 @@ public class AdditionalServiceService implements AbstractService< AdditionalServ
         return additionalServiceDao.findAll(additionalServiceExample);
     }
 
-  public List< AdditionalService > findByCreatedAtIsBetweenAndCreatedBy(LocalDateTime startDateTime, LocalDateTime endDateTime, String username) {
-  return additionalServiceDao.findByCreatedAtIsBetweenAndCreatedBy(startDateTime,endDateTime,username);
-    }
 
-    public List< AdditionalService > findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return additionalServiceDao.findByCreatedAtIsBetween(startDateTime,endDateTime);
-
-    }
 }
