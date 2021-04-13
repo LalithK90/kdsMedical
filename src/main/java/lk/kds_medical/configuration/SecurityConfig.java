@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 /*    http.csrf().disable();
     http.authorizeRequests().antMatchers("/").permitAll();*/
     // For developing easy to give permission all lin
-//"ADMIN","CASHIER","MANAGER","ACCOUNTANT"
+//"ADMIN","CASHIER","MANAGER","ACCOUNTANT","HR_MANAGER"
         http
                 .authorizeRequests(
                         authorizeRequests ->
