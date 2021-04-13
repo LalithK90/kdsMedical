@@ -1,98 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
-<head data-th-replace="~{fragments/header :: headerFragment}">
-    <meta charset="UTF-8">
-    <title>Thymeleaf Springboot </title>
-</head>
-<body>
-<nav data-th-replace="~{fragments/navBar :: navBarFragment}"></nav>
+<html lang="en" >
+<head data-th-replace="~{fragments/header :: headerFragment}" >
+  <meta charset="UTF-8" >
+  <title >Thymeleaf Springboot </title >
+</head >
+<body >
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
 
-<div class="container-fluid   ">
-    <div class="row text-center formManagement border-info">
-        <div class="col">
-            <a class="btn btn-primary" href="/home">
-                <i class="fa fa-home" style="font-size: 20px"></i> &nbsp; Home
-            </a>
-        </div>
-        <div class="col">
-            <h4 class="  text-dark text-center">
-                <strong>
-                    <span data-th-text="${addStatus==true?'New Consultation Add':'Update Consultation Details'}"></span>
-                </strong>
-            </h4>
-        </div>
-        <div class="col">
-            <a class="btn btn-primary" href="/consultation">
-                <i class="fa fa-list"></i>&nbsp; View List
-            </a>
-        </div>
-    </div>
-</div>
+<div class="container-fluid   " >
+  <div class="row text-center formManagement border-info" >
+    <div class="col" >
+      <a class="btn btn-primary" href="/home" >
+        <i class="fa fa-home" style="font-size: 20px" ></i > &nbsp; Home
+      </a >
+    </div >
+    <div class="col" >
+      <h4 class="  text-dark text-center" >
+        <strong >
+          <span data-th-text="${addStatus==true?'New Consultation Add':'Update Consultation Details'}" ></span >
+        </strong >
+      </h4 >
+    </div >
+    <div class="col" >
+      <a class="btn btn-primary" href="/consultation" >
+        <i class="fa fa-list" ></i >&nbsp; View List
+      </a >
+    </div >
+  </div >
+</div >
 <!--Form Content - start -->
-<div class="container-fluid  ">
-    <div class="col-sm-12 flex-column ">
-        <form data-th-action="${addStatus==true?'/consultation/save':'/consultation/update'}"
-              data-th-object="${consultation}"
-              method="POST">
-            <div class="row">
-                <!--Left Side-->
-                <div class="form-group col-md-6 col-sm-6 text-left flex-column">
-                    <input data-th-field="*{id}" data-th-if="${addStatus==false}" hidden type="text"/>
+<div class="container-fluid  " >
+  <div class="col-sm-12 flex-column " >
+    <form data-th-action="${addStatus==true?'/consultation/save':'/consultation/update'}"
+          data-th-object="${consultation}"
+          method="POST" >
+      <div class="row" >
+        <!--Left Side-->
+        <div class="form-group col-md-6 col-sm-6 text-left flex-column" >
+          <input data-th-field="*{id}" data-th-if="${addStatus==false}" hidden type="text" />
+          <input data-th-field="*{liveDead}" data-th-if="${addStatus==false}" hidden type="text" />
 
-                    <!--Name-->
-                    <div class="form-row text-right">
-                        <div class="col-md-4">
-                            <label class="control-label" for="name">Name :</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input class="form-control" data-th-field="*{name}" id="name" required tabindex="4"
-                                   type="text"/>
-                            <span class="error" data-th-errors="*{name}"
-                                  data-th-if="${#fields.hasErrors('name')}" id="nameError">Error Name</span>
-                        </div>
-                    </div>
+          <!--Name-->
+          <div class="form-row text-right" >
+            <div class="col-md-4" >
+              <label class="control-label" for="name" >Name :</label >
+            </div >
+            <div class="col-md-8" >
+              <input class="form-control" data-th-field="*{name}" id="name" required tabindex="4"
+                     type="text" />
+              <span class="error" data-th-errors="*{name}"
+                    data-th-if="${#fields.hasErrors('name')}" id="nameError" >Error Name</span >
+            </div >
+          </div >
 
-                    <!--Price-->
-                    <div class="form-row text-right">
-                        <div class="col-md-4">
-                            <label class="control-label" for="price">Price :</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input class="form-control" data-th-field="*{price}" id="price" required tabindex="4"
-                                   type="text"/>
-                            <span class="error" data-th-errors="*{price}"
-                                  data-th-if="${#fields.hasErrors('price')}" id="priceError">Error Name</span>
-                        </div>
-                    </div>
-                </div>
+          <!--Price-->
+          <div class="form-row text-right" >
+            <div class="col-md-4" >
+              <label class="control-label" for="price" >Price :</label >
+            </div >
+            <div class="col-md-8" >
+              <input class="form-control" data-th-field="*{price}" id="price" required tabindex="4"
+                     type="text" />
+              <span class="error" data-th-errors="*{price}"
+                    data-th-if="${#fields.hasErrors('price')}" id="priceError" >Error Name</span >
+            </div >
+          </div >
+        </div >
 
-                <!--Button-->
-                <!--Button-->
-                <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
-                    <button class="btn btn-success" type="submit" tabindex="21" >
-                        <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;<span id="submit"
-                                                                                                data-th-text="${addStatus==true?'Save': 'Update'}" ></span >
-                    </button >
-                    <button class="btn btn-danger" type="reset" >
-                        <i class="fa fa-redo" ></i > <span id="reset" >Reset</span >
-                    </button >
-                </div >
-                <div class="form-row">
-                    <label data-th-if="${#fields.hasErrors('*')}" data-th-text="'Errors: '"
-                           id="errorLabel">Errors: </label>
-                    <ul>
-                        <li class="error" data-th-each="err: ${#fields.errors('*')}" data-th-text="${err}"
-                            id="error"></li>
-                    </ul>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        <!--Button-->
+        <!--Button-->
+        <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
+          <button class="btn btn-success" type="submit" tabindex="21" >
+            <i class="fa fa-save " style="font-size: 20px" ></i >&nbsp; &nbsp;<span id="submit"
+                                                                                    data-th-text="${addStatus==true?'Save': 'Update'}" ></span >
+          </button >
+          <button class="btn btn-danger" type="reset" >
+            <i class="fa fa-redo" ></i > <span id="reset" >Reset</span >
+          </button >dd
+        </div >
+        <div class="form-row" >
+          <label data-th-if="${#fields.hasErrors('*')}" data-th-text="'Errors: '"
+                 id="errorLabel" >Errors: </label >
+          <ul >
+            <li class="error" data-th-each="err: ${#fields.errors('*')}" data-th-text="${err}"
+                id="error" ></li >
+          </ul >
+        </div >
+      </div >
+    </form >
+  </div >
+</div >
 <!--footer include-->
-<div data-th-replace="~{fragments/footer :: footerFragment}"></div>
+<div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
-<div data-th-replace="~{fragments/script :: scriptFragment}"></div>
+<div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
 
-</body>
-</html>
+</body >
+</html >
