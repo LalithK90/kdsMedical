@@ -74,23 +74,20 @@ public class AdditionalServiceProcessController {
 
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
     Employee employee = userService.findByUserName(username).getEmployee();
-/*    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
+    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
       model.addAttribute("additionServicePatients",
                          paymentAdditionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime,
                                                                                        username));
     } else {
       model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findByCreatedAtIsBetween(startDateTime,
                                                                                                       endDateTime));
-    }*/
-    //todo delete this
-    model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findAll());
+    }
 
     model.addAttribute("message", "This report is belong to " + startDate + " to " + endDate + "\n if you need to " +
         "more please use above search method");
     return "additionServicePatient/additionServicePatient";
   }
 
-  //todo:
   @GetMapping
   public String findAll(Model model) {
     return commonFindAll(model, dateTimeAgeService.getPastDateByMonth(3), LocalDate.now());
