@@ -426,7 +426,7 @@
 
     $("#amountTendered").bind('focusout', function () {
         $("#totalConsultationFee").val($("#consultationFee").val());
-        $("#totalHospitalFee").val($("#hospitalFee").val());
+        $("#totalHospitalFee").val(parseFloat($("#hospitalFee").html()));
         let tenderedAmount = $(this).val();
         let totalAmount = $("#totalAmount").val();
         if (tenderedAmount < totalAmount) {
