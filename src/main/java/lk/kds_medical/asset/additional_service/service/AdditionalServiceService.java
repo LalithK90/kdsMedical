@@ -10,6 +10,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +55,14 @@ public class AdditionalServiceService implements AbstractService< AdditionalServ
         Example< AdditionalService > additionalServiceExample = Example.of(additionalService, matcher);
 
         return additionalServiceDao.findAll(additionalServiceExample);
+    }
+
+  public List< AdditionalService > findByCreatedAtIsBetweenAndCreatedBy(LocalDateTime startDateTime, LocalDateTime endDateTime, String username) {
+  return additionalServiceDao.findByCreatedAtIsBetweenAndCreatedBy(startDateTime,endDateTime,username);
+    }
+
+    public List< AdditionalService > findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return additionalServiceDao.findByCreatedAtIsBetween(startDateTime,endDateTime);
+
     }
 }

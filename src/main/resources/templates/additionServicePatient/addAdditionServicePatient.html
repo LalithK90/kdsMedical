@@ -50,7 +50,7 @@
                   <label class="control-label" data-th-for="${'additionalService'}" >Service Name :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{additionalService}" required>
+                  <select class="form-control" id="additionalService" data-th-field="*{additionalService}" required >
                     <option value="" > Select Doctor</option >
                     <option data-th-each="additionalService : ${additionalServices}"
                             data-th-value="${additionalService.id}"
@@ -71,7 +71,7 @@
                   <label class="control-label" data-th-for="${'doctor'}" >Doctor Name :</label >
                 </div >
                 <div class="col-md-8" >
-                  <select class="form-control" data-th-field="*{doctor}" >
+                  <select class="form-control" id="doctor" data-th-field="*{doctor}" >
                     <option value="" > Select Doctor</option >
                     <option data-th-each="doctor : ${doctors}"
                             data-th-value="${doctor.id}"
@@ -93,7 +93,7 @@
                 </div >
                 <div class="col-md-8" >
                   <div class="form-row" >
-                    <select class="form-control col-md-9" data-th-field="*{patient}" required >
+                    <select class="form-control col-md-9" id="patient" data-th-field="*{patient}" required >
                       <option value="" > Select Patient</option >
                       <option data-th-each="patient : ${patients}"
                               data-th-value="${patient.id}"
@@ -119,8 +119,8 @@
                 </div >
                 <div class="col-md-8" >
                   <input class="form-control" id="consultationFee"
-                         data-th-value="${consultationFee}"
-                         type="number" readonly >
+                         data-th-value="${consultationFee}" min="0" step="0.01"
+                         type="number" >
 
                 </div >
               </div >
@@ -132,8 +132,8 @@
                   <label class="control-label" data-th-for="${'hospitalFee'}" >Hospital Fee :</label >
                 </div >
                 <div class="col-md-8" >
-                  <input class="form-control" id="hospitalFee"
-                         readonly type="number" />
+                  <span class="form-control" id="hospitalFee"
+                  ></span >
                 </div >
               </div >
             </div >
@@ -345,19 +345,59 @@
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
+<input type="hidden" id="additionalServicePriceUrl" data-th-value="${additionalServicePriceUrl}" >
 <script data-th-src="@{/js/combo-box-search.js}" ></script >
 <script >
     $(document).ready(function () {
+        $("#patient, #doctor, #additionalService").select2({
+            data: $(this).val()
+        }).addClass("form-control").addClass("text-left");
 
         $("input[value='CASH']").prop('checked', true);
         $("input[value='NOT_PRINTED']").prop('checked', true);
 
         showHideContent('CASH');
+        $("#consultationFee").attr('readonly', true);
 
-        let conFee = parseFloat($("#consultationFee").val());
-        let hosFee = $("#hospitalFee").val(conFee * 0.2);
-        $("#total, #totalAmount").val((parseFloat(conFee) + parseFloat(hosFee.val())).toFixed(2));
     });
+
+    $("#additionalService").change(function () {
+        $.ajax({
+            type: 'GET',
+            url: $("#additionalServicePriceUrl").val() + $(this).val(),
+            success: function (resp) {
+                document.getElementById("hospitalFee").innerHTML = resp.price.toFixed(2);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+    $("#consultationFee").keyup(function () {
+        if (!$("#additionalService").val()) {
+            swal({
+                title: "Please select service before add consultation fee  ",
+                icon: "warning",
+            });
+            $(this).val();
+        }
+        totalMake();
+    });
+
+    function totalMake() {
+        let conFee = parseFloat($("#consultationFee").val());
+        let total = conFee + parseFloat($("#hospitalFee").html());
+        $("#total, #totalAmount").val(total);
+    }
+
+    $("#doctor").change(function () {
+        if ($(this).val()) {
+            $("#consultationFee").prop('required', true).prop( 'readonly', false);
+        }else {
+        $("#consultationFee").attr('readonly', true);
+        }
+    });
+
 
     // appointment status
     $("input:radio[name='appointmentStatus']").change(function () {

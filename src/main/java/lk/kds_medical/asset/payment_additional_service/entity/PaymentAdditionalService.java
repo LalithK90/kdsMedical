@@ -35,6 +35,6 @@ public class PaymentAdditionalService extends AuditEntity {
   @ManyToOne
   private Doctor doctor;
 
-  @OneToMany( mappedBy = "paymentAdditionalService" )
+  @OneToMany( mappedBy = "paymentAdditionalService", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
   private List< Payment > payments;
 }
