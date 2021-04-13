@@ -78,8 +78,7 @@ public class Payment extends AuditEntity {
   @ManyToOne
   private Appointment appointment;
 
-
-  @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payment")
-  private List< PaymentAdditionalService > paymentAdditionalServices;
+  @ManyToOne
+  private PaymentAdditionalService paymentAdditionalService;
 
 }

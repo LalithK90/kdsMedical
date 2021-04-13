@@ -11,13 +11,13 @@
   <div class="row text-center " >
     <div class="col" >
       <a href="/additionServicePatient/add" >
-        <button type="button" class="btn btn-primary" >Add Appointment</button >
+        <button type="button" class="btn btn-primary" >Add New</button >
       </a >
     </div >
     <div class="col" >
       <h4 class="text-info text-center" >
         <strong >
-          Appointment Management
+          Addition Service Patient Management
         </strong >
       </h4 >
     </div >
@@ -26,70 +26,58 @@
   </div >
 </div >
 
-<div class="container-fluid mt-3" >
-  <div class="container-fluid" data-th-each="appointmentBook, index : ${appointmentBooks}" >
-    <div id="accordianId" role="tablist" aria-multiselectable="true" >
-      <div class="card" >
-        <div class="card-header" role="tab" data-th-id="${'section1HeaderId'+index.index}" >
-          <a data-toggle="collapse" data-parent="#accordianId" data-th-href="${'#section1ContentId'+index.index}"
-             aria-expanded="true" aria-controls="section1ContentId" >
-            <h5 class="mb-0 text-center" >
-              <span data-th-text="${appointmentBook.appointmentDate}" ></span > -
-              <span data-th-text="${appointmentBook.dayOfWeek}" ></span >
-            </h5 >
-          </a >
-        </div >
-        <div data-th-id="${'section1ContentId'+index.index}" class="collapse in" role="tabpanel"
-             aria-labelledby="section1HeaderId" >
-          <div class="card-body" >
-            <table class="table table-hover table-striped text-center" >
-              <tr >
-                <td >Doctor Name</td >
-                <td >Consultation</td >
-                <td >Arrival Time</td >
-                <td >Booking Account</td >
-              </tr >
-              <tr data-th-each="doctorSchedule, indexOne : ${appointmentBook.doctorSchedules}" >
-                <td data-th-text="${doctorSchedule.doctor.title.title+''+doctorSchedule.doctor.name}" ></td >
-                <td data-th-text="${doctorSchedule.doctor.consultation.name}" ></td >
-                <td data-th-text="${doctorSchedule.arrivalTime}" ></td >
-                <td >
-                  <table class="table table-hover table-striped text-center" >
-                    <tr >
-                      <td >Date</td >
-                      <td >Count</td >
-                      <td >Modify</td >
-                    </tr >
-                    <tr >
-                      <td data-th-text="${doctorSchedule.appointmentDate}" ></td >
-                      <td data-th-text="${#lists.size(doctorSchedule.appointments)}" ></td >
-                      <td >
-                        <div class="form-row" >
-                          <!--View-->
-                          <form action="/appointment/view"  method="post">
-                            <input type="hidden" name="doctorSchedule" data-th-value="${doctorSchedule.id}" >
-                            <input type="hidden" name="appointmentDate" data-th-value="${doctorSchedule.appointmentDate}" >
-                            <input type="hidden" name="doctor" data-th-value="${doctorSchedule.doctor.id}" >
-                            <button type="submit" class="btn btn-primary" >View</button >
-                          </form >
-                          <!--add New Appointment-->
-                          <form action="/appointment/find" class="ml-2" method="post">
-                            <input type="hidden" name="doctorSchedule" data-th-value="${doctorSchedule.id}" >
-                            <input type="hidden" name="appointmentDate" data-th-value="${doctorSchedule.appointmentDate}" >
-                            <input type="hidden" name="doctor" data-th-value="${doctorSchedule.doctor.id}" >
-                            <button type="submit" class="btn btn-info" >New Appointment</button >
-                          </form >
-                        </div >
-                      </td >
-                    </tr >
-                  </table >
-                </td >
-              </tr >
-            </table >
-          </div >
+<div class="form-row text-center">
+  <div class="col-4"></div>
+  <a class="btn btn-info" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false"
+     aria-controls="multiCollapseExample1" >Search</a >
+
+  <div class="row" >
+    <div class="col" >
+      <div class="collapse multi-collapse" id="multiCollapseExample1" >
+        <div class="card card-body" >
+          <form action="/additionServicePatient/seach" method="post" >
+            <div class="col-3" >
+              <label class="control-label" > Since :
+                <input type="date" class="form-control" name="startDate" id="startDate" required >
+              </label >
+            </div >
+            <div class="col-3" >
+              <label class="control-label" > To :
+                <input type="date" class="form-control" name="endDate" id="endDate" required >
+              </label >
+            </div >
+            <div class="col-3" >
+              <button type="submit" class="btn btn-success" > Send</button >
+            </div >
+          </form >
         </div >
       </div >
     </div >
+  </div >
+</div >
+
+
+<div class="container-fluid mt-3" >
+  <div class="form-row" >
+    <p class="bg-dark text-white" data-th-text="${message}" ></p >
+  </div >
+  <div class="form-row" >
+    <table class="table table-striped table-inverse table-responsive" id="myTable" >
+      <thead class="thead-inverse" >
+      <tr >
+        <th ></th >
+        <th ></th >
+        <th ></th >
+      </tr >
+      </thead >
+      <tbody >
+      <tr >
+        <td scope="row" ></td >
+        <td ></td >
+        <td ></td >
+      </tr >
+      </tbody >
+    </table >
   </div >
 </div >
 <!--footer include-->
