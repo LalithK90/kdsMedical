@@ -6,6 +6,9 @@ import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalS
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public interface PaymentDao extends JpaRepository<Payment,Integer>{
 
@@ -14,4 +17,8 @@ public interface PaymentDao extends JpaRepository<Payment,Integer>{
   Payment findByAppointment(Appointment appointment);
 
   Payment findByPaymentAdditionalService(PaymentAdditionalService paymentAdditionalService);
+
+  List< Payment> findByCreatedAtIsBetweenAndCreatedBy(LocalDateTime startDateTime, LocalDateTime endDateTime, String username);
+
+  List< Payment> findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
