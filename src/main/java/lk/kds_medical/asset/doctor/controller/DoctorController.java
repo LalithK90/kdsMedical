@@ -116,7 +116,7 @@ public class DoctorController {
     try {
       doctorService.persist(doctor);
     } catch ( Exception e ) {
-      ObjectError error = new ObjectError("patient",
+      ObjectError error = new ObjectError("doctor",
                                           "Please make sure that resolve following error \n. <br> System message -->"
                                               + e.getCause().getCause().getMessage());
       result.addError(error);

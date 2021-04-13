@@ -28,17 +28,16 @@ public class DoctorService implements AbstractService< Doctor, Integer > {
   }
 
 
-  @Cacheable( value = "doctor" )
+
   public List< Doctor > findAll() {
     return doctorDao.findAll().stream().filter(x -> x.getLiveDead().equals(LiveDead.ACTIVE)).collect(Collectors.toList());
   }
 
-  @CachePut( value = "doctor" )
   public Doctor findById(Integer id) {
     return doctorDao.getOne(id);
   }
 
-  @CachePut( value = "doctor" )
+
 
   public Doctor persist(Doctor doctor) {
     if ( doctor.getId() == null ) {
@@ -47,7 +46,6 @@ public class DoctorService implements AbstractService< Doctor, Integer > {
     return doctorDao.save(doctor);
   }
 
-  @CacheEvict( value = "doctor" )
   public boolean delete(Integer id) {
     Doctor doctor = doctorDao.getOne(id);
     doctor.setLiveDead(LiveDead.STOP);
@@ -55,7 +53,7 @@ public class DoctorService implements AbstractService< Doctor, Integer > {
     return false;
   }
 
-  @CachePut( value = "doctor" )
+
   public List< Doctor > search(Doctor doctor) {
     ExampleMatcher matcher = ExampleMatcher
         .matching()

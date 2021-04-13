@@ -1,11 +1,13 @@
 package lk.kds_medical.asset.doctor.entity;
 
 
+import lk.kds_medical.asset.additional_service.entity.AdditionalService;
 import lk.kds_medical.asset.common_asset.model.Enum.Gender;
 import lk.kds_medical.asset.common_asset.model.Enum.LiveDead;
 import lk.kds_medical.asset.common_asset.model.Enum.Title;
 import lk.kds_medical.asset.consultation.entity.Consultation;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
+import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.util.audit.AuditEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -65,6 +67,9 @@ public class Doctor extends AuditEntity {
 
   @OneToMany(mappedBy = "doctor",cascade = {CascadeType.MERGE, CascadeType.PERSIST} )
   private List< DoctorSchedule > doctorSchedules;
+
+  @OneToMany(mappedBy = "doctor" )
+  private List< PaymentAdditionalService > paymentAdditionalServices;
 
   @Transient
   private int appointmentCount;

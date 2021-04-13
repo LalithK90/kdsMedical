@@ -21,11 +21,6 @@
             </h4>
         </div>
         <div class="col">
-            <!-- <a href="/additionalService/workingPlace" id="searchShow" class="btn btn-primary">
-                 <i class="fa fa-user " style="font-size: 20px"></i>&nbsp;Add&nbsp;
-                 <i class="fas fa-store-alt" style="font-size: 20px"></i>
-                 &nbsp;
-             </a>-->
         </div>
     </div>
 </div>
@@ -47,9 +42,9 @@
                     <th data-th-text="${additionalService.name}"></th>
                     <th data-th-text="${additionalService.price}"></th>
                     <th>
-                        <a id="additionalServiceEdit" data-th-href="${'/additionalService/edit/' + additionalService.id}"
+                        <a data-th-href="${'/additionalService/edit/' + additionalService.id}"
                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>&nbsp;Edit</a>
-                        <a id="additionalServiceRemove" data-th-href="${'/additionalService/delete/' + additionalService.id}"
+                        <a  data-th-href="${'/additionalService/delete/' + additionalService.id}"
                            data-th-if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="btn btn-danger btn-sm">
                             <i class="fa fa-trash"></i>
                             Delete</a>
@@ -72,17 +67,17 @@
                 </h3>
             </div>
         </div>
-        <script>
-            /*active boostrap alert - start*/
-            $(".alert").alert();
-            /*active boostrap alert - end*/
-        </script>
+
     </div>
 </div>
 <!--footer include-->
 <div data-th-replace="~{fragments/footer :: footerFragment}"></div>
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}"></div>
-
+<script>
+    /*active boostrap alert - start*/
+    $(".alert").alert();
+    /*active boostrap alert - end*/
+</script>
 </body>
 </html>
