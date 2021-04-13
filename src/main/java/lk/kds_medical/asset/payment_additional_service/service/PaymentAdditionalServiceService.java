@@ -62,4 +62,8 @@ public class PaymentAdditionalServiceService implements AbstractService< Payment
         Example<PaymentAdditionalService> consultationExample = Example.of(paymentAdditionalService, matcher);
         return paymentAdditionalServiceDao.findAll(consultationExample);
     }
+
+    public PaymentAdditionalService lastPaymentAdditionalService() {
+    return paymentAdditionalServiceDao.findFirstByOrderByIdDesc();
+    }
 }

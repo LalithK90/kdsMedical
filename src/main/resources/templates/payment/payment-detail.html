@@ -41,53 +41,98 @@
       <p > Moratuwa</p >
       <p >Tp: 011-2658361</p ></div >
   </div >
-  <!--doctor Schedule-->
-  <div class="form-row text-right" >
-    <div class="col-md-6" >
-      <div class="form-row text-right" >
-        <div class="col-md-4" >
-          <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Schedule :</label >
+  <div class="container-fluid" data-th-if="${paymentDetail.appointment != null}" >
+    <!--doctor Schedule-->
+    <div class="form-row text-right" >
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'doctorSchedule'}" >Doctor Schedule :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.appointment.doctorSchedule.dayOfWeek} +${' '}+${paymentDetail.appointment.doctorSchedule.arrivalTime}" ></p >
+          </div >
         </div >
-        <div class="col-md-8" >
-          <p class="display_detail"
-             data-th-text="${paymentDetail.appointment.doctorSchedule.dayOfWeek} +${' '}+${paymentDetail.appointment.doctorSchedule.arrivalTime}" ></p >
+      </div >
+      <!--Appoiment date-->
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.appointment.date}" ></p >
+          </div >
         </div >
       </div >
     </div >
-    <!--Appoiment date-->
-    <div class="col-md-6" >
-      <div class="form-row text-right" >
-        <div class="col-md-4" >
-          <label class="control-label" data-th-for="${'date'}" >Appointment Date :</label >
+    <!--Patient-->
+    <div class="form-row text-right" >
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.appointment.patient.name+'  '+ paymentDetail.appointment.patient.mobileOne}" ></p >
+          </div >
         </div >
-        <div class="col-md-8" >
-          <p class="display_detail" data-th-text="${paymentDetail.appointment.date}" ></p >
+      </div >
+      <!--Appoiment Status-->
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.appointment.appointmentStatus.appointmentStatus}" ></p >
+          </div >
         </div >
       </div >
     </div >
   </div >
-  <!--Patient-->
-  <div class="form-row text-right" >
-    <div class="col-md-6" >
-      <div class="form-row text-right" >
-        <div class="col-md-4" >
-          <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
+
+  <div class="container-fluid" data-th-if="${paymentDetail.paymentAdditionalService != null}" >
+    <!--doctor Schedule-->
+    <div class="form-row text-right" >
+      <!--Additional Service-->
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'date'}" >Additional Service :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail" data-th-text="${paymentDetail.paymentAdditionalService.additionalService.name}" ></p >
+          </div >
         </div >
-        <div class="col-md-8" >
-          <p class="display_detail"
-             data-th-text="${paymentDetail.appointment.patient.name+'  '+ paymentDetail.appointment.patient.mobileOne}" ></p >
+      </div >
+      <!--doctor name-->
+      <div class="col-md-6" >
+        <div class="form-row text-right" data-th-if="${paymentDetail.paymentAdditionalService.doctor != null}">
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'doctor'}" >Doctor Name :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.paymentAdditionalService.doctor.name}+${' '}+${paymentDetail.paymentAdditionalService.doctor.consultation.name} " ></p >
+          </div >
         </div >
       </div >
     </div >
-    <!--Appoiment Status-->
-    <div class="col-md-6" >
-      <div class="form-row text-right" >
-        <div class="col-md-4" >
-          <label class="control-label" data-th-for="${'appointmentStatus'}" >Appointment Status :</label >
-        </div >
-        <div class="col-md-8" >
-          <p class="display_detail"
-             data-th-text="${paymentDetail.appointment.appointmentStatus.appointmentStatus}" ></p >
+    <!--Patient-->
+    <div class="form-row text-right" >
+      <div class="col-md-6" >
+        <div class="form-row text-right" >
+          <div class="col-md-4" >
+            <label class="control-label" data-th-for="${'patient'}" >Patient :</label >
+          </div >
+          <div class="col-md-8" >
+            <p class="display_detail"
+               data-th-text="${paymentDetail.paymentAdditionalService.patient.name+'  '+ paymentDetail.paymentAdditionalService.patient.mobileOne}" ></p >
+          </div >
         </div >
       </div >
     </div >

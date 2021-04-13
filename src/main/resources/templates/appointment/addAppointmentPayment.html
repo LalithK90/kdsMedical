@@ -339,6 +339,10 @@
       <input data-th-name="${'payments[__${0}__].paymentValidOrNot'}" data-th-value="${'VALID'}" type="hidden" />
       <!--total price-->
       <input type="hidden" id="total" data-th-name="${'payments[__${0}__].totalPrice'}" >
+      <!--totalConsultationFee-->
+      <input type="hidden" id="totalConsultationFee" data-th-name="${'payments[__${0}__].consultationFee'}" >
+      <!--hospital price-->
+      <input type="hidden" id="totalHospitalFee" data-th-name="${'payments[__${0}__].hospitalFee'}" >
       <!--Button-->
       <div class="form-group col-md-12 col-sm-12 text-center flex-column " >
         <button class="btn btn-success" type="submit" tabindex="21" >
@@ -421,6 +425,8 @@
     }
 
     $("#amountTendered").bind('focusout', function () {
+        $("#totalConsultationFee").val($("#consultationFee").val());
+        $("#totalHospitalFee").val($("#hospitalFee").val());
         let tenderedAmount = $(this).val();
         let totalAmount = $("#totalAmount").val();
         if (tenderedAmount < totalAmount) {

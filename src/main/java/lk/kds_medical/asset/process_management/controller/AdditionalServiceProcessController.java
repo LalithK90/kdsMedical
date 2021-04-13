@@ -2,6 +2,7 @@ package lk.kds_medical.asset.process_management.controller;
 
 import lk.kds_medical.asset.additional_service.controller.AdditionalServiceController;
 import lk.kds_medical.asset.additional_service.service.AdditionalServiceService;
+import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.common_asset.model.TwoDate;
 import lk.kds_medical.asset.discount_ratio.service.DiscountRatioService;
 import lk.kds_medical.asset.doctor.service.DoctorService;
@@ -9,22 +10,26 @@ import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.employee.entity.enums.Designation;
 import lk.kds_medical.asset.employee.service.EmployeeService;
 import lk.kds_medical.asset.patient.service.PatientService;
+import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
+import lk.kds_medical.asset.payment_additional_service.service.PaymentAdditionalServiceService;
 import lk.kds_medical.asset.user_management.service.UserService;
 import lk.kds_medical.util.service.DateTimeAgeService;
 import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,6 +45,7 @@ public class AdditionalServiceProcessController {
   private final DateTimeAgeService dateTimeAgeService;
   private final EmployeeService employeeService;
   private final UserService userService;
+  private final PaymentAdditionalServiceService paymentAdditionalServiceService;
 
 
   public AdditionalServiceProcessController(AdditionalServiceService additionalServiceService,
@@ -48,7 +54,8 @@ public class AdditionalServiceProcessController {
                                             PaymentService paymentService,
                                             DiscountRatioService discountRatioService,
                                             DateTimeAgeService dateTimeAgeService, EmployeeService employeeService,
-                                            UserService userService) {
+                                            UserService userService,
+                                            PaymentAdditionalServiceService paymentAdditionalServiceService) {
     this.additionalServiceService = additionalServiceService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     this.patientService = patientService;
@@ -58,6 +65,7 @@ public class AdditionalServiceProcessController {
     this.dateTimeAgeService = dateTimeAgeService;
     this.employeeService = employeeService;
     this.userService = userService;
+    this.paymentAdditionalServiceService = paymentAdditionalServiceService;
   }
 
   private String commonFindAll(Model model, LocalDate startDate, LocalDate endDate) {
@@ -68,7 +76,8 @@ public class AdditionalServiceProcessController {
     Employee employee = userService.findByUserName(username).getEmployee();
     if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
       model.addAttribute("additionServicePatients",
-                         additionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime, username));
+                         additionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime,
+                                                                                       username));
     } else {
       model.addAttribute("additionServicePatients", additionalServiceService.findByCreatedAtIsBetween(startDateTime,
                                                                                                       endDateTime));
@@ -89,21 +98,63 @@ public class AdditionalServiceProcessController {
     return commonFindAll(model, twoDate.getStartDate(), twoDate.getEndDate());
   }
 
-  @GetMapping( "/add" )
-  public String add(Model model) {
+  private String commonAdd(PaymentAdditionalService paymentAdditionalService, Model model) {
     model.addAttribute("additionalServices", additionalServiceService.findAll());
     model.addAttribute("patients", patientService.findAll());
     model.addAttribute("invoicePrintOrNots", PaymentPrintOrNot.values());
     model.addAttribute("paymentMethods", PaymentMethod.values());
     model.addAttribute("doctors", doctorService.findAll());
     model.addAttribute("discountRatios", discountRatioService.findAll());
-    model.addAttribute("paymentAdditionalService", new PaymentAdditionalService());
+    model.addAttribute("paymentAdditionalService", paymentAdditionalService);
     model.addAttribute("additionalServicePriceUrl", MvcUriComponentsBuilder
-                           .fromMethodName(AdditionalServiceController.class, "findPriceById", "")
-                           .build()
-                           .toString()
-                      );
+        .fromMethodName(AdditionalServiceController.class, "findPriceById", "")
+        .build()
+        .toString());
     return "additionServicePatient/addAdditionServicePatient";
   }
-  //todo save method
+
+  @GetMapping( "/add" )
+  public String add(Model model) {
+    return commonAdd(new PaymentAdditionalService(), model);
+  }
+
+  @PostMapping( "/save" )
+  public String persist(@Valid @ModelAttribute PaymentAdditionalService paymentAdditionalService,
+                        BindingResult bindingResult, Model model) {
+    if ( bindingResult.hasErrors() ) {
+      return commonAdd(paymentAdditionalService, model);
+    }
+    if ( paymentAdditionalService.getPayments().get(0).getTotalAmount() != null ) {
+      paymentAdditionalService.getPayments().forEach(x -> {
+        x.setPaymentAdditionalService(paymentAdditionalService);
+        if ( x.getId() == null ) {
+          Payment lastPayment = paymentService.lastPayment();
+          if ( lastPayment == null ) {
+            x.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+          } else {
+            x.setCode("KDSP" + makeAutoGenerateNumberService.numberAutoGen(lastPayment.getCode().substring(4)).toString());
+          }
+        }
+      });
+    } else {
+      paymentAdditionalService.setPayments(null);
+    }
+
+    if ( paymentAdditionalService.getId() == null ) {
+      PaymentAdditionalService lastPaymentAdditionalService =
+          paymentAdditionalServiceService.lastPaymentAdditionalService();
+      if ( lastPaymentAdditionalService == null ) {
+        paymentAdditionalService.setCode("KDSAS" + makeAutoGenerateNumberService.numberAutoGen(null).toString());
+      } else {
+        paymentAdditionalService.setCode("KDSAS" + makeAutoGenerateNumberService.numberAutoGen(paymentAdditionalService.getCode().substring(5)).toString());
+      }
+    }
+
+    PaymentAdditionalService paymentAdditionalServiceDb =
+        paymentAdditionalServiceService.persist(paymentAdditionalService);
+
+
+    return "redirect:/additionServicePatient";
+  }
+
 }
