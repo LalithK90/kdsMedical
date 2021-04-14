@@ -41,7 +41,7 @@
       <div class="container-fluid text-center" >
         <div class="row" >
           <div class="container" >
-            <form data-th-action="${'/report/allUser'}" data-th-method="POST" >
+            <form data-th-action="${'/report/doctorAll'}" data-th-method="POST" >
               <div class="row" >
                 <div class="col-4" >
                   <div class="form-group" >
@@ -83,7 +83,7 @@
         <a data-toggle="collapse" data-parent="#accordianId" data-th-href="${'#section1ContentId'+index.index}"
            aria-expanded="true" aria-controls="section1ContentId" >
           <h5 class="mb-0 text-center" >
-            [[${doctorCount.doctor.name}]] - [[${doctorCount.consultation.name}]]
+            [[${doctorCount.doctor.name}]] - [[${doctorCount.doctor.consultation.name}]]
           </h5 >
         </a >
       </div >
@@ -103,7 +103,7 @@
             </thead >
             <tbody >
             <tr >
-              <td data-th-text="${doctorCount.doctor.name+ ' '+doctorCount.consultation.name}" ></td >
+              <td data-th-text="${doctorCount.doctor.name+ ' '+doctorCount.doctor.consultation.name}" ></td >
               <td data-th-text="${doctorCount.appointmentCount}" ></td >
               <td data-th-text="${doctorCount.appointmentPaidCount}" ></td >
               <td data-th-text="${doctorCount.appointmentBookedCount}" ></td >
