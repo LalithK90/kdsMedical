@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head data-th-replace="~{fragments/header :: headerFragment}" >
+  <meta charset="UTF-8" >
+  <title >Thymeleaf Springboot </title >
+</head >
+<body >
+<nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
+
+<div class="container-fluid   " >
+  <div class="row text-center " >
+    <div class="col" >
+      <a class="btn btn-success" href="/home" ><i class="fa fa-user-plus" ></i >
+        &nbsp; Home</a >
+    </div >
+    <div class="col" >
+      <h4 class="text-info text-center" >
+        <strong >
+          Summary Report [[${date}]]
+        </strong >
+      </h4 >
+    </div >
+    <div class="col" >
+
+    </div >
+  </div >
+</div >
+
+<div class="container-fluid   text-center" id="printContent" data-th-fragment="employeeAppointmentPaymentCountFragment" >
+  <!-- employee detail -->
+  <div class="row" >
+    <!--Left Side-->
+    <div class="form-group col-md-6 col-sm-6 flex-column" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="employeeCode" >Employee Number :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="employeeCode" data-th-text="${employeeAppointmentPaymentCount.employee.code}"
+             class="display_detail" ></p >
+        </div >
+      </div >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="name" >Name :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="name"
+             data-th-text="${employeeAppointmentPaymentCount.employee.title.title} +${' '} +${employeeAppointmentPaymentCount.employee.name}"
+             class="display_detail" ></p >
+        </div >
+      </div >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="designation" >Designation :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="designation" data-th-text="${employeeAppointmentPaymentCount.employee.designation.designation}"
+             class="display_detail" >
+          </p >
+        </div >
+      </div >
+    </div >
+    <!--Right Side-->
+    <div class="form-group col-md-6 col-sm-6 text-right flex-column" >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="mobileOne" >Mobile One No :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="mobileOne" data-th-text="${employeeAppointmentPaymentCount.employee.mobileOne}"
+             class="display_detail" ></p >
+        </div >
+      </div >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="officeEmail" >Office Email :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="officeEmail" data-th-text="${employeeAppointmentPaymentCount.employee.officeEmail}"
+             class="display_detail" ></p >
+        </div >
+      </div >
+      <div class="form-row text-right" >
+        <div class="col-md-4" >
+          <label class="control-label" for="dateOfAssignment" >Date Of Assignment :</label >
+        </div >
+        <div class="col-md-8" >
+          <p id="dateOfAssignment" data-th-text="${{employeeAppointmentPaymentCount.employee.dateOfAssignment}}"
+             class="display_detail" ></p >
+        </div >
+      </div >
+    </div >
+  </div >
+  <!-- Appointment details -->
+  <div class="row" >
+    <table class="table table-striped table-inverse " >
+      <caption class="ml-5 font-weight-bold text-info font-italic">Appointment Details</caption >
+      <thead class="thead-inverse" >
+      <tr >
+        <th >Additional Service</th >
+        <th >Total Appointment</th >
+        <th >Cancel Appointment</th >
+        <th >Booking Appointment</th >
+        <th >Paid Appointment</th >
+      </tr >
+      </thead >
+      <tbody >
+      <tr >
+        <td data-th-text="${employeeAppointmentPaymentCount.additionalServiceCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.appointmentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.appointmentCancelCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.appointmentBookingCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.appointmentPaidCount}" ></td >
+      </tr >
+      </tbody >
+    </table >
+  </div >
+  <!-- All Payment  Detail-->
+  <div class="row" >
+    <table class="table table-striped table-inverse " >
+      <caption class="ml-5 font-weight-bold text-info font-italic">All Payment Details</caption >
+      <thead class="thead-inverse" >
+      <tr >
+        <th >Payment Count</th >
+        <th >Payment Total</th >
+        <th >Card Payment Count</th >
+        <th >Card Payment Total</th >
+        <th >Cash Payment Count</th >
+        <th >Cash Payment Total</th >
+      </tr >
+      </thead >
+      <tbody >
+      <tr >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentTotal}" ></td >
+      </tr >
+      </tbody >
+    </table >
+  </div >
+  <!-- All Appointment Payment -->
+  <div class="row" >
+    <table class="table table-striped table-inverse " >
+      <caption class="ml-5 font-weight-bold text-info font-italic">All Appointment Payment Details</caption >
+      <thead class="thead-inverse" >
+      <tr >
+        <th >Payment Count</th >
+        <th >Payment Total</th >
+        <th >Card Payment Count</th >
+        <th >Card Payment Total</th >
+        <th >Cash Payment Count</th >
+        <th >Cash Payment Total</th >
+      </tr >
+      </thead >
+      <tbody >
+      <tr >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentAppointmentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentAppointmentTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentAppointmentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentAppointmentTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentAppointmentCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentAppointmentTotal}" ></td >
+      </tr >
+      </tbody >
+    </table >
+  </div >
+  <!-- All Additional Payment -->
+  <div class="row" >
+    <table class="table table-striped table-inverse " >
+      <caption class="ml-5 font-weight-bold text-info font-italic">All Additional Service Payment Details</caption >
+      <thead class="thead-inverse" >
+      <tr >
+        <th >Payment Count</th >
+        <th >Payment Total</th >
+        <th >Card Payment Count</th >
+        <th >Card Payment Total</th >
+        <th >Cash Payment Count</th >
+        <th >Cash Payment Total</th >
+      </tr >
+      </thead >
+      <tbody >
+      <tr >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentAdditionalCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.paymentAdditionalTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentAdditionalCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cardPaymentAdditionalTotal}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentAdditionalCount}" ></td >
+        <td data-th-text="${employeeAppointmentPaymentCount.cashPaymentAdditionalTotal}" ></td >
+      </tr >
+      </tbody >
+    </table >
+  </div >
+</div >
+
+<!--Back Button-->
+<div class="form-group col-md-12 col-sm-12 text-center flex-column " >
+  <a href="/payment" >
+    <button class="btn btn-dark" type="button" tabindex="3" >
+      <i class="fas fa-arrow-circle-left" style="font-size: 20px" ></i >&nbsp; &nbsp;Back
+    </button >
+  </a >
+  <button class="btn btn-success" type="button" id="btnPrintResult" >
+    <i class="fa fa-save" style="font-size: 20px" ></i > Print
+  </button >
+</div >
+
+<!--footer include-->
+<div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
+<!--script include-->
+<div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
+<div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
+<script >
+
+    $("#btnPrintResult").click(function () {
+        $("#printContent").addClass("mt-3 pt-3")
+        printContent("printContent")
+    })
+</script >
+</body >
+</html >

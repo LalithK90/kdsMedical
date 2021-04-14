@@ -3,6 +3,8 @@ package lk.kds_medical.asset.process_management.controller;
 import lk.kds_medical.asset.appointment.entity.Appointment;
 import lk.kds_medical.asset.appointment.entity.enums.AppointmentStatus;
 import lk.kds_medical.asset.appointment.service.AppointmentService;
+import lk.kds_medical.asset.common_asset.model.TwoDate;
+import lk.kds_medical.asset.doctor.entity.Doctor;
 import lk.kds_medical.asset.doctor.service.DoctorService;
 import lk.kds_medical.asset.doctor_schedule.service.DoctorScheduleService;
 import lk.kds_medical.asset.employee.entity.Employee;
@@ -17,10 +19,17 @@ import lk.kds_medical.asset.process_management.model.DoctorScheduleCount;
 import lk.kds_medical.asset.process_management.model.EmployeeAppointmentPaymentCount;
 import lk.kds_medical.asset.user_management.service.UserService;
 import lk.kds_medical.util.service.DateTimeAgeService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,18 +84,40 @@ public class ReportController {
 
   private List< DoctorCount > accordingDoctor(List< Appointment > appointments) {
     List< DoctorCount > doctorCounts = new ArrayList<>();
-
-    doctorService.findAll().forEach(x -> {
-      DoctorCount doctorCount = new DoctorCount();
-      doctorCount.setDoctor(x);
-      doctorCount.setAppointmentCount(appointments.stream().filter(y -> y.getDoctorSchedule().getDoctor().equals(x)).count());
-      doctorCounts.add(doctorCount);
-    });
-
+    doctorService.findAll().forEach(x -> doctorCounts.add(doctorOne(appointments, x)));
     return doctorCounts;
   }
 
-  private List< Payment > paymentsAccodingToPaymentMethod(List< Payment > payments, PaymentMethod paymentMethod) {
+  private DoctorCount doctorOne(List< Appointment > appointments, Doctor x) {
+    DoctorCount doctorCount = new DoctorCount();
+    doctorCount.setDoctor(x);
+    doctorCount.setAppointmentCount(appointments.stream().filter(y -> y.getDoctorSchedule().getDoctor().equals(x)).count());
+
+    List< Appointment > paidAppointments =
+        appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.PA)).collect(Collectors.toList());
+
+    if ( !paidAppointments.isEmpty() ) {
+      doctorCount.setAppointmentPaidCount(paidAppointments.stream().filter(y -> y.getDoctorSchedule().getDoctor().equals(x)).count());
+      doctorCount.setTotalIncome(x.getConsultationFee().multiply(new BigDecimal(paidAppointments.size())));
+    }
+
+    List< Appointment > bookedAppointments =
+        appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.BK)).collect(Collectors.toList());
+
+    if ( !bookedAppointments.isEmpty() ) {
+      doctorCount.setAppointmentBookedCount(bookedAppointments.stream().filter(y -> y.getDoctorSchedule().getDoctor().equals(x)).count());
+    }
+
+    List< Appointment > cancelAppointments =
+        appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.CL)).collect(Collectors.toList());
+
+    if ( !cancelAppointments.isEmpty() ) {
+      doctorCount.setAppointmentCancelCount(cancelAppointments.stream().filter(y -> y.getDoctorSchedule().getDoctor().equals(x)).count());
+    }
+    return doctorCount;
+  }
+
+  private List< Payment > paymentsAccordingToPaymentMethod(List< Payment > payments, PaymentMethod paymentMethod) {
     return payments.stream().filter(x -> x.getPaymentMethod().equals(paymentMethod)).collect(Collectors.toList());
   }
 
@@ -106,15 +137,16 @@ public class ReportController {
           appointments.stream().filter(y -> y.getCreatedBy().equals(x.getUsername())).collect(Collectors.toList());
       List< Payment > paymentsAccordingUser =
           payments.stream().filter(z -> z.getCreatedBy().equals(x.getUsername())).collect(Collectors.toList());
-      employeeAppointmentPaymentCounts.add(employee(appointments, payments, x.getEmployee()));
+      employeeAppointmentPaymentCounts.add(employeeOne(appointmentsAccordingUser, paymentsAccordingUser,
+                                                       x.getEmployee()));
 
     });
 
     return employeeAppointmentPaymentCounts;
   }
 
-  private EmployeeAppointmentPaymentCount employee(List< Appointment > appointments,
-                                                   List< Payment > payments, Employee employee) {
+  private EmployeeAppointmentPaymentCount employeeOne(List< Appointment > appointments,
+                                                      List< Payment > payments, Employee employee) {
     EmployeeAppointmentPaymentCount employeeAppointmentPaymentCount = new EmployeeAppointmentPaymentCount();
     employeeAppointmentPaymentCount.setEmployee(employeeService.findById(employee.getId()));
     employeeAppointmentPaymentCount.setAppointmentCount(appointments.size());
@@ -127,22 +159,23 @@ public class ReportController {
     if ( !payments.isEmpty() ) {
       employeeAppointmentPaymentCount.setAdditionalServiceCount(payments.stream().filter(x -> x.getAppointment() != null).count());
       List< BigDecimal > paymentTotal = new ArrayList<>();
+      payments.forEach(x -> paymentTotal.add(x.getTotalAmount()));
       employeeAppointmentPaymentCount.setPaymentCount(payments.size());
       employeeAppointmentPaymentCount.setPaymentTotal(totalAmount(paymentTotal));
 
-      if ( !paymentsAccodingToPaymentMethod(payments, PaymentMethod.CREDIT).isEmpty() ) {
+      if ( !paymentsAccordingToPaymentMethod(payments, PaymentMethod.CREDIT).isEmpty() ) {
         List< BigDecimal > cardPaymentTotal = new ArrayList<>();
-        paymentsAccodingToPaymentMethod(payments, PaymentMethod.CREDIT).forEach(x -> cardPaymentTotal.add(x.getTotalAmount()));
-        employeeAppointmentPaymentCount.setCardPaymentCount(paymentsAccodingToPaymentMethod(payments,
-                                                                                            PaymentMethod.CREDIT).size());
+        paymentsAccordingToPaymentMethod(payments, PaymentMethod.CREDIT).forEach(x -> cardPaymentTotal.add(x.getTotalAmount()));
+        employeeAppointmentPaymentCount.setCardPaymentCount(paymentsAccordingToPaymentMethod(payments,
+                                                                                             PaymentMethod.CREDIT).size());
         employeeAppointmentPaymentCount.setCardPaymentTotal(totalAmount(cardPaymentTotal));
       }
 
-      if ( !paymentsAccodingToPaymentMethod(payments, PaymentMethod.CASH).isEmpty() ) {
+      if ( !paymentsAccordingToPaymentMethod(payments, PaymentMethod.CASH).isEmpty() ) {
         List< BigDecimal > cashPaymentTotal = new ArrayList<>();
-        paymentsAccodingToPaymentMethod(payments, PaymentMethod.CASH).forEach(x -> cashPaymentTotal.add(x.getTotalAmount()));
-        employeeAppointmentPaymentCount.setCashPaymentCount(paymentsAccodingToPaymentMethod(payments,
-                                                                                            PaymentMethod.CASH).size());
+        paymentsAccordingToPaymentMethod(payments, PaymentMethod.CASH).forEach(x -> cashPaymentTotal.add(x.getTotalAmount()));
+        employeeAppointmentPaymentCount.setCashPaymentCount(paymentsAccordingToPaymentMethod(payments,
+                                                                                             PaymentMethod.CASH).size());
         employeeAppointmentPaymentCount.setCashPaymentTotal(totalAmount(cashPaymentTotal));
       }
 
@@ -155,8 +188,8 @@ public class ReportController {
         employeeAppointmentPaymentCount.setPaymentAppointmentCount(paymentAppointment.size());
         employeeAppointmentPaymentCount.setPaymentAppointmentTotal(totalAmount(paymentAppointmentTotalAmount));
 
-        List< Payment > paymentAppointmentCard = paymentsAccodingToPaymentMethod(paymentAppointment,
-                                                                                 PaymentMethod.CREDIT);
+        List< Payment > paymentAppointmentCard = paymentsAccordingToPaymentMethod(paymentAppointment,
+                                                                                  PaymentMethod.CREDIT);
         if ( !paymentAppointmentCard.isEmpty() ) {
           employeeAppointmentPaymentCount.setCardPaymentAppointmentCount(paymentAppointmentCard.size());
           List< BigDecimal > paymentCardPaymentAppointmentAmount = new ArrayList<>();
@@ -164,8 +197,8 @@ public class ReportController {
           employeeAppointmentPaymentCount.setCardPaymentAppointmentTotal(totalAmount(paymentCardPaymentAppointmentAmount));
 
         }
-        List< Payment > paymentAppointmentCash = paymentsAccodingToPaymentMethod(paymentAppointment,
-                                                                                 PaymentMethod.CASH);
+        List< Payment > paymentAppointmentCash = paymentsAccordingToPaymentMethod(paymentAppointment,
+                                                                                  PaymentMethod.CASH);
         if ( !paymentAppointmentCash.isEmpty() ) {
           employeeAppointmentPaymentCount.setCashPaymentAppointmentCount(paymentAppointmentCash.size());
           List< BigDecimal > paymentCashPaymentAppointmentAmount = new ArrayList<>();
@@ -184,8 +217,8 @@ public class ReportController {
         employeeAppointmentPaymentCount.setPaymentAdditionalCount(paymentAppointment.size());
         employeeAppointmentPaymentCount.setPaymentAdditionalTotal(totalAmount(paymentAdditionalTotalAmount));
 
-        List< Payment > paymentAdditionalCard = paymentsAccodingToPaymentMethod(paymentAdditional,
-                                                                                PaymentMethod.CREDIT);
+        List< Payment > paymentAdditionalCard = paymentsAccordingToPaymentMethod(paymentAdditional,
+                                                                                 PaymentMethod.CREDIT);
         if ( !paymentAdditionalCard.isEmpty() ) {
           employeeAppointmentPaymentCount.setCardPaymentAdditionalCount(paymentAdditionalCard.size());
           List< BigDecimal > paymentCardPaymentAdditionalAmount = new ArrayList<>();
@@ -193,8 +226,8 @@ public class ReportController {
           employeeAppointmentPaymentCount.setCardPaymentAdditionalTotal(totalAmount(paymentCardPaymentAdditionalAmount));
 
         }
-        List< Payment > paymentAdditionalCash = paymentsAccodingToPaymentMethod(paymentAdditional,
-                                                                                PaymentMethod.CASH);
+        List< Payment > paymentAdditionalCash = paymentsAccordingToPaymentMethod(paymentAdditional,
+                                                                                 PaymentMethod.CASH);
         if ( !paymentAdditionalCash.isEmpty() ) {
           employeeAppointmentPaymentCount.setCashPaymentAdditionalCount(paymentAdditionalCash.size());
           List< BigDecimal > paymentCashPaymentAppointmentAmount = new ArrayList<>();
@@ -207,6 +240,57 @@ public class ReportController {
 
     return employeeAppointmentPaymentCount;
   }
+
+  @GetMapping( "/user" )
+  public String oneUser(Model model) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Employee employee = userService.findByUserName(username).getEmployee();
+    List< Appointment > appointments =
+        appointmentService.findByCreatedBy(username).stream().filter(x -> dateTimeAgeService.localDateTimeToLocalDate(x.getCreatedAt()).equals(LocalDate.now())).collect(Collectors.toList());
+
+    List< Payment > payments =
+        paymentService.findByUpdatedBy(username).stream().filter(x -> dateTimeAgeService.localDateTimeToLocalDate(x.getUpdatedAt()).equals(LocalDate.now())).collect(Collectors.toList());
+
+    model.addAttribute("employeeAppointmentPaymentCount", employeeOne(appointments,
+                                                                      payments,
+                                                                      employee));
+    model.addAttribute("date", LocalDate.now());
+    return "report/user";
+  }
+
+
+  @GetMapping( "/allUser" )
+  public String allUser(Model model) {
+    LocalDate localDate = LocalDate.now();
+    String message = "This report is belongs to " + localDate.toString();
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(localDate);
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(localDate);
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+
+    List< Payment > payments = paymentService.findByUpdatedAtIsBetween(startDateTime, endDateTime);
+
+    model.addAttribute("employeeAppointmentPaymentCounts", employeeAll(appointments,
+                                                                       payments));
+    model.addAttribute("message", message);
+    return "report/userAll";
+  }
+
+  @PostMapping( "/allUser" )
+  public String allUser(@ModelAttribute( "twoDate" ) TwoDate twoDate, Model model) {
+    String message =
+        "This report is between from " + twoDate.getStartDate().toString() + " to " + twoDate.getEndDate().toString();
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(twoDate.getStartDate());
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(twoDate.getEndDate());
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+
+    List< Payment > payments = paymentService.findByUpdatedAtIsBetween(startDateTime, endDateTime);
+
+    model.addAttribute("employeeAppointmentPaymentCounts", employeeAll(appointments,
+                                                                       payments));
+    model.addAttribute("message", message);
+    return "report/userAll";
+  }
+
 
 
 }

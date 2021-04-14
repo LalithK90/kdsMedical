@@ -21,4 +21,8 @@ public interface PaymentDao extends JpaRepository<Payment,Integer>{
   List< Payment> findByCreatedAtIsBetweenAndCreatedBy(LocalDateTime startDateTime, LocalDateTime endDateTime, String username);
 
   List< Payment> findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+  List< Payment> findByUpdatedBy(String username);
+
+  List< Payment> findByUpdatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

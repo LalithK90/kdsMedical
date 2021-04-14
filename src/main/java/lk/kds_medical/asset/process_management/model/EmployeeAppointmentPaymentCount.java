@@ -16,6 +16,7 @@ public class EmployeeAppointmentPaymentCount {
   private Employee employee;
 
   private long appointmentCount;
+
   private long appointmentCancelCount;
   private long appointmentBookingCount;
   private long appointmentPaidCount;
