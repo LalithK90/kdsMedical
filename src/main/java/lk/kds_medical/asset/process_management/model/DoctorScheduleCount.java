@@ -11,4 +11,7 @@ import lombok.NoArgsConstructor;
 public class DoctorScheduleCount {
   private DoctorSchedule doctorSchedule;
   private long appointmentCount;
+  private long appointmentBookedCount;
+  private long appointmentPaidCount;
+  private long appointmentCancelCount;
 }

@@ -75,7 +75,22 @@ public class ReportController {
       DoctorScheduleCount doctorScheduleCount = new DoctorScheduleCount();
       doctorScheduleCount.setDoctorSchedule(x);
       doctorScheduleCount.setAppointmentCount(appointments.stream().filter(y -> y.getDoctorSchedule().equals(x)).count());
-      //todo
+
+      List< Appointment > bookedAppointments =
+          appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.BK)).collect(Collectors.toList());
+
+      doctorScheduleCount.setAppointmentBookedCount(bookedAppointments.size());
+
+      List< Appointment > paidAppointments =
+          appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.PA)).collect(Collectors.toList());
+
+      doctorScheduleCount.setAppointmentPaidCount(paidAppointments.size());
+
+      List< Appointment > cancelAppointments =
+          appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.CL)).collect(Collectors.toList());
+
+      doctorScheduleCount.setAppointmentCancelCount(cancelAppointments.size());
+
       doctorScheduleCounts.add(doctorScheduleCount);
     });
     return doctorScheduleCounts;
@@ -120,7 +135,7 @@ public class ReportController {
     return payments.stream().filter(x -> x.getPaymentMethod().equals(paymentMethod)).collect(Collectors.toList());
   }
 
-  private List< Payment > paymentsAccodingToValidOrNot(List< Payment > payments, PaymentValidOrNot paymentValidOrNot) {
+  private List< Payment > paymentsAccordingToValidOrNot(List< Payment > payments, PaymentValidOrNot paymentValidOrNot) {
     return payments.stream().filter(x -> x.getPaymentValidOrNot().equals(paymentValidOrNot)).collect(Collectors.toList());
   }
 
@@ -251,7 +266,8 @@ public class ReportController {
         paymentService.findByUpdatedBy(username).stream().filter(x -> dateTimeAgeService.localDateTimeToLocalDate(x.getUpdatedAt()).equals(LocalDate.now())).collect(Collectors.toList());
 
     model.addAttribute("employeeAppointmentPaymentCount", employeeOne(appointments,
-                                                                      paymentsAccodingToValidOrNot(payments,PaymentValidOrNot.VALID),
+                                                                      paymentsAccordingToValidOrNot(payments,
+                                                                                                    PaymentValidOrNot.VALID),
                                                                       employee));
     model.addAttribute("date", LocalDate.now());
     return "report/user";
@@ -282,7 +298,8 @@ public class ReportController {
     List< Payment > payments = paymentService.findByUpdatedAtIsBetween(startDateTime, endDateTime);
 
     model.addAttribute("employeeAppointmentPaymentCounts", employeeAll(appointments,
-                                                                       paymentsAccodingToValidOrNot(payments,PaymentValidOrNot.VALID)));
+                                                                       paymentsAccordingToValidOrNot(payments,
+                                                                                                     PaymentValidOrNot.VALID)));
     model.addAttribute("message", message);
     return "report/userAll";
   }
@@ -313,8 +330,34 @@ public class ReportController {
     model.addAttribute("doctorCounts", accordingDoctor(appointments));
     return "report/doctorAll";
   }
-//appointment
 
+  //appointment
+  @GetMapping( "/appointmentAll" )
+  public String appointments(Model model) {
+
+    LocalDate localDate = LocalDate.now();
+    String message = "This report is belongs to " + localDate;
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(localDate);
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(localDate);
+
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+    model.addAttribute("message", message);
+    model.addAttribute("doctorScheduleCounts", accordingDoctorSchedules(appointments));
+    return "report/appointmentAll";
+  }
+
+  @PostMapping( "/appointmentAll" )
+  public String appointments(@ModelAttribute( "twoDate" ) TwoDate twoDate, Model model) {
+    String message =
+        "This report is between from " + twoDate.getStartDate().toString() + " to " + twoDate.getEndDate().toString();
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(twoDate.getStartDate());
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(twoDate.getEndDate());
+
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+    model.addAttribute("message", message);
+    model.addAttribute("doctorScheduleCounts", accordingDoctorSchedules(appointments));
+    return "report/appointmentAll";
+  }
 
 
 }
