@@ -30,7 +30,7 @@
 <div class="container-fluid" >
   <div class="row" >
     <!--Custom Invoice search-->
-    <button type="button" class="btn btn-info mb-5 btn-block text-capitalize col-12" data-toggle="collapse"
+    <button type="button" class="btn btn-info mb-1 btn-block text-capitalize col-12" data-toggle="collapse"
             data-target="#dataTargetCollapse"
             aria-expanded="false" aria-controls="dataTargetCollapse"
     > Custom Payment Search
@@ -41,7 +41,7 @@
       <div class="container-fluid text-center" >
         <div class="row" >
           <div class="container" >
-            <form data-th-action="${'/report/userAll}" data-th-method="POST" >
+            <form data-th-action="${'/report/allUser'}" data-th-method="POST" >
               <div class="row" >
                 <div class="col-4" >
                   <div class="form-group" >
@@ -71,8 +71,11 @@
     </div >
   </div >
 </div >
+<div class="container-fluid text-center" >
+  <span data-th-text="${message}" class="bg-dark text-white p-2"></span>
+</div >
 <!--detail table-->
-<div class="container-fluid" >
+
   <div class="container-fluid"
        data-th-each="employeeAppointmentPaymentCount, index : ${employeeAppointmentPaymentCounts}" >
     <div id="accordianId" role="tablist" aria-multiselectable="true" >
@@ -94,7 +97,6 @@
       </div >
     </div >
   </div >
-</div >
 
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->

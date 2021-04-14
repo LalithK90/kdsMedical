@@ -71,14 +71,13 @@ public class ReportController {
 
   private List< DoctorScheduleCount > accordingDoctorSchedules(List< Appointment > appointments) {
     List< DoctorScheduleCount > doctorScheduleCounts = new ArrayList<>();
-
     doctorScheduleService.findAll().forEach(x -> {
       DoctorScheduleCount doctorScheduleCount = new DoctorScheduleCount();
       doctorScheduleCount.setDoctorSchedule(x);
       doctorScheduleCount.setAppointmentCount(appointments.stream().filter(y -> y.getDoctorSchedule().equals(x)).count());
+      //todo
       doctorScheduleCounts.add(doctorScheduleCount);
     });
-
     return doctorScheduleCounts;
   }
 
@@ -252,7 +251,7 @@ public class ReportController {
         paymentService.findByUpdatedBy(username).stream().filter(x -> dateTimeAgeService.localDateTimeToLocalDate(x.getUpdatedAt()).equals(LocalDate.now())).collect(Collectors.toList());
 
     model.addAttribute("employeeAppointmentPaymentCount", employeeOne(appointments,
-                                                                      payments,
+                                                                      paymentsAccodingToValidOrNot(payments,PaymentValidOrNot.VALID),
                                                                       employee));
     model.addAttribute("date", LocalDate.now());
     return "report/user";
@@ -262,17 +261,10 @@ public class ReportController {
   @GetMapping( "/allUser" )
   public String allUser(Model model) {
     LocalDate localDate = LocalDate.now();
-    String message = "This report is belongs to " + localDate.toString();
+    String message = "This report is belongs to " + localDate;
     LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(localDate);
     LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(localDate);
-    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
-
-    List< Payment > payments = paymentService.findByUpdatedAtIsBetween(startDateTime, endDateTime);
-
-    model.addAttribute("employeeAppointmentPaymentCounts", employeeAll(appointments,
-                                                                       payments));
-    model.addAttribute("message", message);
-    return "report/userAll";
+    return commonAllUser(model, message, startDateTime, endDateTime);
   }
 
   @PostMapping( "/allUser" )
@@ -281,12 +273,16 @@ public class ReportController {
         "This report is between from " + twoDate.getStartDate().toString() + " to " + twoDate.getEndDate().toString();
     LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(twoDate.getStartDate());
     LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(twoDate.getEndDate());
+    return commonAllUser(model, message, startDateTime, endDateTime);
+  }
+
+  private String commonAllUser(Model model, String message, LocalDateTime startDateTime, LocalDateTime endDateTime) {
     List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
 
     List< Payment > payments = paymentService.findByUpdatedAtIsBetween(startDateTime, endDateTime);
 
     model.addAttribute("employeeAppointmentPaymentCounts", employeeAll(appointments,
-                                                                       payments));
+                                                                       paymentsAccodingToValidOrNot(payments,PaymentValidOrNot.VALID)));
     model.addAttribute("message", message);
     return "report/userAll";
   }
