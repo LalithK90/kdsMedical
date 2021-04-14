@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +16,5 @@ public class DoctorScheduleCount {
   private long appointmentBookedCount;
   private long appointmentPaidCount;
   private long appointmentCancelCount;
+  private BigDecimal totalIncome;
 }

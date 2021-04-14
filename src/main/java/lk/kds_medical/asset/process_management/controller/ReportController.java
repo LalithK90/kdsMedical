@@ -91,6 +91,8 @@ public class ReportController {
 
       doctorScheduleCount.setAppointmentCancelCount(cancelAppointments.size());
 
+      doctorScheduleCount.setTotalIncome(doctorService.findById(x.getDoctor().getId()).getConsultationFee().multiply(new BigDecimal(paidAppointments.size())));
+
       doctorScheduleCounts.add(doctorScheduleCount);
     });
     return doctorScheduleCounts;
