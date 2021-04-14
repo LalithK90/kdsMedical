@@ -72,12 +72,14 @@
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
            aria-expanded="false" > <i class="fa fa-book-open" ></i > Report</a >
         <div class="dropdown-menu" aria-labelledby="dropdownId" >
-          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')" data-th-href="@{'/report/user'}" class="nav-link" >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER')" data-th-href="@{'/report/user'}" class="nav-link" >
             Payment Summary</a >
-          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')" data-th-href="@{'/report/doctor'}" class="nav-link" >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER','ROLE_CASHIER')" data-th-href="@{'/report/doctorAll'}" class="nav-link" >
             Doctor Summary</a >
           <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')" data-th-href="@{'/report/allUser'}" class="nav-link" >
             All User Report</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER')" data-th-href="@{'/report/appointment'}" class="nav-link" >
+           Appointment Report</a >
         </div >
       </li >
     </ul >

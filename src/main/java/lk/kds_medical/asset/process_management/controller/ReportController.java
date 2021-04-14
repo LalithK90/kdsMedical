@@ -287,6 +287,32 @@ public class ReportController {
     return "report/userAll";
   }
 
+  @GetMapping( "/doctorAll" )
+  public String doctors(Model model) {
 
+    LocalDate localDate = LocalDate.now();
+    String message = "This report is belongs to " + localDate;
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(localDate);
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(localDate);
+
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+    model.addAttribute("message", message);
+    model.addAttribute("doctorCounts", accordingDoctor(appointments));
+    return "report/doctorAll";
+  }
+
+  @PostMapping( "/doctorAll" )
+  public String doctors(@ModelAttribute( "twoDate" ) TwoDate twoDate, Model model) {
+    String message =
+        "This report is between from " + twoDate.getStartDate().toString() + " to " + twoDate.getEndDate().toString();
+    LocalDateTime startDateTime = dateTimeAgeService.dateTimeToLocalDateStartInDay(twoDate.getStartDate());
+    LocalDateTime endDateTime = dateTimeAgeService.dateTimeToLocalDateEndInDay(twoDate.getEndDate());
+
+    List< Appointment > appointments = appointmentService.findByCreatedAtIsBetween(startDateTime, endDateTime);
+    model.addAttribute("message", message);
+    model.addAttribute("doctorCounts", accordingDoctor(appointments));
+    return "report/doctorAll";
+  }
+//appointment
 
 }

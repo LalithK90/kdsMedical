@@ -14,7 +14,7 @@
     <div class="col " >
       <h4 class="text-info text-center" >
         <strong >
-          Summary Report
+          Doctor Summary Report
         </strong >
       </h4 >
     </div >
@@ -72,31 +72,51 @@
   </div >
 </div >
 <div class="container-fluid text-center" >
-  <span data-th-text="${message}" class="bg-dark text-white p-2"></span>
+  <span data-th-text="${message}" class="bg-dark text-white p-2" ></span >
 </div >
 <!--detail table-->
-
-  <div class="container-fluid"
-       data-th-each="employeeAppointmentPaymentCount, index : ${employeeAppointmentPaymentCounts}" >
-    <div id="accordianId" role="tablist" aria-multiselectable="true" >
-      <div class="card" >
-        <div class="card-header" role="tab" data-th-id="${'section1HeaderId'+index.index}" >
-          <a data-toggle="collapse" data-parent="#accordianId" data-th-href="${'#section1ContentId'+index.index}"
-             aria-expanded="true" aria-controls="section1ContentId" >
-            <h5 class="mb-0 text-center" >
-              [[${employeeAppointmentPaymentCount.employee.name}]]
-            </h5 >
-          </a >
-        </div >
-        <div data-th-id="${'section1ContentId'+index.index}" class="collapse in" role="tabpanel"
-             aria-labelledby="section1HeaderId" >
-          <div class="card-body" >
-            <div data-th-replace="~{report/user :: employeeAppointmentPaymentCountFragment}" ></div >
-          </div >
+<div class="container-fluid"
+     data-th-each="doctorCount, index : ${doctorCounts}" >
+  <div id="accordianId" role="tablist" aria-multiselectable="true" >
+    <div class="card" >
+      <div class="card-header" role="tab" data-th-id="${'section1HeaderId'+index.index}" >
+        <a data-toggle="collapse" data-parent="#accordianId" data-th-href="${'#section1ContentId'+index.index}"
+           aria-expanded="true" aria-controls="section1ContentId" >
+          <h5 class="mb-0 text-center" >
+            [[${doctorCount.doctor.name}]] - [[${doctorCount.consultation.name}]]
+          </h5 >
+        </a >
+      </div >
+      <div data-th-id="${'section1ContentId'+index.index}" class="collapse in" role="tabpanel"
+           aria-labelledby="section1HeaderId" >
+        <div class="card-body" >
+          <table class="table table-striped table-inverse" >
+            <thead class="thead-inverse" >
+            <tr >
+              <th >Doctor Name</th >
+              <th >Appointment Count</th >
+              <th >Appointment Paid Count</th >
+              <th >Appointment Booked Count</th >
+              <th >Appointment Cancel Count</th >
+              <th >Total Income</th >
+            </tr >
+            </thead >
+            <tbody >
+            <tr >
+              <td data-th-text="${doctorCount.doctor.name+ ' '+doctorCount.consultation.name}" ></td >
+              <td data-th-text="${doctorCount.appointmentCount}" ></td >
+              <td data-th-text="${doctorCount.appointmentPaidCount}" ></td >
+              <td data-th-text="${doctorCount.appointmentBookedCount}" ></td >
+              <td data-th-text="${doctorCount.appointmentCancelCount}" ></td >
+              <td data-th-text="${doctorCount.totalIncome}" ></td >
+            </tr >
+            </tbody >
+          </table >
         </div >
       </div >
     </div >
   </div >
+</div >
 
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
