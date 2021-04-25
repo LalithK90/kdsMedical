@@ -7,7 +7,7 @@
 <body >
 <nav class="navbar navbar-expand-sm mb-2" style="background-color: #f5e642" data-th-fragment="navBarFragment" >
   <a class="navbar-brand" href="/home" >
-    <img data-th-src="${'../img/logo.png'}" alt="Company log" style="height:50px;" id="logo"
+    <img data-th-src="@{/img/logo.png}" alt="Company log" style="height:50px;" id="logo"
          class="animated-spin" >
   </a >
   <a class="navbar-brand" data-th-href="${'/home'}" ><i class="fa fa-home" style="font-size: 18px" ></i ></a >
@@ -23,6 +23,15 @@
           <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' ,'ROLE_ADMIN')"             data-th-href="@{'/employee'}" class="nav-link" > Employee Management </a >
           <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/user'}" class="nav-link" > User Management </a >
           <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/role'}" class="nav-link" > Role Management </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/additionalService'}" class="nav-link" > Additional Service Management </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/additionServicePatient'}" class="nav-link" > Addition Service Patient </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/appointment'}" class="nav-link" > Appointment </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/consultation'}" class="nav-link" > Consultation </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/discountRatio'}" class="nav-link" > Discount Ratio </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/doctor'}" class="nav-link" > Doctor Management </a>
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/patient'}" class="nav-link" > Patient Management</a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/payment'}" class="nav-link" > Payment </a >
+
         </div >
       </li >
 
@@ -30,9 +39,15 @@
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
            aria-expanded="false" > <i class="fa fa-bell" ></i > Transaction</a >
         <div class="dropdown-menu" aria-labelledby="dropdownId" >
-          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' ,'ROLE_ADMIN')"             data-th-href="@{'/employee/add'}" class="nav-link" > New Employee </a >
-          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/user/add'}" class="nav-link" > New User </a >
-          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER', 'ROLE_HR_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/role/add'}" class="nav-link" > New Role </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER' , 'ROLE_ADMIN')"             data-th-href="@{'/employee/add'}" class="nav-link" > New Employee </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/user/add'}" class="nav-link" > New User </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/role/add'}" class="nav-link" > New Role </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/additionalService/add'}" class="nav-link" > New Additional Service </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/consultation/add'}" class="nav-link" > New Consultation </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_CASHIER',  'ROLE_ACCOUNTANT')"        data-th-href="@{'/discountRatio/add'}" class="nav-link" > New DiscountRatio </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/doctor/add'}" class="nav-link" > New Doctor </a >
+          <a data-sec-authorize="hasAnyAuthority('ROLE_MANAGER',  'ROLE_ADMIN')"             data-th-href="@{'/patient/add'}" class="nav-link" > New Patient </a >
+
         </div >
       </li >
 
