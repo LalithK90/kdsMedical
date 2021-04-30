@@ -74,7 +74,12 @@ public class ReportController {
     doctorScheduleService.findAll().forEach(x -> {
       DoctorScheduleCount doctorScheduleCount = new DoctorScheduleCount();
       doctorScheduleCount.setDoctorSchedule(x);
-      doctorScheduleCount.setAppointmentCount(appointments.stream().filter(y -> y.getDoctorSchedule().equals(x)).count());
+      List< Appointment > accordingToDoctorSchedule =
+          appointments.stream().filter(y -> y.getDoctorSchedule().equals(x)).collect(Collectors.toList());
+      doctorScheduleCount.setAppointmentCount(accordingToDoctorSchedule.size());
+      if ( !accordingToDoctorSchedule.isEmpty() ) {
+        doctorScheduleCount.setAppointmentDate(accordingToDoctorSchedule.get(0).getDate());
+      }
 
       List< Appointment > bookedAppointments =
           appointments.stream().filter(z -> z.getAppointmentStatus().equals(AppointmentStatus.BK)).collect(Collectors.toList());
