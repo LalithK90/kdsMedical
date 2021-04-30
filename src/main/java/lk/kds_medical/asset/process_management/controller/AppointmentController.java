@@ -228,6 +228,7 @@ public class AppointmentController {
             .collect(Collectors.toList());
     model.addAttribute("appointments", appointments);
     model.addAttribute("doctorDetail", appointments.get(0).getDoctorSchedule().getDoctor());
+    model.addAttribute("appointmentDoctorSearch", appointmentDoctorSearch);
     return "appointment/appointment-message";
   }
 

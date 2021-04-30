@@ -69,9 +69,9 @@
   </div >
   <div class="container-fluid">
     <form action="/appointment/messageSend" method="post">
-      <input type="hidden" name="doctorSchedule" data-th-value="${appointment.id}" >
-      <input type="hidden" name="appointmentDate" data-th-value="${appointment.appointmentDate}" >
-      <input type="hidden" name="doctor" data-th-value="${doctorDetail.id}" >
+      <input type="hidden" name="doctorSchedule" data-th-value="${appointmentDoctorSearch.doctorSchedule.id}" >
+      <input type="hidden" name="appointmentDate" data-th-value="${appointmentDoctorSearch.appointmentDate}" >
+      <input type="hidden" name="doctor" data-th-value="${appointmentDoctorSearch.doctor.id}" >
       <div class="form-group" >
         <label for="message" >Message</label >
         <textarea class="form-control" name="message" id="message" rows="5" ></textarea >
