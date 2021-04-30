@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -17,4 +18,8 @@ public interface AppointmentDao extends JpaRepository< Appointment, Integer> {
   List< Appointment> findByDateAndDoctorSchedule(LocalDate date, DoctorSchedule doctorSchedule);
 
   Appointment findByDoctorScheduleAndPatientAndDate(DoctorSchedule doctorSchedule, Patient patient, LocalDate date);
+
+  List< Appointment> findByCreatedBy(String username);
+
+  List< Appointment> findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

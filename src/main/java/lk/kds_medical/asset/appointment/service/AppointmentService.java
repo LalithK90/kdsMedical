@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,5 +78,13 @@ public class AppointmentService implements AbstractService< Appointment, Integer
 
     public Appointment findByDoctorScheduleAndPatientAndDate(DoctorSchedule doctorSchedule, Patient patient, LocalDate date) {
     return appointmentDao.findByDoctorScheduleAndPatientAndDate(doctorSchedule,patient,date);
+    }
+
+  public List< Appointment> findByCreatedBy(String username) {
+  return appointmentDao.findByCreatedBy(username);
+    }
+
+  public List< Appointment> findByCreatedAtIsBetween(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+  return  appointmentDao.findByCreatedAtIsBetween(startDateTime, endDateTime);
     }
 }

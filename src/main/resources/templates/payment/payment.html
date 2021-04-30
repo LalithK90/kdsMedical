@@ -6,107 +6,148 @@
 </head >
 <body class="sb-nav-fixed" >
 <nav data-th-replace="~{fragments/navBar :: navBarFragment}" ></nav >
-
-      <div class="container-fluid " >
-        <div class="row text-center   " >
-          <div class="col" >
-          </div >
-          <div class="col " >
-            <h4 class="text-info text-center" >
-              <strong >
-                Payment Management
-              </strong >
-            </h4 >
-          </div >
-          <div class="col" >
-            <a href="/payment/allPayment" >
-              <button class="btn btn-success" type="button" > All Payment Show</button >
-            </a >
-          </div >
-        </div >
-      </div >
-      <div class="container-fluid" >
+<!--header-->
+<div class="container-fluid mb-1 " >
+  <div class="row text-center   " >
+    <div class="col" >
+    </div >
+    <div class="col " >
+      <h4 class="text-info text-center" >
+        <strong >
+          Payment Management
+        </strong >
+      </h4 >
+    </div >
+    <div class="col" >
+      <a href="/home" >
+        <button class="btn btn-success" type="button" > Home</button >
+      </a >
+    </div >
+  </div >
+</div >
+<!--button group-->
+<div class="container-fluid text-center mb-1" >
+  <a href="/payment" class="m-1" >
+    <button class="btn-primary btn p-2 col-1" type="button" >All</button >
+  </a >
+  <a href="/payment/additional" class="m-1" >
+    <button class="btn-success btn p-2 col-1" type="button" >Additional</button >
+  </a >
+  <a href="/payment/appointment" class="m-1" >
+    <button class="btn-secondary btn p-2 col-1" type="button" >Appointment</button >
+  </a >
+  <a href="/payment/card" class="m-1" >
+    <button class="btn-info btn p-2 col-1" type="button" >Card</button >
+  </a >
+  <a href="/payment/cash" class="m-1" >
+    <button class="btn-warning btn p-2 col-1" type="button" >Cash</button >
+  </a >
+  <a href="/payment/vaid" class="m-1" >
+    <button class="btn-dark btn p-2 col-1" type="button" >Valid</button >
+  </a >
+  <a href="/payment/cancel" class="m-1" >
+    <button class="btn-danger btn p-2 col-1" type="button" >Cancel</button >
+  </a >
+</div >
+<!--custom search-->
+<div class="container-fluid" >
+  <div class="row" >
+    <!--Custom Invoice search-->
+    <button type="button" class="btn btn-info mb-5 btn-block text-capitalize col-12" data-toggle="collapse"
+            data-target="#dataTargetCollapse"
+            aria-expanded="false" aria-controls="dataTargetCollapse"
+    > Custom Payment Search
+    </button >
+  </div >
+  <div class="form-row" >
+    <div class="collapse col-12" id="dataTargetCollapse" >
+      <div class="container-fluid text-center" >
         <div class="row" >
-          <!--Custom Invoice search-->
-          <button type="button" class="btn btn-info mb-5 btn-block text-capitalize" data-toggle="collapse"
-                  data-target="#dataTargetCollapse"
-                  aria-expanded="false" aria-controls="dataTargetCollapse"
-          > Custom Payment Search
-          </button >
-          <div class="collapse mx-auto" id="dataTargetCollapse" >
-            <div class="container-fluid text-center" >
+          <div class="container" >
+            <form data-th-action="${searchUrl}" data-th-method="POST" >
               <div class="row" >
-                <div class="col-sm-6 col-sm-offset-3" >
-                  <h4 class="text-info" ><b > Custom Search</b ></h4 >
-                  <form class="form-inline" data-th-action="@{/payment/search}" data-th-method="POST" >
-                    <div class="form-group" >
-                      <label for="startDate" >FROM :</label >
-                      <input class="form-control" id="startDate" name="startDate" type="date" />
-                    </div >
-                    <div class="form-group" >
-                      <label for="endDate" >TO :</label >
-                      <input class="form-control" id="endDate" name="endDate" type="date" />
-                    </div >
-                    <button class="btn btn-success" id="btnSummaryFind" type="submit" ><span
+                <div class="col-4" >
+                  <div class="form-group" >
+                    <label for="startDate" >FROM :</label >
+                    <input class="form-control" id="startDate" name="startDate" type="date" />
+                  </div >
+                </div >
+                <div class="col-4" >
+                  <div class="form-group" >
+                    <label for="endDate" >TO :</label >
+                    <input class="form-control" id="endDate" name="endDate" type="date" />
+                  </div >
+                </div >
+                <div class="col-4" >
+                  <div class="form-group" >
+                    <br >
+                    <button class="btn btn-success mt-2" id="btnSummaryFind" type="submit" ><span
                           class="glyphicon glyphicon-search" ></span >&nbsp;Search
                     </button >
-                  </form >
+                  </div >
                 </div >
               </div >
-            </div >
+            </form >
           </div >
         </div >
       </div >
-
-      <div class="container-fluid" >
-        <div class="offset-2 col-8 col-sm-8 col-md-8" data-th-if="${not #lists.isEmpty(purchaseOrders)}" >
-          <div class="table-responsive" >
-            <table class="table table-striped table-condensed" >
-              <thead >
-              <tr >
-                <th > Index</th >
-                <th > Supplier Name</th >
-                <th >Purchase Order Number</th >
-                <th >Need to be Paid</th >
-                <th data-th-if="${addState}" > Modify</th >
-              </tr >
-              </thead >
-              <tbody >
-              <tr data-th-each="purchaseOrder, rowCount : ${purchaseOrders}" >
-                <th data-th-text="${rowCount.count}" ></th >
-                <th data-th-text="${purchaseOrder.supplier.name}" ></th >
-                <th data-th-text="${purchaseOrder.code}" ></th >
-                <th data-th-text="${purchaseOrder.price}" ></th >
-                <th data-th-if="${addState}" >
-                  <a id="edit" data-th-href="${'/payment/' + purchaseOrder.id}"
-                     class="btn btn-primary btn-sm mr-2 p-2" >Pay
-                  </a >
-                </th >
-              </tr >
-              </tbody >
-            </table >
-          </div >
-        </div >
-      </div >
-      <div class="container-fluid" >
-        <div class="offset-2 col-8 col-sm-8 col-md-8" data-th-if="${ #lists.isEmpty(purchaseOrders)}" >
-          <div class="alert alert-warning alert-dismissible fade show" role="alert" >
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
-              <span aria-hidden="true" >&times;</span >
-            </button >
-            <h3 class="text-center text-danger" >
-              <strong >There is no pending payment upto now.</strong >
-            </h3 >
-          </div >
-        </div >
-      </div >
+    </div >
+  </div >
+</div >
+<!--detail table-->
+<div class="container-fluid" >
+  <div class="offset-2 col-8 col-sm-8 col-md-8" data-th-if="${not #lists.isEmpty(payments)}" >
+    <div class="container-fluid" >
+      <table class="table table-striped table-condensed" id="myTable" >
+        <thead >
+        <tr >
+          <th > Index</th >
+          <th > Payment code </th >
+          <th >Payment Method</th >
+          <th >Validity</th >
+            <th>Service Type</th>
+            <th>Amount</th>
+          <th > Modify</th >
+        </tr >
+        </thead >
+        <tbody >
+        <tr data-th-each="payment, rowCount : ${payments}" >
+          <th data-th-text="${rowCount.count}" ></th >
+          <th data-th-text="${payment.code}" ></th >
+          <th data-th-text="${payment.paymentMethod.paymentMethod}" ></th >
+          <th data-th-text="${payment.paymentValidOrNot.paymentValidOrNot}" ></th >
+          <th data-th-text="${payment.appointment==null?'Additional':'Appointment'}" ></th >
+          <th data-th-text="${payment.totalAmount}" ></th >
+          <th >
+            <a id="edit" data-th-href="${'/payment/' + payment.id}"
+               class="btn btn-primary btn-sm mr-2 p-2" >View/Print
+            </a >
+          </th >
+        </tr >
+        </tbody >
+      </table >
+    </div >
+  </div >
+</div >
+<!--no found-->
+<div class="container-fluid" >
+  <div class="offset-2 col-8 col-sm-8 col-md-8" data-th-if="${ #lists.isEmpty(payments)}" >
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" >
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
+        <span aria-hidden="true" >&times;</span >
+      </button >
+      <h3 class="text-center text-danger" >
+        <strong >There payment upto now.</strong >
+      </h3 >
+    </div >
+  </div >
+</div >
 
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
-<script >
-    /*active boostrap alert - start*/
+<script data-th-if="${ #lists.isEmpty(payments)}" >
     $(".alert").alert();
-    /*active boostrap alert - end*/
-</script ></body >
+</script >
+</body >
 </html >

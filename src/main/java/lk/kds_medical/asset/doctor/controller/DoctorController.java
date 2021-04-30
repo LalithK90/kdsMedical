@@ -106,11 +106,13 @@ public class DoctorController {
     }
     List< DoctorSchedule > doctorSchedules = new ArrayList<>();
     doctor.getDoctorSchedules().forEach(x -> {
+      x.setDoctor(doctor);
       if ( x.isActive() ) {
-        x.setDoctor(doctor);
         x.setLiveDead(LiveDead.ACTIVE);
-        doctorSchedules.add(x);
+      } else {
+        x.setLiveDead(LiveDead.STOP);
       }
+      doctorSchedules.add(x);
     });
     doctor.setDoctorSchedules(doctorSchedules);
     try {

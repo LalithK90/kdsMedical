@@ -37,8 +37,6 @@
               <span data-th-text="${appointmentBook.appointmentDate}" ></span > -
               <span data-th-text="${appointmentBook.dayOfWeek}" ></span >
             </h5 >
-            <!--todo doctor request to cancel or time changed need to do method manager can do it -->
-
           </a >
         </div >
         <div data-th-id="${'section1ContentId'+index.index}" class="collapse in" role="tabpanel"
@@ -67,6 +65,13 @@
                       <td data-th-text="${#lists.size(doctorSchedule.appointments)}" ></td >
                       <td >
                         <div class="form-row" >
+                          <!--send message-->
+                          <form action="/appointment/message"  method="post" data-th-if="${not #lists.isEmpty(doctorSchedule.appointments)}">
+                            <input type="hidden" name="doctorSchedule" data-th-value="${doctorSchedule.id}" >
+                            <input type="hidden" name="appointmentDate" data-th-value="${doctorSchedule.appointmentDate}" >
+                            <input type="hidden" name="doctor" data-th-value="${doctorSchedule.doctor.id}" >
+                            <button type="submit" class="btn btn-primary" >Message To Patient</button >
+                          </form >
                           <!--View-->
                           <form action="/appointment/view"  method="post" data-th-if="${not #lists.isEmpty(doctorSchedule.appointments)}">
                             <input type="hidden" name="doctorSchedule" data-th-value="${doctorSchedule.id}" >

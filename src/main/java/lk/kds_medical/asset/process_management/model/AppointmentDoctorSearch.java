@@ -21,4 +21,5 @@ public class AppointmentDoctorSearch {
   @DateTimeFormat( pattern = "yyyy-MM-dd" )
   private LocalDate appointmentDate;
   private DoctorSchedule doctorSchedule;
+  private String message;
 }

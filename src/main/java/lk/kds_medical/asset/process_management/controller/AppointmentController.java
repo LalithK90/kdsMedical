@@ -17,6 +17,7 @@ import lk.kds_medical.asset.payment.entity.enums.PaymentValidOrNot;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.process_management.model.AppointmentBook;
 import lk.kds_medical.asset.process_management.model.AppointmentDoctorSearch;
+import lk.kds_medical.util.service.EmailService;
 import lk.kds_medical.util.service.MakeAutoGenerateNumberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,12 +43,13 @@ public class AppointmentController {
   private final DiscountRatioService discountRatioService;
   private final MakeAutoGenerateNumberService makeAutoGenerateNumberService;
   private final PaymentService paymentService;
+  private final EmailService emailService;
 
   public AppointmentController(DoctorService doctorService, PatientService patientService,
                                AppointmentService appointmentService, DoctorScheduleService doctorScheduleService,
                                DiscountRatioService discountRatioService,
                                MakeAutoGenerateNumberService makeAutoGenerateNumberService,
-                               PaymentService paymentService) {
+                               PaymentService paymentService, EmailService emailService) {
     this.doctorService = doctorService;
     this.patientService = patientService;
     this.appointmentService = appointmentService;
@@ -55,6 +57,7 @@ public class AppointmentController {
     this.discountRatioService = discountRatioService;
     this.makeAutoGenerateNumberService = makeAutoGenerateNumberService;
     this.paymentService = paymentService;
+    this.emailService = emailService;
   }
 
   @GetMapping
@@ -152,7 +155,7 @@ public class AppointmentController {
       model.addAttribute("message", "There is already appointment for this patient ");
       return common(new AppointmentDoctorSearch(appointment.getDoctorSchedule().getDoctor(),
                                                 appointment.getDate(),
-                                                appointment.getDoctorSchedule()), bindingResult, redirectAttributes,
+                                                appointment.getDoctorSchedule(), ""), bindingResult, redirectAttributes,
                     model);
     }
 
@@ -202,6 +205,37 @@ public class AppointmentController {
     model.addAttribute("appointments", appointments);
     model.addAttribute("doctorDetail", appointments.get(0).getDoctorSchedule().getDoctor());
     return "appointment/appointment-view";
+  }
+
+  @PostMapping( "/message" )
+  public String sendMessage(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch, Model model) {
+    List< Appointment > appointments =
+        appointmentService.byDateAndDoctorSchedule(appointmentDoctorSearch.getAppointmentDate(),
+                                                   appointmentDoctorSearch.getDoctorSchedule())
+            .stream()
+            .filter(x -> !x.getAppointmentStatus().equals(AppointmentStatus.CL))
+            .collect(Collectors.toList());
+    model.addAttribute("appointments", appointments);
+    model.addAttribute("doctorDetail", appointments.get(0).getDoctorSchedule().getDoctor());
+    return "appointment/appointment-message";
+  }
+
+  @PostMapping( "/messageSend" )
+  public String sendMessageSend(@Valid @ModelAttribute AppointmentDoctorSearch appointmentDoctorSearch, Model model) {
+    List< Appointment > appointments =
+        appointmentService.byDateAndDoctorSchedule(appointmentDoctorSearch.getAppointmentDate(),
+                                                   appointmentDoctorSearch.getDoctorSchedule())
+            .stream()
+            .filter(x -> !x.getAppointmentStatus().equals(AppointmentStatus.CL))
+            .collect(Collectors.toList());
+    appointments.forEach(x -> {
+      if ( x.getPatient().getEmail() != null ) {
+        String message =
+            "Regarding that You had booked following appointment " + x.getCode() + appointmentDoctorSearch.getMessage();
+        emailService.sendEmail(x.getPatient().getEmail(), "Related Appointment Number " + x.getCode(), message);
+      }
+    });
+    return "redirect:/appointment";
   }
 
 
@@ -265,5 +299,6 @@ public class AppointmentController {
 
     return "redirect:/appointment";
   }
+
 
 }

@@ -13,6 +13,7 @@ import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
 import lk.kds_medical.asset.payment.entity.enums.PaymentPrintOrNot;
+import lk.kds_medical.asset.payment.entity.enums.PaymentWay;
 import lk.kds_medical.asset.payment.service.PaymentService;
 import lk.kds_medical.asset.payment_additional_service.entity.PaymentAdditionalService;
 import lk.kds_medical.asset.payment_additional_service.service.PaymentAdditionalServiceService;
@@ -74,23 +75,20 @@ public class AdditionalServiceProcessController {
 
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
     Employee employee = userService.findByUserName(username).getEmployee();
-/*    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
+    if ( !employee.getDesignation().equals(Designation.MANAGER) ) {
       model.addAttribute("additionServicePatients",
                          paymentAdditionalServiceService.findByCreatedAtIsBetweenAndCreatedBy(startDateTime, endDateTime,
                                                                                        username));
     } else {
       model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findByCreatedAtIsBetween(startDateTime,
                                                                                                       endDateTime));
-    }*/
-    //todo delete this
-    model.addAttribute("additionServicePatients", paymentAdditionalServiceService.findAll());
+    }
 
     model.addAttribute("message", "This report is belong to " + startDate + " to " + endDate + "\n if you need to " +
         "more please use above search method");
     return "additionServicePatient/additionServicePatient";
   }
 
-  //todo:
   @GetMapping
   public String findAll(Model model) {
     return commonFindAll(model, dateTimeAgeService.getPastDateByMonth(3), LocalDate.now());
@@ -130,6 +128,7 @@ public class AdditionalServiceProcessController {
     if ( paymentAdditionalService.getPayments().get(0).getTotalAmount() != null ) {
       paymentAdditionalService.getPayments().forEach(x -> {
         x.setPaymentAdditionalService(paymentAdditionalService);
+        x.setPaymentWay(PaymentWay.ADD);
         if ( x.getId() == null ) {
           Payment lastPayment = paymentService.lastPayment();
           if ( lastPayment == null ) {

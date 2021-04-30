@@ -8,5 +8,5 @@ import lombok.Getter;
 public enum PaymentValidOrNot {
     VALID("Valid"),
     NOT_VALID("No Valid");
-    private final String invoiceValidOrNot;
+    private final String paymentValidOrNot;
 }
