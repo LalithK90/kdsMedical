@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DoctorScheduleCount {
   private DoctorSchedule doctorSchedule;
+  private LocalDate appointmentDate;
   private long appointmentCount;
   private long appointmentBookedCount;
   private long appointmentPaidCount;
