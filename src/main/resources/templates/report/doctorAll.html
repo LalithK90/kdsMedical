@@ -108,7 +108,7 @@
               <td data-th-text="${doctorCount.appointmentPaidCount}" ></td >
               <td data-th-text="${doctorCount.appointmentBookedCount}" ></td >
               <td data-th-text="${doctorCount.appointmentCancelCount}" ></td >
-              <td data-th-text="${doctorCount.totalIncome}" ></td >
+              <td data-th-text="${doctorCount.appointmentPaidCount * doctorCount.doctor.consultationFee}" ></td >
             </tr >
             </tbody >
           </table >
