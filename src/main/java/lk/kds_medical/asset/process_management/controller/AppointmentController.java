@@ -9,6 +9,7 @@ import lk.kds_medical.asset.doctor.controller.DoctorController;
 import lk.kds_medical.asset.doctor.service.DoctorService;
 import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.service.DoctorScheduleService;
+import lk.kds_medical.asset.patient.entity.Patient;
 import lk.kds_medical.asset.patient.service.PatientService;
 import lk.kds_medical.asset.payment.entity.Payment;
 import lk.kds_medical.asset.payment.entity.enums.PaymentMethod;
@@ -187,6 +188,16 @@ public class AppointmentController {
     }
 
     Appointment appointmentDb = appointmentService.persist(appointment);
+    if ( appointmentDb.getPatient() != null ) {
+      Patient patient = patientService.findById(appointmentDb.getPatient().getId());
+      DoctorSchedule doctorSchedule = doctorScheduleService.findById(appointmentDb.getDoctorSchedule().getId());
+      if ( patient.getEmail() != null ) {
+        String message =
+            "Regarding that You had booked following appointment " + appointmentDb.getCode() + "\n Dear " + patient.getName() + "\n You have make an appointment to \nDr. " + doctorSchedule.getDoctor().getName() + "\n appointment date time " + appointmentDb.getDate() + doctorSchedule.getArrivalTime() + "\n appointment number " + appointmentDb.getNumber() + " \n\n Thanks \n KDS Medical";
+        emailService.sendEmail(patient.getEmail(), "Related Appointment Number " + appointmentDb.getCode(), message);
+      }
+    }
+
     if ( appointmentDb.getAppointmentStatus().equals(AppointmentStatus.PA) ) {
       return "redirect:/payment/" + paymentService.findByAppointment(appointmentDb).getId();
     } else {
