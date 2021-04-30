@@ -87,9 +87,7 @@
     <span aria-hidden="true" >&times;</span >
   </button >
   <strong ><span id="employeeNotFound" data-th-text="${employeeNotFound}" ></span ></strong >
-  <script >
-      $(".alert").alert();
-  </script >
+
 </div >
 
 <!--User add from-->
@@ -193,7 +191,9 @@
 <div data-th-replace="~{fragments/footer :: footerFragment}" ></div >
 <!--script include-->
 <div data-th-replace="~{fragments/script :: scriptFragment}" ></div >
-
+<script >
+    $(".alert").alert();
+</script >
 
 </body >
 </html >

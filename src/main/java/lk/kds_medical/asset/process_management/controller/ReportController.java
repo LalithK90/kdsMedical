@@ -6,6 +6,7 @@ import lk.kds_medical.asset.appointment.service.AppointmentService;
 import lk.kds_medical.asset.common_asset.model.TwoDate;
 import lk.kds_medical.asset.doctor.entity.Doctor;
 import lk.kds_medical.asset.doctor.service.DoctorService;
+import lk.kds_medical.asset.doctor_schedule.entity.DoctorSchedule;
 import lk.kds_medical.asset.doctor_schedule.service.DoctorScheduleService;
 import lk.kds_medical.asset.employee.entity.Employee;
 import lk.kds_medical.asset.employee.service.EmployeeService;
@@ -31,6 +32,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,8 +72,13 @@ public class ReportController {
   }
 
   private List< DoctorScheduleCount > accordingDoctorSchedules(List< Appointment > appointments) {
+    HashSet< DoctorSchedule > doctorSchedules = new HashSet<>();
+    appointments.forEach(x->doctorSchedules.add(doctorScheduleService.findById(x.getDoctorSchedule().getId())));
+
+
     List< DoctorScheduleCount > doctorScheduleCounts = new ArrayList<>();
-    doctorScheduleService.findAll().forEach(x -> {
+
+    doctorSchedules.forEach(x -> {
       DoctorScheduleCount doctorScheduleCount = new DoctorScheduleCount();
       doctorScheduleCount.setDoctorSchedule(x);
       List< Appointment > accordingToDoctorSchedule =
